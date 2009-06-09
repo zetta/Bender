@@ -280,4 +280,13 @@ class DbTable
     {
         return $this->object;
     }
+    
+    /**
+     * @return boolean
+     */
+    public function hasPrimaryField()
+    {
+        return (get_class($this->primaryField) == 'DbField') ? true : false; 
+    }
+    
 }

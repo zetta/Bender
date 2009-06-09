@@ -42,7 +42,6 @@ class ProjectAutoloader
      */
     protected $dirs = array();
     
-    
     /**
      * @var mixed
      */
@@ -124,17 +123,19 @@ class ProjectAutoloader
             return true;
         }
         
-        if(!$this->cacheLoaded) $this->loadCache();
-        
+        if (! $this->cacheLoaded)
+            $this->loadCache();
+            
         // we have a class path, let's include it
         if (isset($this->classes[$class]))
         {
             require ($this->classes[$class]);
             return true;
-        }else if($first == true){
+        } else if ($first == true)
+        {
             $this->cacheChanged = true;
             $this->saveCache();
-            $this->autoload($class,false);
+            $this->autoload($class, false);
         }
         
         return false;
@@ -165,7 +166,7 @@ class ProjectAutoloader
             {
                 $this->parseIncludePaths();
                 file_put_contents($this->cacheFile, serialize($this->classes));
-                chmod($this->cacheFile,0777);
+                chmod($this->cacheFile, 0777);
             }
             $this->cacheChanged = false;
         }
@@ -184,8 +185,9 @@ class ProjectAutoloader
      */
     public function parseIncludePaths()
     {
-        $this->dirs = explode(PATH_SEPARATOR,get_include_path());
-        foreach ($this->dirs as $dir){
+        $this->dirs = explode(PATH_SEPARATOR, get_include_path());
+        foreach ( $this->dirs as $dir )
+        {
             $this->parseDirectory($dir);
         }
     }
@@ -193,19 +195,24 @@ class ProjectAutoloader
     /**
      * @param string $directory
      */
-    public function parseDirectory($directory){
-		if(false != ($handle = opendir($directory)))
-		{
-			while ( false !== ($file = readdir($handle)) )
-			{
-			    if(is_dir($directory.'/'.$file) && !eregi("^\\.",$file) ){
-			        $this->parseDirectory($directory.'/'.$file);
-			    }
-				if(eregi(".php$", $file))
-					$this->addFile($directory.'/'.$file);
-			}
-			closedir($handle);
-		}
+    public function parseDirectory($directory)
+    {
+        if (is_dir($directory))
+        {
+            if (false != ($handle = opendir($directory)))
+            {
+                while ( false !== ($file = readdir($handle)) )
+                {
+                    if (is_dir($directory . '/' . $file) && ! eregi("^\\.", $file))
+                    {
+                        $this->parseDirectory($directory . '/' . $file);
+                    }
+                    if (eregi(".php$", $file))
+                        $this->addFile($directory . '/' . $file);
+                }
+                closedir($handle);
+            }
+        }
     }
     
     /**
@@ -221,13 +228,13 @@ class ProjectAutoloader
             return;
         }
         $classes = array();
-        preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface)\s+(\w+)~mi',file_get_contents($file),$classes);
-        foreach ($classes[1] as $class){
+        preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface)\s+(\w+)~mi', file_get_contents($file), $classes);
+        foreach ( $classes[1] as $class )
+        {
             $this->classes[$class] = $file;
-        }    
+        }
     }
-    
-    
+
 }
 
 

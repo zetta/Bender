@@ -55,7 +55,9 @@ class {$factory}
     public static function create{$className}Internal({$secondParameters})
     {
         $new{$className} = {$factory}::create{$className}({$secondParametersNotCasted});
+      <block:hasPrimaryField>
         $new{$className}->{$primaryKeySetter}(${$primaryKeyPhpName});
+      </block:hasPrimaryField>
         return $new{$className};
     }
 

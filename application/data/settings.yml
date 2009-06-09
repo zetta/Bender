@@ -4,14 +4,14 @@ bender:
   singleton:        true
   use_constants:    true
   private_criteria: false
-  encoding:         ISO-8859-1
+  encoding:         UTF-8
   header:
     author:         Juan Carlos Jarquín
     brandName:      Patitos Corporation
     copyright:      El copiraid =) 
     description:    sistema que controla las cosas de'sas
-  mysql:            { username : root, password : temporal , server : localhost , dbname : lyrics_sf }
-  schema:           default
+  mysql:            { username : root, password : temporal , server : localhost , dbname : sd_ixe }
+  schema:           generated
   paths:
     model_location: application/models
     catalogs:       Catalogs

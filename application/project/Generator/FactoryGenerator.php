@@ -55,8 +55,12 @@ class FactoryGenerator extends ModelGenerator
         $this->template->assign('firstParameters', implode(', ', $this->firstParameters));
         $this->template->assign('secondParameters', implode(', ', $this->secondParameters));
         $this->template->assign('secondParametersNotCasted', implode(', ', $this->secondParametersNotCasted));
-        $this->template->assign('primaryKeySetter', $this->table->getPrimaryField()->getSetterName());
-        $this->template->assign('primaryKeyPhpName', $this->table->getPrimaryField()->getPhpName());
+        if($this->table->hasPrimaryField())
+        {
+            $this->template->showBlock('hasPrimaryField');
+            $this->template->assign('primaryKeySetter', $this->table->getPrimaryField()->getSetterName());
+            $this->template->assign('primaryKeyPhpName', $this->table->getPrimaryField()->getPhpName());
+        }
         $this->fileContent = $this->template->fetch('factory');
     }
     

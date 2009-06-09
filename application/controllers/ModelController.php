@@ -44,6 +44,19 @@ class ModelController extends GenericController
             $bender['models'][$objectName]['object'] = $objectName;
         
         ModelController::$models = $bender['models'];
+        
+        
+        CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
+        $catalogLibraryGenerator = new LibraryGenerator($bender);
+        $catalogLibraryGenerator->createLibrary('Catalog');
+        $catalogLibraryGenerator->saveFile("output/Project/Db/Catalog.php");
+        $criteriaGenerator = new LibraryGenerator($bender);
+        $criteriaGenerator->createLibrary('Criteria');
+        $criteriaGenerator->saveFile("output/Project/Db/Criteria.php");
+        $dbaoGenerator = new LibraryGenerator($bender);
+        $dbaoGenerator->createLibrary('DBAO');
+        $dbaoGenerator->saveFile("output/Project/Db/DBAO.php");
+        
         foreach ( $bender['models'] as $objectName => $model )
         {
             $dbTable = new DbTable($model['table'], $bender['mysql']['dbname'], $model);
@@ -67,20 +80,6 @@ class ModelController extends GenericController
             $catalogGenerator->saveFile("{$modelPath}/{$bender['paths']['collections']}/{$objectName}Collection.php");
         
         }
-        
-        CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
-        
-        $catalogLibraryGenerator = new LibraryGenerator($bender);
-        $catalogLibraryGenerator->createLibrary('Catalog');
-        $catalogLibraryGenerator->saveFile("output/Project/Db/Catalog.php");
-        
-        $criteriaGenerator = new LibraryGenerator($bender);
-        $criteriaGenerator->createLibrary('Criteria');
-        $criteriaGenerator->saveFile("output/Project/Db/Criteria.php");
-        
-        $dbaoGenerator = new LibraryGenerator($bender);
-        $dbaoGenerator->createLibrary('DBAO');
-        $dbaoGenerator->saveFile("output/Project/Db/DBAO.php");
     }
     
     /**
@@ -88,7 +87,6 @@ class ModelController extends GenericController
      */
     public function generateSchemaAction()
     {
-
         $bender = $this->prepare();
         $schemaGenerator = new SchemaGenerator($bender);
         $schemaGenerator->setDatabaseName($bender['mysql']['dbname']);

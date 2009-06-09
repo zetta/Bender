@@ -61,12 +61,12 @@ class SchemaGenerator
         include_once 'application/project/Yaml/Spyc.php';
         $db = Database::getInstance();
         $schema = array();
-        foreach ( $db->fetch_all_array("SHOW TABLES FROM {$this->databaseName}") as $table )
+        foreach ( $db->fetch_all_array("SHOW FULL TABLES FROM {$this->databaseName}") as $table )
         {
+            if($table['Table_type'] == 'VIEW') continue;
             $tableName = $table['Tables_in_' . $this->databaseName];
             $objectName = StringFormatter::toCamelCase($tableName, '_', true);
             $schema[$objectName] = array('table' => $tableName, 'extends' => false);
-        
         }
         
         $this->fileContent = Spyc::YAMLDump(array('schema' => $schema),2,100);

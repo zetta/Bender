@@ -37,16 +37,20 @@ class CatalogGenerator extends ModelGenerator
      */
     public function createCatalog()
     {
+        $template = $this->table->hasPrimaryField() ? 'Catalog' : 'SimpleCatalog';
         CommandLineInterface::getInstance()->printSection('Generator','Creating '.$this->object.'Catalog','NOTE'); 
-        $this->template->set_filenames(array('catalog' => 'Model/Catalog'));
+        $this->template->set_filenames(array('catalog' => 'Model/'.$template));
         $this->template->assign('className', $this->object);
         $this->template->assign('catalog', $this->object . 'Catalog');
         $this->template->assign('extendedCatalog','Catalog');
         $this->template->assign('classVar', $this->getLowerObject());
-        $this->template->assign('primaryKeySetter',$this->table->getPrimaryField()->getSetterName());
-        $this->template->assign('primaryKeyName',$this->table->getPrimaryField()->getName());
-        $this->template->assign('primaryKeyPhpName',$this->table->getPrimaryField()->getPhpName());
-        $this->template->assign('primaryKeyGetter',$this->table->getPrimaryField()->getGetterName());
+        if($this->table->hasPrimaryField())
+        {
+            $this->template->assign('primaryKeySetter',$this->table->getPrimaryField()->getSetterName());
+            $this->template->assign('primaryKeyName',$this->table->getPrimaryField()->getName());
+            $this->template->assign('primaryKeyPhpName',$this->table->getPrimaryField()->getPhpName());
+            $this->template->assign('primaryKeyGetter',$this->table->getPrimaryField()->getGetterName());
+        }
         $this->template->showBlock((($this->settings['singleton']) ? 'isSingleton' : 'isntSingleton'));
         
         $fields = $this->table->getFields();
