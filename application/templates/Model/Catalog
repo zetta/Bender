@@ -1,0 +1,353 @@
+<?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @copyright  {$copyright}
+ * @author     {$author}, $LastChangedBy$
+ * @version    {$version} SVN: $Id$
+ */
+<block:useIncludes>
+
+/**
+ * Catalog
+ */
+require_once '{$modelFolder}/Project/Db/Catalog.php';
+
+/**
+ * {$className}Factory
+ */
+require_once '{$modelFolder}/{$factoryFolder}/{$className}Factory.php';
+
+/**
+ * {$className}Collection
+ */
+require_once '{$modelFolder}/{$collectionFolder}/{$className}Collection.php';
+</block:useIncludes>
+<block:extendedInclude>
+
+/**
+ * {$extendedClass}
+ */
+require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}.php';
+</block:extendedInclude>
+
+/**
+ * Clase {$catalog}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @subpackage Project_Models_Catalogs
+ * @copyright  {$copyright}
+ * @version    {$version} SVN: $Revision$
+ */
+class {$catalog} extends {$extendedCatalog}
+{
+  <block:isSingleton>
+    /**
+     * Instancia singleton
+     * @var {$catalog}
+     */
+    static protected $instance   = null;
+    
+    /**
+     * Método para obtener la instancia del catálogo
+     * @return {$catalog}
+     */
+    public static function getInstance()
+    {
+        if (!isset(self::$instance))
+        {
+          self::$instance = new {$catalog}();
+        }
+        return self::$instance;
+    }
+
+    /**
+     * Constructor de la clase {$catalog}
+     * @return {$catalog}
+     */
+    private function {$catalog}()
+    {
+        parent::Catalog();
+    }    
+  </block:isSingleton>
+  <block:isntSingleton>
+    /**
+     * Constructor de la clase {$catalog}
+     * @return {$catalog}
+     */
+    public function {$catalog}()
+    {
+        parent::Catalog();
+    }  
+  </block:isntSingleton>
+
+    /**
+     * Metodo para agregar un {$className} a la base de datos
+     * @param {$className} ${$classVar} Objeto {$className}
+     */
+    public function create{$className}({$className} ${$classVar})
+    {
+        try
+        {
+          <block:willExtend>
+            $this->create{$extendedClass}(${$classVar});
+          </block:willExtend>
+            $data = array(
+              <block:getters>
+                '{$getters.name}'{$getters.spaces}=> ${$classVar}->{$getters.getter}(),
+              </block:getters>
+            );
+            $this->db->insert({$className}::TABLENAME, $data);
+            ${$classVar}->{$primaryKeySetter}($this->db->lastInsertId());
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("El objeto {$className} no pudo ser guardado en la base de datos\n" . $e->getMessage());
+        }
+    }
+
+    /**
+     * Metodo para Obtener los datos de un objeto por su llave primaria
+     * @param int ${$primaryKeyPhpName}
+     * @return {$className}|null Objeto {$className} si existe, caso contrario retorna null;
+     */
+    public function get{$className}ById(${$primaryKeyPhpName})
+    {
+        try
+        {
+          <block:privateCriteria>
+            {$criteriaVar}->add('{$primaryKeyName}', ${$primaryKeyPhpName}, Criteria::EQUAL);
+            $new{$className} = $this->get{$className}sByCriteria()->getOne();
+          </block:privateCriteria>
+          <block:publicCriteria>
+            {$criteriaVar} = new Criteria();
+            {$criteriaVar}->add('{$primaryKeyName}', ${$primaryKeyPhpName}, Criteria::EQUAL);
+            $new{$className} = $this->get{$className}sByCriteria({$criteriaVar})->getOne();
+          </block:publicCriteria>
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("El objeto {$className} no pudo ser obtenido\n" . $e->getMessage());
+        }
+        return $new{$className};
+    }    
+  <block:willExtend>
+  
+    /**
+     * Metodo para Obtener los datos de un objeto por la llave primaria de la tabla que extiende
+     * @param int ${$extendedPrimaryKeyPhpName} 
+     * @return {$className}|null Objeto {$className} si existe, caso contrario retorna null;
+     */
+    public function get{$className}By{$extendedPrimaryKeyUpper}(${$extendedPrimaryKeyPhpName})
+    {
+        try
+        {
+          <block:privateCriteria>
+            {$criteriaVar}->add('{$extendedPrimaryKeyName}', ${$extendedPrimaryKeyPhpName}, Criteria::EQUAL);
+            $new{$className} = $this->get{$className}sByCriteria()->getOne();
+          </block:privateCriteria>
+          <block:publicCriteria>
+            {$criteriaVar} = new Criteria();
+            {$criteriaVar}->add('{$extendedPrimaryKeyName}', ${$extendedPrimaryKeyPhpName}, Criteria::EQUAL);
+            $new{$className} = $this->get{$className}sByCriteria({$criteriaVar})->getOne();
+          </block:publicCriteria>
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("El objeto {$className} no pudo ser obtenido\n" . $e->getMessage());
+        }
+        return $new{$className};
+    }
+  </block:willExtend>
+
+    /**
+     * Metodo para Obtener todos los ids en un arreglo
+     * @return array
+     */
+    public function retrieveAll{$className}Ids()
+    {
+        try
+        {
+            $result = $this->db->fetchCol('SELECT {$primaryKeyName} FROM '.{$className}::TABLENAME);
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("No se pudieron obtener los ids\n" . $e->getMessage());
+        }
+        return $result;
+    }
+
+    /**
+     * Metodo para actualizar un {$className}
+     * @param {$className} ${$className} Objeto {$className}
+     */
+    public function update{$className}({$className} ${$classVar})
+    {
+        try
+        {
+            $where[] = "{$primaryKeyName} = '{${$classVar}->{$primaryKeyGetter}()}'";
+            $data = array(
+              <block:getters>
+                '{$getters.name}'{$getters.spaces}=> ${$classVar}->{$getters.getter}(),
+              </block:getters>
+            );
+            $this->db->update({$className}::TABLENAME, $data, $where);
+          <block:willExtend>
+            $this->update{$extendedClass}(${$classVar});
+          </block:willExtend>
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("El objeto {$className} no pudo ser actualizado\n" . $e->getMessage());
+        }
+    }
+
+    /**
+     * Metodo para eliminar un {$className}
+     * @param {$className} ${$className} Objeto {$className}
+     */
+    public function delete{$className}({$className} ${$classVar})
+    {
+        try
+        {
+            $where[] = "{$primaryKeyName} = '{${$classVar}->{$primaryKeyGetter}()}'";
+            $this->db->delete({$className}::TABLENAME, $where);
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
+        }
+    }
+
+    /**
+     * Metodo para eliminar un {$className} a partir de su Id
+     * @param int ${$className}
+     */
+    public function delete{$className}ById(${$primaryKeyPhpName})
+    {
+        try
+        {
+            $where[] = "{$primaryKeyName} = '{${$primaryKeyPhpName}}'";
+            $this->db->delete({$className}::TABLENAME, $where);
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
+        }
+    }
+
+    /**
+     * Metodo para obtener todos los id de {$className} por criterio
+  <block:privateCriteria>
+     * @return array Array con todos los id de {$className} que encajen en la busqueda
+     */
+    private function get{$className}IdsByCriteria()
+  </block:privateCriteria>
+  <block:publicCriteria>
+     * @param Criteria $criteria
+     * @return array Array con todos los id de {$className} que encajen en la busqueda
+     */
+    private function get{$className}IdsByCriteria(Criteria $criteria)
+  </block:publicCriteria>
+    {
+        try
+        {
+            $sql = "SELECT {$primaryKeyName}
+                    FROM ".{$className}::TABLENAME."
+                    WHERE  " . {$criteriaVar}->createSql();
+            $result = $this->db->fetchCol($sql);
+        } catch(Exception $e)
+        {
+            throw new Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
+        }
+        return $result;
+    }
+
+    /**
+     * Metodo para obtener un campo en particular de un {$className} dado un criterio
+  <block:privateCriteria>
+     * @param string $field
+     * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
+     */
+    {$visibility} function get{$className}CustomFieldByCriteria($field)
+  </block:privateCriteria>
+  <block:publicCriteria>
+     * @param Criteria $criteria
+     * @param string $field
+     * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
+     */
+    {$visibility} function get{$className}CustomFieldByCriteria(Criteria $criteria, $field)
+  </block:publicCriteria>
+    {
+        try
+        {
+            $sql = "SELECT {$field{$field}}
+                    FROM ".{$className}::TABLENAME."
+                    WHERE  " . {$criteriaVar}->createSql();
+            $result = $this->db->fetchCol($sql);
+        } catch(Exception $e)
+        {
+            throw new Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
+        }
+        return $result;
+    }
+
+    /**
+     * Metodo que regresa una coleccion de objetos {$className} 
+     * dependiendo del criterio establecido
+  <block:privateCriteria>
+     * @return {$className}Collection $objects
+     */
+    protected function get{$className}sByCriteria()
+  </block:privateCriteria>
+  <block:publicCriteria>
+     * @param Criteria $criteria
+     * @return {$className}Collection $objects
+     */
+    public function get{$className}sByCriteria(Criteria $criteria)
+  </block:publicCriteria> 
+    {
+        try 
+        {
+            $this->db->setFetchMode(Zend_Db::FETCH_ASSOC);
+            $sql = "SELECT {$fieldNames} 
+                    FROM ".{$className}::TABLENAME."
+                  <block:willExtend>
+                    , ".{$extendedClass}::TABLENAME."
+                  </block:willExtend>
+                    WHERE {$extendedCondition} " . {$criteriaVar}->createSql();
+            ${$classVar}Collection = new {$className}Collection();
+            foreach ($this->db->fetchAll($sql) as $result){
+                ${$classVar}Collection->append($this->create{$className}Internal($result));
+            }
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("No se pudo obtener la colección de items\n" . $e->getMessage());
+        }
+      <block:privateCriteria>
+        $this->criteria->clear();
+      </block:privateCriteria>
+        return ${$classVar}Collection;
+    }
+
+    /**
+     * Método que manda a llamar a {$className}Factory para instanciar el objeto
+     * @param array $result El arreglo que devolvió el objeto Zend_Db despues del fetch
+     * @uses {$className}Factory::create{$className}Internal
+     * @return {$className} 
+     */
+    private function create{$className}Internal($result)
+    {
+        return {$className}Factory::create{$className}Internal({$results});
+    }
+    
+
+} 
+ 
+ 

@@ -1,0 +1,50 @@
+<?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @copyright  {$copyright}
+ * @authoer    zetta
+ * @version    {$version} SVN: $Id$
+ */
+
+/**
+ * Clase abstracta que representa un catalogo general
+ *
+ * @category   project
+ * @package    Project_Models
+ * @subpackage Project_Models_Catalogs
+ * @copyright  {$copyright}
+ * @version    {$version} SVN: $Rev$
+ */
+abstract class Catalog
+{
+
+    /**
+     * Propiedad que representa el objeto db.
+     * @var Zend_Db_Adapter_Abstract Objeto Zend_Db_Adapter_Abstract
+     */
+    protected $db;
+
+    /**
+     * Date part usado para los campos tipo Date o DateTime
+     * @var string $datePart
+     */
+    protected $datePart;
+
+    /**
+     * Constructor de la clase catalogo
+     */
+    public function Catalog()
+    {
+        $this->datePart = "YYYY-MM-dd hh:mm:ss";
+        $this->db = DBAO::Database();
+      <block:privateCriteria>
+        $this->criteria = new Criteria();
+      </block:privateCriteria>
+    }
+}
+

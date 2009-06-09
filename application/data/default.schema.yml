@@ -1,0 +1,40 @@
+---
+schema: 
+  Album: 
+    table:       lyrics_albums
+    extends:     false
+    behaviors:
+      sluggable: { source : name , target : slug }
+  Artist: 
+    table:       lyrics_artists
+    extends:     false
+  Song: 
+    table:       lyrics_songs
+    extends:     false
+  Translation: 
+    table:       lyrics_translations
+    extends:     false
+  User: 
+    table:       lyrics_user
+    extends:     false
+  Email: 
+    table:       lyrics_user_emails
+    extends:     false
+#  Friend: 
+#    table:      lyrics_user_friends
+#    extends:    false
+  Invitation: 
+    table:       lyrics_user_invitations
+    extends:     false
+  Message: 
+    table:       lyrics_user_messages
+    extends:     false
+  Photo: 
+    table:       lyrics_user_photos
+    extends:     false
+  Profile: 
+    table:       lyrics_user_profiles
+    extends:     false
+  Settings: 
+    table:       lyrics_user_settings
+    extends:     false

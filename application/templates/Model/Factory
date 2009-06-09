@@ -1,0 +1,64 @@
+<?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @copyright  {$copyright}
+ * @author     {$author}, $LastChangedBy$
+ * @version    {$version} SVN: $Id$
+ */
+<block:useIncludes>
+
+/**
+ * {$className}
+ */
+require_once '{$modelFolder}/{$beanFolder}/{$className}.php';
+</block:useIncludes>
+
+/**
+ * Clase {$factory}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @subpackage Project_Models_Factories
+ * @copyright  {$copyright}
+ * @version    {$version} SVN: $Revision$
+ */
+class {$factory}
+{
+    /**
+     * Instancia un nuevo objeto {$className}
+   <block:firstPhpDoc>
+     * @param {$firstPhpDoc.dataType} ${$firstPhpDoc.phpName} {$firstPhpDoc.comment}
+   </block:firstPhpDoc>
+     * @return {$className} Objeto {$className}
+     */
+    public static function create{$className}({$firstParameters})
+    {
+        $new{$className} = new {$className}();
+      <block:firstSetters>
+        $new{$className}->{$firstSetters.setter}(${$firstSetters.phpName});
+      </block:firstSetters>
+        return $new{$className};
+    }
+
+    /**
+     * Crea un objeto {$className} con parametros solo para uso de catalogos
+   <block:secondPhpDoc>
+     * @param {$secondPhpDoc.dataType} ${$secondPhpDoc.phpName} {$secondPhpDoc.comment}
+   </block:secondPhpDoc>
+     * @return {$className} Objeto {$className}
+     */
+    public static function create{$className}Internal({$secondParameters})
+    {
+        $new{$className} = {$factory}::create{$className}({$secondParametersNotCasted});
+        $new{$className}->{$primaryKeySetter}(${$primaryKeyPhpName});
+        return $new{$className};
+    }
+
+} 
+ 
+ 

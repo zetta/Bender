@@ -1,0 +1,20 @@
+bender:
+  add_includes:     false
+  use_base:         true
+  singleton:        true
+  use_constants:    true
+  private_criteria: false
+  encoding:         ISO-8859-1
+  header:
+    author:         Juan Carlos Jarquín
+    brandName:      Patitos Corporation
+    copyright:      El copiraid =) 
+    description:    sistema que controla las cosas de'sas
+  mysql:            { username : root, password : temporal , server : localhost , dbname : lyrics_sf }
+  schema:           default
+  paths:
+    model_location: application/models
+    catalogs:       Catalogs
+    beans:          Beans
+    factories:      Factories
+    collections:    Collections

@@ -1,0 +1,72 @@
+<?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @copyright  {$copyright}
+ * @author     {$author}, $LastChangedBy$
+ * @version    {$version} SVN: $Id$
+ */
+
+/**
+ * Clase {$collection} que representa una collección de objetos {$className}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @subpackage Project_Models_Collections
+ * @copyright  {$copyright}
+ * @version    {$version} SVN: $Revision$
+ */
+class {$collection} extends ArrayIterator
+{
+	/**
+     * Appends the value
+     * @param {$className} ${$classVar}
+     */
+    public function append(${$classVar})
+    {
+        parent::append(${$classVar});
+    }
+
+    /**
+     * Return current array entry
+     * @return {$className}
+     */
+    public function current()
+    {
+        return parent::current();
+    }
+
+    /**
+     * Return current array entry and 
+     * move to next entry
+     * @return {$className} 
+     */
+    public function read()
+    {
+        ${$classVar} = $this->current();
+        $this->next();
+        return ${$classVar};
+    }
+
+    /**
+     * Get the first array entry
+     * if exists or null if not 
+     * @return {$className}|null 
+     */
+    public function getOne()
+    {
+        if ($this->count() > 0)
+        {
+            $this->seek(0);
+            return $this->current();
+        } else
+            return null;
+    }
+}
+
+
+
