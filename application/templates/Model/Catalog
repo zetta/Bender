@@ -71,7 +71,7 @@ class {$catalog} extends {$extendedCatalog}
      * @return {$catalog}
      */
     private function {$catalog}()
-    {
+    {{$behaviors}
         parent::Catalog();
     }    
   </block:isSingleton>
@@ -81,7 +81,7 @@ class {$catalog} extends {$extendedCatalog}
      * @return {$catalog}
      */
     public function {$catalog}()
-    {
+    {{$behaviors}
         parent::Catalog();
     }  
   </block:isntSingleton>

@@ -71,6 +71,12 @@ class DbTable
     private $object = '';
     
     /**
+     * Comportamientos que debe tener el objeto
+     * @var array
+     */
+    private $behaviors = array();
+    
+    /**
      * Constructor
      *
      * @param string $table
@@ -85,13 +91,13 @@ class DbTable
         $this->databaseName = $database;
         $this->database = Database::getInstance();
         $this->fields = new FieldCollection();
+        $this->behaviors = isset($modelInfo['behaviors']) ? $modelInfo['behaviors'] : array();
         $this->extends = $modelInfo['extends'];
-        $this->extendedTableName = isset($modelInfo['extended']) ? $modelInfo['extended'] : '';
-        if(!isset($modelInfo['object']))
+        $this->extendedTableName = isset($modelInfo['extends']) ? $modelInfo['extends'] : '';
+        if (! isset($modelInfo['object']))
             throw new Exception('Ha ocurrido un error no se pudo encontrar la información del objeto ');
         $this->object = $modelInfo['object'];
     }
-    
     
     /**
      * Genera toda la información acerca de la tabla
@@ -122,10 +128,12 @@ class DbTable
             $commentResource = $this->database->query($query);
             $commentData = $this->database->fetch_array($commentResource);
             $field->setComment($commentData['COLUMN_COMMENT']);
-            $this->fields->append($field);
+            $this->fields->offsetSet($fieldData->name, $field);
+            $this->fields->rewind();
         }
-        if($this->extends){
-            $this->extendedTable = new DbTable(ModelController::$models[$this->extendedTableName]['table'],$this->databaseName,ModelController::$models[$this->extendedTableName]);
+        if ($this->extends)
+        {
+            $this->extendedTable = new DbTable(ModelController::$models[$this->extendedTableName]['table'], $this->databaseName, ModelController::$models[$this->extendedTableName]);
             $this->extendedTable->initialize();
         }
     }
@@ -272,7 +280,7 @@ class DbTable
     {
         $this->extends = $extends;
     }
-
+    
     /**
      * @return string
      */
@@ -286,7 +294,39 @@ class DbTable
      */
     public function hasPrimaryField()
     {
-        return (get_class($this->primaryField) == 'DbField') ? true : false; 
+        return (get_class($this->primaryField) == 'DbField') ? true : false;
     }
     
+    /**
+     * Determina si el objeto tiene un Behavior Asociado
+     * @param string $behaviorName
+     */
+    public function hasBehavior($behaviorName)
+    {
+        return isset($this->behaviors[$behaviorName]);
+    }
+    
+    /**
+     * @return array
+     */
+    public function getBehaviors()
+    {
+        return $this->behaviors;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function hasBehaviors()
+    {
+        return count($this->behaviors) > 0 ? true : false;
+    }
+    
+    public function getField($fieldName)
+    {
+        if (! $this->fields->offsetExists($fieldName))
+            throw new Exception("Field [{$fieldName}] doesn't exists");
+        return $this->fields->offsetGet($fieldName);
+    }
+
 }

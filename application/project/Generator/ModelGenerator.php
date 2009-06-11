@@ -94,16 +94,17 @@ abstract class ModelGenerator
     /**
      * Escribe el archivo en la dirección especificada
      * @param string $path
+     * @param boolean $preserveChanges
      */
-    public function saveFile($path)
+    public function saveFile($path, $preserveChanges = true)
     {
         $this->filePath = $path;
         CommandLineInterface::getInstance()->printSection('Generator', 'Saving file ' . $path, 'NOTE');
         $dir = dirname($path);
         if (! is_dir($dir))
             mkdir($dir, 0777, true);
-        
-        $this->tryToPreserveChanges($path);
+        if($preserveChanges)
+            $this->tryToPreserveChanges($path);
         
         $handle = fopen($path, "w");
         if ($this->settings['encoding'] != 'UTF-8')

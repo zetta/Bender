@@ -34,7 +34,17 @@ class FieldCollection extends ArrayIterator
         $this->next();
         return $field;
     }
-
+    /**
+     * Regresa el valor guardado en X indice 
+     *
+     * @param string|int $index
+     * @return dbField
+     */
+    public function offsetGet($index)
+    {
+        return parent::offsetGet($index);    
+    }
+    
     /**
      * Get the first array entry
      * if exists or null if not 

@@ -1,13 +1,10 @@
 ---
 schema: 
-  Album: 
-    table:       lyrics_albums
-    extends:     false
-    behaviors:
-      sluggable: { source : name , target : slug }
   Artist: 
-    table:       lyrics_artists
-    extends:     false
+    table: lyrics_artists
+    extends: false
+    behaviors: 
+      sluggable: { target : slug , source : name }
   Song: 
     table:       lyrics_songs
     extends:     false

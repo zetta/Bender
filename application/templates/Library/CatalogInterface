@@ -1,0 +1,12 @@
+<?php 
+
+
+
+interface CatalogInterface 
+{
+    function addObserver( BehaviorObserver $behaviorObserver);
+    function notifyObservers($object,$event);
+    
+}
+
+

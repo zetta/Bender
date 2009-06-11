@@ -20,8 +20,13 @@
  * @copyright  {$copyright}
  * @version    {$version} SVN: $Rev$
  */
-abstract class Catalog
+abstract class Catalog implements CatalogInterface
 {
+
+    const EVENT_CREATE = 1;
+    const EVENT_RETRIEVE = 2;
+    const EVENT_UPDATE = 3;
+    const EVENT_DELETE = 4;
 
     /**
      * Propiedad que representa el objeto db.
@@ -36,6 +41,12 @@ abstract class Catalog
     protected $datePart;
 
     /**
+     * Arreglo de observers
+     * @var array
+     */
+    protected $observers;
+
+    /**
      * Constructor de la clase catalogo
      */
     public function Catalog()
@@ -46,5 +57,22 @@ abstract class Catalog
         $this->criteria = new Criteria();
       </block:privateCriteria>
     }
+    
+    
+    public function addObserver(BehaviorObserver $behaviorObserver)
+    {
+        $className = get_class($behaviorObserver);
+        if (! isset($this->observers[$className]))
+            $this->observers[$className] = $behaviorObserver;
+    }
+    
+    public function notifyObservers($object, $event)
+    {
+        foreach ($this->observers as $observer)
+        {
+            $observer->fireEvent($this, $object, $event);
+        }
+    }
+    
 }
 

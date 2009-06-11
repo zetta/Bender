@@ -59,7 +59,6 @@ class BeanGenerator extends ModelGenerator
                     'fieldName' => $field->getConstantName(), 
                     'fieldValue' => $this->table->getTable().'.'.$field->getName()
                 ));
-            
             $fields->next();
         }
         $fields->rewind();

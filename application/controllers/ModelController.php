@@ -5,11 +5,6 @@
  */
 
 /**
- * GenericModule 
- */
-require_once "application/controllers/GenericController.php";
-
-/**
  * Modulo para generar los models de forma automática
  *
  */
@@ -27,11 +22,20 @@ class ModelController extends GenericController
      */
     public static $models = array();
     
+    private $library = array(
+            'CatalogInterface' => 'Db/CatalogInterface.php', 
+            'Catalog' => 'Db/Catalog.php',
+            'Criteria' => 'Db/Criteria.php', 
+            'DBAO' => 'Db/DBAO.php', 
+            'BehaviorObserver' => 'Db/Behavior/BehaviorObserver.php', 
+            'Observer' => 'Db/Behavior/Observer.php', 
+            'SluggableBehavior' => 'Db/Behavior/SluggableBehavior.php');
+    
     /**
      * Genera los catálogos
      */
     public function generateAction()
-    {        
+    {
         $bender = $this->prepare();
         $schemaFile = isset($bender['schema']) ? "application/data/{$bender['schema']}.schema.yml" : 'application/data/default.schema.yml';
         
@@ -44,18 +48,14 @@ class ModelController extends GenericController
             $bender['models'][$objectName]['object'] = $objectName;
         
         ModelController::$models = $bender['models'];
-        
-        
         CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
-        $catalogLibraryGenerator = new LibraryGenerator($bender);
-        $catalogLibraryGenerator->createLibrary('Catalog');
-        $catalogLibraryGenerator->saveFile("output/Project/Db/Catalog.php");
-        $criteriaGenerator = new LibraryGenerator($bender);
-        $criteriaGenerator->createLibrary('Criteria');
-        $criteriaGenerator->saveFile("output/Project/Db/Criteria.php");
-        $dbaoGenerator = new LibraryGenerator($bender);
-        $dbaoGenerator->createLibrary('DBAO');
-        $dbaoGenerator->saveFile("output/Project/Db/DBAO.php");
+        
+        foreach ( $this->library as $objectName => $path )
+        {
+            $libraryGenerator = new LibraryGenerator($bender);
+            $libraryGenerator->createLibrary($objectName);
+            $libraryGenerator->saveFile("output/Project/" . $path,false);
+        }
         
         foreach ( $bender['models'] as $objectName => $model )
         {

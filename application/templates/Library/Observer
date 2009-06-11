@@ -1,0 +1,18 @@
+<?php 
+
+
+
+
+
+
+interface Observer
+{
+    
+    
+    
+    public function fireEvent(Catalog $catalog, $bean, $event);
+    
+}
+
+
+

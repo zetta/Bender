@@ -1,6 +1,6 @@
 <?php
 /**
- * BeanGenerator
+ * CatalogGenerator
  * @author Juan Carlos Jarquin
  */
 
@@ -20,7 +20,7 @@ class CatalogGenerator extends ModelGenerator
      * @var array
      */
     private $fieldNames = array();
-
+    
     /**
      * Arreglo donde se guardan los campos para usarlos como resulset
      * @var array
@@ -32,58 +32,61 @@ class CatalogGenerator extends ModelGenerator
      */
     private $maxFieldLength = 0;
     
-     /**
+    /**
      * Genera el Catalog del objeto y lo almacena para su posterior uso
      */
     public function createCatalog()
     {
         $template = $this->table->hasPrimaryField() ? 'Catalog' : 'SimpleCatalog';
-        CommandLineInterface::getInstance()->printSection('Generator','Creating '.$this->object.'Catalog','NOTE'); 
-        $this->template->set_filenames(array('catalog' => 'Model/'.$template));
+        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object . 'Catalog', 'NOTE');
+        
+        if($this->table->hasBehaviors())
+            $this->checkBehaviors();
+        
+        $this->template->set_filenames(array('catalog' => 'Model/' . $template));
         $this->template->assign('className', $this->object);
         $this->template->assign('catalog', $this->object . 'Catalog');
-        $this->template->assign('extendedCatalog','Catalog');
+        $this->template->assign('extendedCatalog', 'Catalog');
         $this->template->assign('classVar', $this->getLowerObject());
-        if($this->table->hasPrimaryField())
+        if ($this->table->hasPrimaryField())
         {
-            $this->template->assign('primaryKeySetter',$this->table->getPrimaryField()->getSetterName());
-            $this->template->assign('primaryKeyName',$this->table->getPrimaryField()->getName());
-            $this->template->assign('primaryKeyPhpName',$this->table->getPrimaryField()->getPhpName());
-            $this->template->assign('primaryKeyGetter',$this->table->getPrimaryField()->getGetterName());
+            $this->template->assign('primaryKeySetter', $this->table->getPrimaryField()->getSetterName());
+            $this->template->assign('primaryKeyName', $this->table->getPrimaryField()->getName());
+            $this->template->assign('primaryKeyPhpName', $this->table->getPrimaryField()->getPhpName());
+            $this->template->assign('primaryKeyGetter', $this->table->getPrimaryField()->getGetterName());
         }
         $this->template->showBlock((($this->settings['singleton']) ? 'isSingleton' : 'isntSingleton'));
         
         $fields = $this->table->getFields();
         $this->maxFieldLength = $this->getMaxFieldLength($fields);
-        $this->loopFields($fields,true,$this->table);
-        $privateCriteria = isset($this->settings['private_criteria']) ? $this->settings['private_criteria'] : false ; 
+        $this->loopFields($fields, true, $this->table);
+        $privateCriteria = isset($this->settings['private_criteria']) ? $this->settings['private_criteria'] : false;
         $criteriaBlocK = ($privateCriteria) ? 'privateCriteria' : 'publicCriteria';
         $this->template->showBlock($criteriaBlocK);
-        $this->template->assign('criteriaVar', ($privateCriteria ? '$this->criteria' :  '$criteria'));
+        $this->template->assign('criteriaVar', ($privateCriteria ? '$this->criteria' : '$criteria'));
         
-        if($this->table->getExtends())
+        if ($this->table->getExtends())
         {
             $this->template->showBlock('willExtend');
-            $this->template->showBlock('willExtend.'.$criteriaBlocK);
-            $this->template->assign('extendedCatalog',$this->table->getExtendedTable()->getObject().'Catalog');
+            $this->template->showBlock('willExtend.' . $criteriaBlocK);
+            $this->template->assign('extendedCatalog', $this->table->getExtendedTable()->getObject() . 'Catalog');
             $this->template->assign('extendedClass', $this->table->getExtendedTable()->getObject());
-            $this->template->assign('extendedPrimaryKeyUpper',ucfirst($this->table->getExtendedTable()->getPrimaryField()->getPhpName()));
-            $this->template->assign('extendedPrimaryKeyPhpName',$this->table->getExtendedTable()->getPrimaryField()->getPhpName());
-            $this->template->assign('extendedPrimaryKeyName',$this->table->getExtendedTable()->getPrimaryField()->getName());
+            $this->template->assign('extendedPrimaryKeyUpper', ucfirst($this->table->getExtendedTable()->getPrimaryField()->getPhpName()));
+            $this->template->assign('extendedPrimaryKeyPhpName', $this->table->getExtendedTable()->getPrimaryField()->getPhpName());
+            $this->template->assign('extendedPrimaryKeyName', $this->table->getExtendedTable()->getPrimaryField()->getName());
             
-            if($this->settings['add_includes'])
+            if ($this->settings['add_includes'])
                 $this->template->showBlock('extendedInclude');
             
-            $this->loopFields($this->table->getExtendedTable()->getFields(),false,$this->table->getExtendedTable());
+            $this->loopFields($this->table->getExtendedTable()->getFields(), false, $this->table->getExtendedTable());
             if (isset($this->settings['use_constants']) && $this->settings['use_constants'])
-                $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" = \".{$this->table->getExtendedTable()->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" and" );            
+                $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" = \".{$this->table->getExtendedTable()->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" and");
             else
-                $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::TABLE_NAME.\".{$this->table->getExtendedTable()->getPrimaryField()->getName()} = \".{$this->table->getExtendedTable()->getObject()}::TABLE_NAME.\".{$this->table->getExtendedTable()->getPrimaryField()->getName()} and" );
+                $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::TABLE_NAME.\".{$this->table->getExtendedTable()->getPrimaryField()->getName()} = \".{$this->table->getExtendedTable()->getObject()}::TABLE_NAME.\".{$this->table->getExtendedTable()->getPrimaryField()->getName()} and");
         }
-
         
-        $this->template->assign('fieldNames', implode(', ',$this->fieldNames));
-        $this->template->assign('results', implode(', ',$this->results));
+        $this->template->assign('fieldNames', implode(', ', $this->fieldNames));
+        $this->template->assign('results', implode(', ', $this->results));
         $this->fileContent = $this->template->fetch('catalog');
     
     }
@@ -95,22 +98,22 @@ class CatalogGenerator extends ModelGenerator
      */
     private function getMaxFieldLength(FieldCollection $fields)
     {
-        $maxFieldLength = 0;        
+        $maxFieldLength = 0;
         while ( $fields->valid() )
         {
             $field = $fields->current();
-            if($field->isPrimaryKey())
+            if ($field->isPrimaryKey())
             {
                 $fields->next();
                 continue;
             }
-            $maxFieldLength = (strlen($field->getName()) > $maxFieldLength) ? strlen($field->getName())+1 : $maxFieldLength;
+            $maxFieldLength = (strlen($field->getName()) > $maxFieldLength) ? strlen($field->getName()) + 1 : $maxFieldLength;
             $fields->next();
         }
         $fields->rewind();
         return $maxFieldLength;
     }
-
+    
     /**
      * Método que itera sobre los items dentro del FieldCollection
      * @param FieldCollection $fields
@@ -127,24 +130,35 @@ class CatalogGenerator extends ModelGenerator
             else
                 $this->fieldNames[] = "\".{$table->getObject()}::TABLE_NAME.\".{$field->getName()}";
             $this->results[] = ($field->getDataType() == 'Zend_Date') ? "new Zend_Date(\$result['{$field->getName()}'], \$this->datePart)" : "\$result['{$field->getName()}']";
-
-            if($field->isPrimaryKey() || !$isPrimaryTable)
+            
+            if ($field->isPrimaryKey() || ! $isPrimaryTable)
             {
                 $fields->next();
                 continue;
             }
             $spaces = $this->maxFieldLength - strlen($field->getName());
-    		$spaces = sprintf("% " . $spaces . "s", '');    
-            $this->template->assignBlock('getters',array(
-                'name'   => $field->getName(),
-                'getter' => $field->getGetterName(),
-                'spaces' => $spaces,
-            ));
+            $spaces = sprintf("% " . $spaces . "s", '');
+            $this->template->assignBlock('getters', array('name' => $field->getName(), 'getter' => $field->getGetterName(), 'spaces' => $spaces));
             $fields->next();
         }
         $fields->rewind();
     }
-
+    
+    
+    /**
+     * Genera la información de los behaviors utilizados en el catálogo
+     */
+    private function checkBehaviors()
+    {
+        $behaviorArray = array();
+        foreach ($this->table->getBehaviors() as $behaviorName => $behaviorData)
+        {
+            $behavior =  CatalogBehavior::factory($behaviorName,$behaviorData,$this->table);
+            $behaviorArray[] = "        \$this->addObserver({$behavior->generate()});";
+        }
+        $this->template->assign('behaviors',"\n".implode("\n",$behaviorArray));
+    }
+   
 }
 
 

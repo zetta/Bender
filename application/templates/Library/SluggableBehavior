@@ -1,0 +1,23 @@
+<?php 
+
+
+
+class SluggableBehavior extends BehaviorObserver 
+{
+ 
+    public function SluggableBehavior($table, $source, $target)
+    {
+        
+        
+        
+    }   
+    
+    public function fireEvent(Catalog $catalog,$object, $event)
+    {
+
+        
+        print_r($catalog);
+        print_r($object);
+    }
+    
+}

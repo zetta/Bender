@@ -66,14 +66,15 @@ class CommandLineInterpreter
         if (! file_exists("application/controllers/{$controller}Controller.php"))
             throw new Exception("El controllador {$this->controller} no existe");
         
-        require_once "application/controllers/{$controller}Controller.php";
         $controllerName = "{$controller}Controller";
         $reflectedModule = new ReflectionClass($controllerName);
         if (! $reflectedModule->hasMethod($this->action . 'Action'))
-            throw new Exception("La acción {$this->action} no existe");
+            throw new Exception("La acción [{$this->action}] no existe");
+        $method =$reflectedModule->getMethod($this->action.'Action');
+        if(!$method->isPublic())
+            throw new Exception("La acción [{$this->action}] no existe");
         
-        require_once 'application/project/Template/Template.php';
-        $controller = new $controllerName();
+        $controller = $reflectedModule->newInstance();
         $controller->setActionName($this->action);
         $controller->dispatch();
         $controller->postDispatch();
