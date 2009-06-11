@@ -1,47 +1,122 @@
-<?php 
+<?php
 
-
-
-class SluggableBehavior extends BehaviorObserver 
+class SluggableBehavior extends BehaviorObserver
 {
- 
+    /**
+     * El objeto al que se va a accesar
+     * @var mixed
+     */
     private $object;
+    
+    /**
+     * Catalogo utilizado
+     * @var CatalogInterface $catalog
+     */
     private $catalog;
+    
+    /**
+     * Nombre del campo donde vamos a sacar el slug
+     * @var string
+     */
     private $source;
+    
+    /**
+     * Nombre del campo donde vamos a guardar el slug
+     * @var string
+     */
     private $target;
     
+    /**
+     * Nombre del campo sin tabla donde se sacará el slug
+     * @var string
+     */
+    private $sourceName;
     
+    /**
+     * Nombre del campo sin tabla donde se guardará el slug
+     * @var string
+     */
+    private $targetName;
+    
+    /**
+     * Constructor de la Clase
+     *
+     * @param string $source
+     * @param string $target
+     * @return SluggableBehavior
+     */
     public function SluggableBehavior($source, $target)
     {
-        
-    }   
+        $this->source = $source;
+        $this->target = $target;
+        $sourceName = explode('.', $source);
+        $this->sourceName = $sourceName[1];
+        $targetName = explode('.', $target);
+        $this->targetName = $targetName[1];
+    }
     
-    public function fireEvent(Catalog $catalog,$object, $event)
+    /**
+     * Dispara el evento
+     *
+     * @param Catalog $catalog
+     * @param mixed $object
+     * @param int $event see Catalog constants
+     */
+    public function fireEvent(Catalog $catalog, $object, $event)
     {
         $this->catalog = $catalog;
         $this->object = $object;
-        switch($event)
+        switch ( $event)
         {
-            case Catalog::EVENT_CREATE:
+            case Catalog::EVENT_CREATE :
                 $this->setNewSlug();
             break;
         }
     }
     
-    public function setNewSlug()
+    /**
+     * Obtiene el valor del slug y lo pone en el bean
+     */
+    private function setNewSlug()
     {
         $criteria = new Criteria();
-        //$criteria->add($target,);
+        $getterName = $this->getCamelCase('get_' . $this->sourceName);
+        $slug = $this->getSlugString($this->object->$getterName());
+        $criteria->add($this->target, $slug, Criteria::RIGHT_LIKE);
+        $slugs = $this->catalog->getCustomFieldByCriteria($criteria, $this->target);
+        if ($slugs)
+        {
+            $index = 1;
+            while ( $index > 0 )
+            {
+                $temporalSlug = $slug . '-' . $index;
+                if (! in_array($temporalSlug, $slugs))
+                {
+                    $slug = $temporalSlug;
+                    $index = - 1;
+                }
+                $index ++;
+            }
+            $setterName = $this->getCamelCase('set_' . $this->targetName);
+            $this->object->$setterName($slug);
+        }
+    
     }
     
-    
-    public function getSlugString($str)
+    /**
+     * Obtiene el slug dependiendo una cadena
+     *
+     * @param string $str
+     * @return string
+     */
+    private function getSlugString($str)
     {
         $str = strtolower(trim($str));
         $str = preg_replace('/[^a-z0-9-]/', '-', $str);
         $str = preg_replace('/-+/', "-", $str);
         return $str;
     }
-    
-    
+
 }
+
+

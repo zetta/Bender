@@ -58,7 +58,6 @@ class SchemaGenerator
      */
     public function generate()
     {
-        include_once 'application/project/Yaml/Spyc.php';
         $db = Database::getInstance();
         $schema = array();
         foreach ( $db->fetch_all_array("SHOW FULL TABLES FROM {$this->databaseName}") as $table )
@@ -68,7 +67,6 @@ class SchemaGenerator
             $objectName = StringFormatter::toCamelCase($tableName, '_', true);
             $schema[$objectName] = array('table' => $tableName, 'extends' => false);
         }
-        
         $this->fileContent = Spyc::YAMLDump(array('schema' => $schema),2,100);
     }
     

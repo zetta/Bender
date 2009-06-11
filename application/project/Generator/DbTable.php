@@ -123,7 +123,7 @@ class DbTable
             if (ModelController::$settings['use_constants'])
                 $field->setCatalogAccesor($this->getObject().'::'.$field->getConstantName());
             else
-                $field->setCatalogAccesor($this->getObject()."::TABLE_NAME.\"{$field->getConstantName()}\".");
+                $field->setCatalogAccesor($this->getObject()."::TABLENAME.\".{$field->getName()}\"");
             
             if ($field->isPrimaryKey())
             {

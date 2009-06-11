@@ -1,10 +1,30 @@
-<?php 
+<?php
 
-
-
-abstract class BehaviorObserver implements Observer 
+abstract class BehaviorObserver implements Observer
 {
     
-    
-    
+    /**
+     * Obtiene el camelCase de una cadena de texto
+     *
+     * @param string $string
+     * @param boolean $first
+     * @param boolean $preserve 
+     * @return string
+     */
+    protected function getCamelCase($string, $first = false, $preserve = false)
+    {
+        $array = explode('_', $string);
+        $string = '';
+        foreach ( $array as $i => $segment )
+        {
+            if (! $preserve)
+                $segment = strtolower($segment);
+            if ($i || $first)
+                $segment = ucfirst($segment);
+            $string .= $segment;
+        }
+        return $string;
+    }
+
 }
+
