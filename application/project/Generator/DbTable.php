@@ -120,6 +120,11 @@ class DbTable
             $field->setCastDataType(DbTable::parseCastDataType($field->getDataType()));
             $field->setBaseDataType($fieldData->type);
             $field->setIsPrimaryKey(($fieldData->primary_key == 0 ? false : true));
+            if (ModelController::$settings['use_constants'])
+                $field->setCatalogAccesor($this->getObject().'::'.$field->getConstantName());
+            else
+                $field->setCatalogAccesor($this->getObject()."::TABLE_NAME.\"{$field->getConstantName()}\".");
+            
             if ($field->isPrimaryKey())
             {
                 $this->primaryField = $field;

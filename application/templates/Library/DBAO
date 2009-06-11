@@ -56,7 +56,7 @@ abstract class DBAO
     {
         if (!isset(self::$instance))
         {
-          self::$instance = Zend_Db::factory('Pdo_Mysql',DBAO::$config);
+          self::$instance = Zend_Db::factory(DBAO::$config);
         }
         return self::$instance;
     }

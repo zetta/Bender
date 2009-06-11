@@ -10,7 +10,7 @@ bender:
     brandName:      Patitos Corporation
     copyright:      El copiraid =) 
     description:    sistema que controla las cosas de'sas
-  mysql:            { username : root, password : temporal , server : localhost , dbname : lyrics_sf }
+  mysql:            { username : root, password : temporal , server : localhost , dbname : lyrics_fx }
   schema:           default
   paths:
     model_location: application/models

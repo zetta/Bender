@@ -2,7 +2,6 @@
 
 class SluggableCatalogBehavior extends CatalogBehavior
 {
-    
     /**
      * Constructor de la clase
      *
@@ -22,11 +21,9 @@ class SluggableCatalogBehavior extends CatalogBehavior
      */
     public function generate()
     {
-        $table = strtoupper($this->table->getTable());
-        $source = $this->table->getField($this->behaviorData['source'])->getConstantName();
-        $target = $this->table->getField($this->behaviorData['target'])->getConstantName();
-        return "new SluggableBehavior({$table},{$source},{$target})";
+        $source = $this->table->getField($this->behaviorData['source'])->getCatalogAccesor();
+        $target = $this->table->getField($this->behaviorData['target'])->getCatalogAccesor();
+        return "new SluggableBehavior({$source},{$target})";
     }
-
 }
 

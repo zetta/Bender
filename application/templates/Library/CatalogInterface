@@ -4,9 +4,25 @@
 
 interface CatalogInterface 
 {
-    function addObserver( BehaviorObserver $behaviorObserver);
-    function notifyObservers($object,$event);
-    
+    public static function getInstance();
+    public function addObserver( BehaviorObserver $behaviorObserver);
+    public function notifyObservers($object,$event);
+    public function create($object);
+    public function update($object);
+    public function delete($object);
+    public function deleteById($object);
+    public function getById($idObject);
+    public function retrieveAllIds();   
+  <block:privateCriteria>
+    private function getIdsByCriteria();
+    private function getByCriteria();
+    private function getCustomFieldByCriteria($field);
+  </block:privateCriteria>
+  <block:publicCriteria>
+    public function getIdsByCriteria(Criteria $criteria);
+    public function getByCriteria(Criteria $criteria);
+    public function getCustomFieldByCriteria(Criteria $criteria, $field);
+  </block:publicCriteria>
 }
 
 

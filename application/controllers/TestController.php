@@ -13,17 +13,20 @@ class TestController extends GenericController
         $settingsFile = 'application/data/settings.yml';
         $yaml = Spyc::YAMLLoad($settingsFile);
         $bender = new ArrayObject(isset($yaml['bender']) ? $yaml['bender'] : null);
-        DBAO::$config = $bender['mysql'];
+        $config = new Zend_Config(array('database' => array(
+                'adapter' => 'Pdo_Mysql',
+                'params' => $bender['mysql']
+        )));
+        DBAO::$config = $config->database;
         
-        
-        
-        $artist = ArtistFactory::createArtist('Green Day','es una banda','Su bio',1,1,'',new Zend_Date(),new Zend_Date());
-        ArtistCatalog::getInstance()->createArtist($artist);
+        $artist = ArtistFactory::createArtist('Green Day','green-day','Su Mario bross','A la bio',1,1);
+        ArtistCatalog::getInstance()->create($artist);
         
         
         print_r($artist);
+        echo $artist->getId();
         echo "\n";
-        echo $artist->getIdArtist();
+        
     }
     
 }

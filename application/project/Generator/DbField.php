@@ -74,6 +74,13 @@ class DbField
     private $primaryKey = false;
     
     /**
+     * Nombre con el que se accesa al dato dentro de los accesos, 
+     * Si se usan constantes en las preferencias, este atributo deberá almacenar un 
+     * nombre de constante en caso contrario la constante de la tabla y el nombre del campo
+     */
+    private $catalogAccesor = '';
+    
+    /**
      * Nombre de la tabla a la que pertenece el field
      * @var string
      */
@@ -260,5 +267,20 @@ class DbField
         $this->table = $table;
     }
 
+    /**
+     * @param string $accesor
+     */
+    public function setCatalogAccesor($accesor)
+    {
+        $this->catalogAccesor = $accesor;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getCatalogAccesor()
+    {
+        return $this->catalogAccesor;
+    }
 
 }

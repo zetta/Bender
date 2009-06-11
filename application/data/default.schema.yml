@@ -1,37 +1,37 @@
 ---
 schema: 
   Artist: 
-    table: lyrics_artists
+    table: lyricsfx_artists
     extends: false
     behaviors: 
       sluggable: { target : slug , source : name }
   Song: 
-    table:       lyrics_songs
+    table:       lyricsfx_songs
     extends:     false
   Translation: 
-    table:       lyrics_translations
+    table:       lyricsfx_translations
     extends:     false
   User: 
-    table:       lyrics_user
+    table:       lyricsfx_user
     extends:     false
   Email: 
-    table:       lyrics_user_emails
+    table:       lyricsfx_user_email
     extends:     false
 #  Friend: 
-#    table:      lyrics_user_friends
+#    table:      lyricsfx_user_friends
 #    extends:    false
   Invitation: 
-    table:       lyrics_user_invitations
+    table:       lyricsfx_user_invite
     extends:     false
   Message: 
-    table:       lyrics_user_messages
+    table:       lyricsfx_user_pm
     extends:     false
   Photo: 
-    table:       lyrics_user_photos
+    table:       lyricsfx_user_image
     extends:     false
   Profile: 
-    table:       lyrics_user_profiles
+    table:       lyricsfx_user_profile
     extends:     false
   Settings: 
-    table:       lyrics_user_settings
+    table:       lyricsfx_user_setting
     extends:     false

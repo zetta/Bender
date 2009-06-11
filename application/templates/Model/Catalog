@@ -90,8 +90,11 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo para agregar un {$className} a la base de datos
      * @param {$className} ${$classVar} Objeto {$className}
      */
-    public function create{$className}({$className} ${$classVar})
+    public function create(${$classVar})
     {
+        if(!(${$classVar} instanceof {$className}))
+            throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+        $this->notifyObservers(${$classVar},Catalog::EVENT_CREATE);
         try
         {
           <block:willExtend>
@@ -118,7 +121,7 @@ class {$catalog} extends {$extendedCatalog}
      * @param int ${$primaryKeyPhpName}
      * @return {$className}|null Objeto {$className} si existe, caso contrario retorna null;
      */
-    public function get{$className}ById(${$primaryKeyPhpName})
+    public function getById(${$primaryKeyPhpName})
     {
         try
         {
@@ -145,7 +148,7 @@ class {$catalog} extends {$extendedCatalog}
      * @param int ${$extendedPrimaryKeyPhpName} 
      * @return {$className}|null Objeto {$className} si existe, caso contrario retorna null;
      */
-    public function get{$className}By{$extendedPrimaryKeyUpper}(${$extendedPrimaryKeyPhpName})
+    public function getBy{$extendedPrimaryKeyUpper}(${$extendedPrimaryKeyPhpName})
     {
         try
         {
@@ -171,7 +174,7 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo para Obtener todos los ids en un arreglo
      * @return array
      */
-    public function retrieveAll{$className}Ids()
+    public function retrieveAllIds()
     {
         try
         {
@@ -188,8 +191,10 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo para actualizar un {$className}
      * @param {$className} ${$className} Objeto {$className}
      */
-    public function update{$className}({$className} ${$classVar})
+    public function update(${$classVar})
     {
+        if(!(${$classVar} instanceof {$className}))
+            throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
         try
         {
             $where[] = "{$primaryKeyName} = '{${$classVar}->{$primaryKeyGetter}()}'";
@@ -213,8 +218,10 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo para eliminar un {$className}
      * @param {$className} ${$className} Objeto {$className}
      */
-    public function delete{$className}({$className} ${$classVar})
+    public function delete(${$classVar})
     {
+        if(!(${$classVar} instanceof {$className}))
+            throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
         try
         {
             $where[] = "{$primaryKeyName} = '{${$classVar}->{$primaryKeyGetter}()}'";
@@ -230,7 +237,7 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo para eliminar un {$className} a partir de su Id
      * @param int ${$className}
      */
-    public function delete{$className}ById(${$primaryKeyPhpName})
+    public function deleteById(${$primaryKeyPhpName})
     {
         try
         {
@@ -254,7 +261,7 @@ class {$catalog} extends {$extendedCatalog}
      * @param Criteria $criteria
      * @return array Array con todos los id de {$className} que encajen en la busqueda
      */
-    private function get{$className}IdsByCriteria(Criteria $criteria)
+    public function getIdsByCriteria(Criteria $criteria)
   </block:publicCriteria>
     {
         try
@@ -276,14 +283,14 @@ class {$catalog} extends {$extendedCatalog}
      * @param string $field
      * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
      */
-    {$visibility} function get{$className}CustomFieldByCriteria($field)
+    private function getCustomFieldByCriteria($field)
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
      * @param string $field
      * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
      */
-    {$visibility} function get{$className}CustomFieldByCriteria(Criteria $criteria, $field)
+    public function getCustomFieldByCriteria(Criteria $criteria, $field)
   </block:publicCriteria>
     {
         try
@@ -305,13 +312,13 @@ class {$catalog} extends {$extendedCatalog}
   <block:privateCriteria>
      * @return {$className}Collection $objects
      */
-    protected function get{$className}sByCriteria()
+    private function getByCriteria()
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
      * @return {$className}Collection $objects
      */
-    public function get{$className}sByCriteria(Criteria $criteria)
+    public function getByCriteria(Criteria $criteria)
   </block:publicCriteria> 
     {
         try 
@@ -344,7 +351,7 @@ class {$catalog} extends {$extendedCatalog}
      * @uses {$className}Factory::create{$className}Internal
      * @return {$className} 
      */
-    private function create{$className}Internal($result)
+    private function createInternal($result)
     {
         return {$className}Factory::create{$className}Internal({$results});
     }

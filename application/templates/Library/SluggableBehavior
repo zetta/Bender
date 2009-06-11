@@ -5,19 +5,43 @@
 class SluggableBehavior extends BehaviorObserver 
 {
  
-    public function SluggableBehavior($table, $source, $target)
+    private $object;
+    private $catalog;
+    private $source;
+    private $target;
+    
+    
+    public function SluggableBehavior($source, $target)
     {
-        
-        
         
     }   
     
     public function fireEvent(Catalog $catalog,$object, $event)
     {
-
-        
-        print_r($catalog);
-        print_r($object);
+        $this->catalog = $catalog;
+        $this->object = $object;
+        switch($event)
+        {
+            case Catalog::EVENT_CREATE:
+                $this->setNewSlug();
+            break;
+        }
     }
+    
+    public function setNewSlug()
+    {
+        $criteria = new Criteria();
+        //$criteria->add($target,);
+    }
+    
+    
+    public function getSlugString($str)
+    {
+        $str = strtolower(trim($str));
+        $str = preg_replace('/[^a-z0-9-]/', '-', $str);
+        $str = preg_replace('/-+/', "-", $str);
+        return $str;
+    }
+    
     
 }

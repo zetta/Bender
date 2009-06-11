@@ -50,6 +50,7 @@ class CatalogGenerator extends ModelGenerator
         $this->template->assign('classVar', $this->getLowerObject());
         if ($this->table->hasPrimaryField())
         {
+            $this->template->showBlock('hasPrimaryField');
             $this->template->assign('primaryKeySetter', $this->table->getPrimaryField()->getSetterName());
             $this->template->assign('primaryKeyName', $this->table->getPrimaryField()->getName());
             $this->template->assign('primaryKeyPhpName', $this->table->getPrimaryField()->getPhpName());
@@ -79,10 +80,7 @@ class CatalogGenerator extends ModelGenerator
                 $this->template->showBlock('extendedInclude');
             
             $this->loopFields($this->table->getExtendedTable()->getFields(), false, $this->table->getExtendedTable());
-            if (isset($this->settings['use_constants']) && $this->settings['use_constants'])
-                $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" = \".{$this->table->getExtendedTable()->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" and");
-            else
-                $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::TABLE_NAME.\".{$this->table->getExtendedTable()->getPrimaryField()->getName()} = \".{$this->table->getExtendedTable()->getObject()}::TABLE_NAME.\".{$this->table->getExtendedTable()->getPrimaryField()->getName()} and");
+            $this->template->assign('extendedCondition', "\".{$this->table->getPrimaryField()->getCatalogAccesor()}.\" = \".{$this->table->getExtendedTable()->getPrimaryField()->getCatalogAccesor()}.\" and");
         }
         
         $this->template->assign('fieldNames', implode(', ', $this->fieldNames));
@@ -124,11 +122,7 @@ class CatalogGenerator extends ModelGenerator
         while ( $fields->valid() )
         {
             $field = $fields->current();
-            
-            if (isset($this->settings['use_constants']) && $this->settings['use_constants'])
-                $this->fieldNames[] = "\".{$table->getObject()}::{$field->getConstantName()}.\"";
-            else
-                $this->fieldNames[] = "\".{$table->getObject()}::TABLE_NAME.\".{$field->getName()}";
+            $this->fieldNames[] = "\".{$field->getCatalogAccesor()}.\"";
             $this->results[] = ($field->getDataType() == 'Zend_Date') ? "new Zend_Date(\$result['{$field->getName()}'], \$this->datePart)" : "\$result['{$field->getName()}']";
             
             if ($field->isPrimaryKey() || ! $isPrimaryTable)

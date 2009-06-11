@@ -22,6 +22,11 @@ class ModelController extends GenericController
      */
     public static $models = array();
     
+    /**
+     * Las settings para poder accesar a ellas cuando se neceesiten =P
+     */
+    public static $settings = array();
+    
     private $library = array(
             'CatalogInterface' => 'Db/CatalogInterface.php', 
             'Catalog' => 'Db/Catalog.php',
@@ -48,6 +53,8 @@ class ModelController extends GenericController
             $bender['models'][$objectName]['object'] = $objectName;
         
         ModelController::$models = $bender['models'];
+        
+        
         CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
         
         foreach ( $this->library as $objectName => $path )
@@ -116,7 +123,7 @@ class ModelController extends GenericController
         $dataBase = Database::getInstance();
         $dataBase->configure($bender['mysql']['server'], $bender['mysql']['username'], $bender['mysql']['password'], $bender['mysql']['dbname']);
         $dataBase->connect();
-        
+        ModelController::$settings = $bender;
         return $bender;
     }
 

@@ -36,6 +36,7 @@ class LibraryGenerator extends ModelGenerator
         $this->template->set_filenames(array('library' => 'Library/'.$libraryName));
         $privateCriteria = isset($this->settings['private_criteria']) ? $this->settings['private_criteria'] : false ; 
         $criteriaBlocK = ($privateCriteria) ? 'privateCriteria' : 'publicCriteria';
+        
         $this->template->showBlock($criteriaBlocK);
         $this->fileContent = $this->template->fetch('library');
     }
