@@ -142,7 +142,7 @@ abstract class ModelGenerator
         if (file_exists($path))
         {
             //CommandLineInterface::getInstance()->printSection('Generator','File exists!','NOTE');
-            $content = file_get_contents($path);
+            $content = substr(file_get_contents($path),5);
             $content = eregi_replace("require|include","#",$content);
             eval($content);
             
