@@ -90,12 +90,15 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo para agregar un {$className} a la base de datos
      * @param {$className} ${$classVar} Objeto {$className}
      */
-    public function create{$className}({$className} ${$classVar})
+    public function create(${$classVar})
     {
+        if(!(${$classVar} instanceof {$className}))
+            throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+        $this->notifyObservers(${$classVar},Catalog::EVENT_CREATE);
         try
         {
           <block:willExtend>
-            $this->create{$extendedClass}(${$classVar});
+            parent::create(${$classVar});
           </block:willExtend>
             $data = array(
               <block:getters>

@@ -98,7 +98,7 @@ class {$catalog} extends {$extendedCatalog}
         try
         {
           <block:willExtend>
-            $this->create{$extendedClass}(${$classVar});
+            parent::create(${$classVar});
           </block:willExtend>
             $data = array(
               <block:getters>
@@ -127,12 +127,12 @@ class {$catalog} extends {$extendedCatalog}
         {
           <block:privateCriteria>
             {$criteriaVar}->add('{$primaryKeyName}', ${$primaryKeyPhpName}, Criteria::EQUAL);
-            $new{$className} = $this->get{$className}sByCriteria()->getOne();
+            $new{$className} = $this->getByCriteria()->getOne();
           </block:privateCriteria>
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
             {$criteriaVar}->add('{$primaryKeyName}', ${$primaryKeyPhpName}, Criteria::EQUAL);
-            $new{$className} = $this->get{$className}sByCriteria({$criteriaVar})->getOne();
+            $new{$className} = $this->getByCriteria({$criteriaVar})->getOne();
           </block:publicCriteria>
         }
         catch(Exception $e)
@@ -159,7 +159,7 @@ class {$catalog} extends {$extendedCatalog}
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
             {$criteriaVar}->add('{$extendedPrimaryKeyName}', ${$extendedPrimaryKeyPhpName}, Criteria::EQUAL);
-            $new{$className} = $this->get{$className}sByCriteria({$criteriaVar})->getOne();
+            $new{$className} = $this->getByCriteria({$criteriaVar})->getOne();
           </block:publicCriteria>
         }
         catch(Exception $e)
@@ -205,7 +205,7 @@ class {$catalog} extends {$extendedCatalog}
             );
             $this->db->update({$className}::TABLENAME, $data, $where);
           <block:willExtend>
-            $this->update{$extendedClass}(${$classVar});
+            parent::update(${$classVar});
           </block:willExtend>
         }
         catch(Exception $e)
@@ -255,7 +255,7 @@ class {$catalog} extends {$extendedCatalog}
   <block:privateCriteria>
      * @return array Array con todos los id de {$className} que encajen en la busqueda
      */
-    private function get{$className}IdsByCriteria()
+    private function getIdsByCriteria()
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
@@ -332,7 +332,7 @@ class {$catalog} extends {$extendedCatalog}
                     WHERE {$extendedCondition} " . {$criteriaVar}->createSql();
             ${$classVar}Collection = new {$className}Collection();
             foreach ($this->db->fetchAll($sql) as $result){
-                ${$classVar}Collection->append($this->create{$className}Internal($result));
+                ${$classVar}Collection->append($this->createInternal($result));
             }
         }
         catch(Exception $e)
