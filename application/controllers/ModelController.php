@@ -51,6 +51,7 @@ class ModelController extends GenericController
         
         $modelPath =  (isset($yaml['workcopy'])) ? $yaml['workcopy'] : "output/{$bender['mysql']['dbname']}";
         $libPath = (isset($yaml['libPath'])) ? $yaml['libPath'] : "output/Project";
+        $libfirst = (isset($yaml['libfirst'])) ? $yaml['libfirst'] : true;
         
         if(isset($yaml['workcopy']))
             ProjectAutoloader::getInstance()->addDirectory($yaml['workcopy']);
@@ -62,15 +63,8 @@ class ModelController extends GenericController
         
         ModelController::$models = $bender['models'];
         
-        
-        CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
-        
-        foreach ( $this->library as $objectName => $path )
-        {
-            $libraryGenerator = new LibraryGenerator($bender);
-            $libraryGenerator->createLibrary($objectName);
-            $libraryGenerator->saveFile("{$libPath}/{$path}",false);
-        }
+        if($libfirst)
+            $this->generateLibrary($libPath);
         
         foreach ( $bender['models'] as $objectName => $model )
         {
@@ -94,7 +88,28 @@ class ModelController extends GenericController
             $catalogGenerator->saveFile("{$modelPath}/{$bender['paths']['collections']}/{$objectName}Collection.php");
         
         }
+        
+        if(!$libfirst)
+            $this->generateLibrary($libPath);
+        
     }
+    
+    /**
+     * Genera las librerias
+     * @param string $libPath
+     */
+    private function generateLibrary($libPath)
+    {
+        CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
+        foreach ( $this->library as $objectName => $path )
+        {
+            $libraryGenerator = new LibraryGenerator($bender);
+            $libraryGenerator->createLibrary($objectName);
+            $libraryGenerator->saveFile("{$libPath}/{$path}",false);
+        }
+    }
+    
+    
     
     /**
      * Genera un schema a partir de la configuración en el archivo settings

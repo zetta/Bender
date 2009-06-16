@@ -1,5 +1,6 @@
 #workcopy: PATH
 #libPath: PATH
+#libfirst: true
 schema:
   Artist: 
     table: lyrics_artists
