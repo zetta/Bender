@@ -144,16 +144,20 @@ abstract class ModelGenerator
             //CommandLineInterface::getInstance()->printSection('Generator','File exists!','NOTE');
             $content = substr(file_get_contents($path),5);
             $content = eregi_replace("require|include","#",$content);
-            eval($content);
-            
+                        
             $php = substr($this->fileContent, 5);
             $php = eregi_replace('class ', 'class Temp', $php);
-            eval($php);
             
             $classes = array();
             preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface)\s+(\w+)~mi', $php, $classes);
             $newClass = $classes[1][0];
             $oldClass = substr($newClass, 4);
+            
+            
+            if(!class_exists($oldClass))
+                eval($content);
+            eval($php);
+            
             
             $newReflection = new ReflectionClass($newClass);
             $oldReflection = new ReflectionClass($oldClass);
