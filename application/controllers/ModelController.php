@@ -49,6 +49,14 @@ class ModelController extends GenericController
         $yaml = Spyc::YAMLLoad($schemaFile);
         $bender['models'] = $yaml['schema'];
         
+        $modelPath =  (isset($yaml['workcopy'])) ? $yaml['workcopy'] : "output/{$bender['mysql']['dbname']}";
+        $libPath = (isset($yaml['libPath'])) ? $yaml['libPath'] : "output/Project";
+        
+        if(isset($yaml['workcopy']))
+            ProjectAutoloader::getInstance()->addDirectory($yaml['workcopy']);
+        if(isset($yaml['libPath']))
+            ProjectAutoloader::getInstance()->addDirectory($yaml['libPath']);
+        
         foreach ( $bender['models'] as $objectName => $model )
             $bender['models'][$objectName]['object'] = $objectName;
         
@@ -61,14 +69,13 @@ class ModelController extends GenericController
         {
             $libraryGenerator = new LibraryGenerator($bender);
             $libraryGenerator->createLibrary($objectName);
-            $libraryGenerator->saveFile("output/Project/" . $path,false);
+            $libraryGenerator->saveFile("{$libPath}/{$path}",false);
         }
         
         foreach ( $bender['models'] as $objectName => $model )
         {
             $dbTable = new DbTable($model['table'], $bender['mysql']['dbname'], $model);
             $dbTable->initialize();
-            $modelPath = "output/{$bender['mysql']['dbname']}";
             
             $beanGenerator = new BeanGenerator($objectName, $dbTable, $model['extends'], $bender);
             $beanGenerator->createBean();

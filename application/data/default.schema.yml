@@ -1,5 +1,6 @@
----
-schema: 
+#workcopy: PATH
+#libPath: PATH
+schema:
   Artist: 
     table: lyrics_artists
     extends: false

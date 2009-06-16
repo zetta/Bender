@@ -38,7 +38,8 @@ class ProjectAutoloader
     protected $cacheChanged = false;
     
     /**
-     * @var mixed
+     * Directorios donde se buscarán las clases
+     * @var ArrayObject
      */
     protected $dirs = array();
     
@@ -50,21 +51,21 @@ class ProjectAutoloader
     /**
      * Constructor de la clase
      * @param string $cacheFile
+     * @return ProjectAutoloader
      */
-    protected function __construct($cacheFile = null)
+    protected function ProjectAutoloader($cacheFile = null)
     {
         if (! is_null($cacheFile))
         {
             $this->cacheFile = $cacheFile;
         }
+        $this->dirs = new ArrayObject(explode(PATH_SEPARATOR, get_include_path()));
         $this->loadCache();
     }
     
     /**
      * Retrieves the singleton instance of this class.
-     *
      * @param  string $cacheFile  The file path to save the cache
-     *
      * @return ProjectAutoloader   A ProjectAutoloader implementation instance.
      */
     static public function getInstance($cacheFile = null)
@@ -89,7 +90,7 @@ class ProjectAutoloader
             return;
         }
         
-        //ini_set('unserialize_callback_func', 'spl_autoload_call');
+        ini_set('unserialize_callback_func', 'spl_autoload_call');
         if (false === spl_autoload_register(array(self::getInstance(), 'autoload')))
         {
             throw new Exception(sprintf('Unable to register %s::autoload as an autoloading method.', get_class(self::getInstance())));
@@ -181,11 +182,10 @@ class ProjectAutoloader
     }
     
     /**
-     * 
+     * Checa en los include paths las clases que se pueden cargar automáticamente
      */
     public function parseIncludePaths()
     {
-        $this->dirs = explode(PATH_SEPARATOR, get_include_path());
         foreach ( $this->dirs as $dir )
         {
             $this->parseDirectory($dir);
@@ -233,6 +233,15 @@ class ProjectAutoloader
         {
             $this->classes[$class] = $file;
         }
+    }
+    
+    /**
+     * Agrega un directorio donde se buscarán las clases 
+     * @param string $directory
+     */
+    public function addDirectory($directory)
+    {
+        $this->dirs->append($directory);
     }
 
 }
