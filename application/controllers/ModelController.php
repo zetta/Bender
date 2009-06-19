@@ -64,7 +64,7 @@ class ModelController extends GenericController
         ModelController::$models = $bender['models'];
         
         if($libfirst)
-            $this->generateLibrary($libPath);
+            $this->generateLibrary($libPath, $bender);
         
         foreach ( $bender['models'] as $objectName => $model )
         {
@@ -90,20 +90,21 @@ class ModelController extends GenericController
         }
         
         if(!$libfirst)
-            $this->generateLibrary($libPath);
+            $this->generateLibrary($libPath, $bender);
         
     }
     
     /**
      * Genera las librerias
      * @param string $libPath
+     * @param array $settings
      */
-    private function generateLibrary($libPath)
+    private function generateLibrary($libPath,$settings)
     {
         CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
         foreach ( $this->library as $objectName => $path )
         {
-            $libraryGenerator = new LibraryGenerator($bender);
+            $libraryGenerator = new LibraryGenerator($settings);
             $libraryGenerator->createLibrary($objectName);
             $libraryGenerator->saveFile("{$libPath}/{$path}",false);
         }

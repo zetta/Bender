@@ -80,7 +80,7 @@ class CatalogGenerator extends ModelGenerator
                 $this->template->showBlock('extendedInclude');
             
             $this->loopFields($this->table->getExtendedTable()->getFields(), false, $this->table->getExtendedTable());
-            $this->template->assign('extendedCondition', "\".{$this->table->getPrimaryField()->getCatalogAccesor()}.\" = \".{$this->table->getExtendedTable()->getPrimaryField()->getCatalogAccesor()}.\" and");
+            $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" = \".{$this->table->getExtendedTable()->getPrimaryField()->getCatalogAccesor()}.\" and");
         }
         
         $this->template->assign('fieldNames', implode(', ', $this->fieldNames));
