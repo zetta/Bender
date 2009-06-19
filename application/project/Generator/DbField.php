@@ -81,6 +81,11 @@ class DbField
     private $catalogAccesor = '';
     
     /**
+     * Nombre del getter que se usará en los catálogos, completo por si necesita usas objetos dentro de objetos =)
+     */
+    private $completeGetterName = '';
+    
+    /**
      * Nombre de la tabla a la que pertenece el field
      * @var string
      */
@@ -282,5 +287,22 @@ class DbField
     {
         return $this->catalogAccesor;
     }
+    
+    /**
+     * @param string $completeGetterName
+     */
+    public function setCompleteGetterName($completeGetterName)
+    {
+        $this->completeGetterName = $completeGetterName;
+    }
+    
+    /**
+     * @return string 
+     */
+    public function getCompleteGetterName()
+    {
+        return $this->completeGetterName;
+    }
+    
 
 }

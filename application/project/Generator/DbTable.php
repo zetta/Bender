@@ -120,6 +120,7 @@ class DbTable
             $field->setCastDataType(DbTable::parseCastDataType($field->getDataType()));
             $field->setBaseDataType($fieldData->type);
             $field->setIsPrimaryKey(($fieldData->primary_key == 0 ? false : true));
+            $field->setCompleteGetterName( $this->parseCompleteGetterName($field) );
             if (ModelController::$settings['use_constants'])
                 $field->setCatalogAccesor($this->getObject().'::'.$field->getConstantName());
             else
@@ -142,6 +143,33 @@ class DbTable
             $this->extendedTable->initialize();
         }
     }
+    
+    /**
+     * Obtiene el nombre completo del getter
+     * @param DbField $field
+     * @return string 
+     */
+    private function parseCompleteGetterName(DbField $field)
+    {
+        if($field->getBaseDataType() == 'date')
+        {
+            return "{$field->getGetterName()}()->get('YYYY-MM-dd')";
+        }
+        else if($field->getBaseDataType() == 'time')
+        {
+            return "{$field->getGetterName()}()->get('HH:mm:ss')";
+        }
+        else if($field->getBaseDataType() == 'datetime' || $field->getBaseDataType() == 'timestamp')
+        {
+            return "{$field->getGetterName()}()->get('YYYY-MM-dd HH:mm:ss')";
+        }
+        else
+        {
+            return "{$field->getGetterName()}()";
+        }
+    
+    }
+    
     
     /**
      * Obtiene los nombres de campos y tablas en CamelCase
