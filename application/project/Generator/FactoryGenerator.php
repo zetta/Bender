@@ -47,10 +47,10 @@ class FactoryGenerator extends ModelGenerator
         $this->template->assign('factory', $this->object . 'Factory');
         $this->template->assign('classVar', $this->getLowerObject());
         
-        $this->loopFields($this->table->getFields());
+        $this->loopFields($this->table->getFields(),true);
         
         if($this->table->getExtends())
-            $this->loopFields($this->table->getExtendedTable()->getFields());
+            $this->loopFields($this->table->getExtendedTable()->getFields(),false);
         
         $this->template->assign('firstParameters', implode(', ', $this->firstParameters));
         $this->template->assign('secondParameters', implode(', ', $this->secondParameters));
@@ -67,8 +67,9 @@ class FactoryGenerator extends ModelGenerator
     /**
      * Itera sobre los items dentro del FieldCollection
      * @param FieldCollection
+     * @param boolean $isPrimaryTable the table used is a primary or a extended table?
      */
-    private function loopFields(FieldCollection $fields)
+    private function loopFields(FieldCollection $fields, $isPrimaryTable)
     {
         while ( $fields->valid() )
         {
@@ -89,6 +90,7 @@ class FactoryGenerator extends ModelGenerator
             
             
             # No mostrar la llave primaria en el primer método
+            # o de la tabla primaria
             if ($field->isPrimaryKey())
             {
                 $fields->next();

@@ -123,13 +123,15 @@ class CatalogGenerator extends ModelGenerator
         {
             $field = $fields->current();
             $this->fieldNames[] = "\".{$field->getCatalogAccesor()}.\"";
-            $this->results[] = ($field->getDataType() == 'Zend_Date') ? "new Zend_Date(\$result['{$field->getName()}'], \$this->datePart)" : "\$result['{$field->getName()}']";
+            
             
             if ($field->isPrimaryKey() || ! $isPrimaryTable)
             {
                 $fields->next();
                 continue;
             }
+            if(!(!$isPrimaryTable && $field->isPrimaryKey()))
+                $this->results[] = ($field->getDataType() == 'Zend_Date') ? "new Zend_Date(\$result['{$field->getName()}'], \$this->datePart)" : "\$result['{$field->getName()}']";
             $spaces = $this->maxFieldLength - strlen($field->getName());
             $spaces = sprintf("% " . $spaces . "s", '');
             $this->template->assignBlock('getters', array('name' => $field->getName(), 'getter' => $field->getGetterName(), 'spaces' => $spaces));
