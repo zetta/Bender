@@ -86,7 +86,7 @@ class FactoryGenerator extends ModelGenerator
                     'dataType' => $field->getDataType(), 
                     'comment' => $field->getComment()));
             $this->secondParameters[] = $field->getCastDataType() . '$' . $field->getPhpName();
-            $this->secondParametersNotCasted[] = '$' . $field->getPhpName();
+            
             
             # No mostrar la llave primaria en el primer método
             if ($field->isPrimaryKey())
@@ -95,6 +95,7 @@ class FactoryGenerator extends ModelGenerator
                 continue;
             }
             
+            $this->secondParametersNotCasted[] = '$' . $field->getPhpName();
             $this->template->assignBlock('firstPhpDoc', array(
                     'phpName' => $field->getPhpName(), 
                     'dataType' => $field->getDataType(), 
