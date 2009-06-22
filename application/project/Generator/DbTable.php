@@ -145,6 +145,17 @@ class DbTable
     }
     
     /**
+     * Agrega campos a la tabla
+     * @param FieldCollection $fields
+     */
+    public function addFields(FieldCollection $fields)
+    {
+        foreach($fields as $offset => $field){
+            $this->fields->offsetSet($offset, $field);
+        }
+    }
+    
+    /**
      * Obtiene el nombre completo del getter
      * @param DbField $field
      * @return string 

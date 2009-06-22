@@ -40,9 +40,6 @@ class CatalogGenerator extends ModelGenerator
         $template = $this->table->hasPrimaryField() ? 'Catalog' : 'SimpleCatalog';
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object . 'Catalog', 'NOTE');
         
-        if($this->table->hasBehaviors())
-            $this->checkBehaviors();
-        
         $this->template->set_filenames(array('catalog' => 'Model/' . $template));
         $this->template->assign('className', $this->object);
         $this->template->assign('catalog', $this->object . 'Catalog');
@@ -82,6 +79,9 @@ class CatalogGenerator extends ModelGenerator
             $this->loopFields($this->table->getExtendedTable()->getFields(), false, $this->table->getExtendedTable());
             $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" = \".{$this->table->getExtendedTable()->getPrimaryField()->getCatalogAccesor()}.\" and");
         }
+        
+        if($this->table->hasBehaviors())
+            $this->checkBehaviors();
         
         $this->template->assign('fieldNames', implode(', ', $this->fieldNames));
         $this->template->assign('results', implode(', ', $this->results));
@@ -151,7 +151,10 @@ class CatalogGenerator extends ModelGenerator
         $behaviorArray = array();
         foreach ($this->table->getBehaviors() as $behaviorName => $behaviorData)
         {
-            $behavior =  CatalogBehavior::factory($behaviorName,$behaviorData,$this->table);
+            $newTable = clone $this->table;
+            if($this->table->getExtends())
+                $newTable->addFields( $this->table->getExtendedTable()->getFields() );
+            $behavior =  CatalogBehavior::factory($behaviorName,$behaviorData,$newTable);
             $behaviorArray[] = "        \$this->addObserver({$behavior->generate()});";
         }
         $this->template->assign('behaviors',"\n".implode("\n",$behaviorArray));

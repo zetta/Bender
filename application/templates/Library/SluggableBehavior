@@ -81,6 +81,7 @@ class SluggableBehavior extends BehaviorObserver
     {
         $criteria = new Criteria();
         $getterName = $this->getCamelCase('get_' . $this->sourceName);
+        $setterName = $this->getCamelCase('set_' . $this->targetName);
         $slug = $this->getSlugString($this->object->$getterName());
         $criteria->add($this->target, $slug, Criteria::RIGHT_LIKE);
         $slugs = $this->catalog->getCustomFieldByCriteria($criteria, $this->target);
@@ -97,10 +98,8 @@ class SluggableBehavior extends BehaviorObserver
                 }
                 $index ++;
             }
-            $setterName = $this->getCamelCase('set_' . $this->targetName);
-            $this->object->$setterName($slug);
         }
-    
+        $this->object->$setterName($slug);
     }
     
     /**
