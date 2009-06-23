@@ -1,5 +1,25 @@
 <?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Db
+ * @copyright  {$copyright}
+ * @author     zetta
+ * @version    {$version} SVN: $Id$
+ */
 
+
+/**
+ * Comportamiento de los catálogo que se encarga de generar un slug único
+ *
+ * @category   project
+ * @package    Project_Db
+ * @subpackage Project_Db_Behaviors
+ * @copyright  {$copyright}
+ */
 class SluggableBehavior extends BehaviorObserver
 {
     /**
@@ -39,13 +59,19 @@ class SluggableBehavior extends BehaviorObserver
     private $targetName;
     
     /**
+     * Separador utilizado en el slug
+     */ 
+    protected $separator = '-';
+    
+    /**
      * Constructor de la Clase
      *
      * @param string $source
      * @param string $target
+     * @param string $separator
      * @return SluggableBehavior
      */
-    public function SluggableBehavior($source, $target)
+    public function SluggableBehavior($source, $target, $separator = '-')
     {
         $this->source = $source;
         $this->target = $target;
@@ -53,6 +79,7 @@ class SluggableBehavior extends BehaviorObserver
         $this->sourceName = $sourceName[1];
         $targetName = explode('.', $target);
         $this->targetName = $targetName[1];
+        $this->separator = $separator;
     }
     
     /**
@@ -90,7 +117,7 @@ class SluggableBehavior extends BehaviorObserver
             $index = 1;
             while ( $index > 0 )
             {
-                $temporalSlug = $slug . '-' . $index;
+                $temporalSlug = $slug . $this->separator . $index;
                 if (! in_array($temporalSlug, $slugs))
                 {
                     $slug = $temporalSlug;
@@ -111,9 +138,9 @@ class SluggableBehavior extends BehaviorObserver
     private function getSlugString($str)
     {
         $str = strtolower(trim($str));
-        $str = preg_replace('/[^a-z0-9-]/', '-', $str);
-        $str = preg_replace('/-+/', "-", $str);
-        return $str;
+        $str = preg_replace("/[^a-z0-9{$this->separator}]/", $this->separator, $str);
+        $str = preg_replace("/{$this->separator}+/", "-", $str);
+        return trim($str,$this->separator);
     }
 
 }

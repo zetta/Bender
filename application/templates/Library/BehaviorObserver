@@ -1,5 +1,20 @@
 <?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Db_Behavior
+ * @copyright  {$copyright}
+ * @author     zetta
+ * @version    {$version} SVN: $Id$
+ */
 
+/**
+ * Clase abstracta Behavior que implementa la interfaz de Observer
+ * utilizada para las los comportamientos que se agregen a los catálogos
+ */
 abstract class BehaviorObserver implements Observer
 {
     

@@ -14,7 +14,7 @@ class ModelController extends GenericController
      * Version de la clase utilizada
      *
      */
-    const VERSION = "0.3a";
+    const VERSION = "0.3.1";
     
     /**
      * Los modelos para uso futuro =)

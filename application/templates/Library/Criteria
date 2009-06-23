@@ -12,8 +12,7 @@
  */
 
 /**
- * Clase Criteria para realizar busquedas
- *
+ * Clase Criteria para realizar busquedas o filtros
  */
 class Criteria
 {

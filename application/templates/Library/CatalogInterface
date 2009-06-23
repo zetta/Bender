@@ -1,26 +1,118 @@
 <?php 
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Db
+ * @copyright  {$copyright}
+ * @author     zetta
+ * @version    {$version} SVN: $Id$
+ */
 
-
-
+/**
+ * Interfaz Catalog
+ */
 interface CatalogInterface 
 {
+    /**
+     * Método público abstracto que permite tener solo una instancia del catálogo
+     */
     public static function getInstance();
+    
+    /**
+     * Agrega un BehaviorObserver a la lista de observers del catálogo
+     * @ṕaram BehaviorObserver $behaviorObserver El objeto observer que estará escuchando lo que haga el catálogo
+     */
     public function addObserver( BehaviorObserver $behaviorObserver);
+    
+    /**
+     * Notifica a los observers de los eventos del catálogo
+     * @param mixed $object El bean que jaló el gatillo =O
+     * @param int $event 
+     */
     public function notifyObservers($object,$event);
+    
+    /**
+     * Guarda en la base de datos
+     * @param mixed Un bean para guardar
+     */
     public function create($object);
+    
+    /**
+     * Actualiza el objeto en la base de datos
+     * @param mixed Un bean para actualizar
+     */
     public function update($object);
+    
+    /**
+     * Elimina de  la base de datos
+     * @param mixed El bean que se va a eliminar
+     */
     public function delete($object);
-    public function deleteById($object);
+    
+    /**
+     * Elimina de la base de datos por medio de llave primaria
+     * @param int $idObject El id del bean que se borrará
+     */
+    public function deleteById($idObject);
+    
+    /**
+     * Obtiene un BEAN de la base de datos
+     * @param int $idObject 
+     * @return mixed EL BEAN
+     */
     public function getById($idObject);
+    
+    /**
+     * Obtiene un arreglo de todos los ids =S
+     * @return array
+     */
     public function retrieveAllIds();   
   <block:privateCriteria>
+    
+    /**
+     * Obtiene un arreglo de ids determinados por un criteria
+     * @return array 
+     */
     private function getIdsByCriteria();
+    
+    /**
+     * Obtiene un BEAN por el criteria especificado
+     * @return mixed EL BEAN
+     */
     private function getByCriteria();
+    
+    /**
+     * Obtiene un arreglo de valores establecidos por el usuario
+     * @param string $field Nombre del campo
+     * @return array
+     */
     private function getCustomFieldByCriteria($field);
   </block:privateCriteria>
   <block:publicCriteria>
+  
+    /**
+     * Obtiene un arreglo de ids determinados por un criteria
+     * @param Criteria $criteria
+     * @return array 
+     */
     public function getIdsByCriteria(Criteria $criteria);
+    
+    /**
+     * Obtiene un BEAN por el criteria especificado
+     * @param Criteria $criteria
+     * @return mixed EL BEAN
+     */
     public function getByCriteria(Criteria $criteria);
+    
+    /**
+     * Obtiene un arreglo de valores establecidos por el usuario
+     * @param Criteria $criteria
+     * @param string $field Nombre del campo
+     * @return array
+     */
     public function getCustomFieldByCriteria(Criteria $criteria, $field);
   </block:publicCriteria>
 }
