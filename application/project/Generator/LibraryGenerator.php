@@ -4,10 +4,6 @@
  * @author Juan Carlos Jarquin
  */
 
-/**
- * BaseGenerator 
- */
-require_once "application/project/Generator/ModelGenerator.php";
 
 /**
  * Clase que genera los Collections
@@ -34,9 +30,12 @@ class LibraryGenerator extends ModelGenerator
     {
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $libraryName, 'NOTE');
         $this->template->set_filenames(array('library' => 'Library/'.$libraryName));
-        $privateCriteria = isset($this->settings['private_criteria']) ? $this->settings['private_criteria'] : false ; 
-        $criteriaBlocK = ($privateCriteria) ? 'privateCriteria' : 'publicCriteria';
         
+        $privateCriteria = isset($this->settings['private_criteria']) ? $this->settings['private_criteria'] : false ; 
+        
+        $criteriaBlocK = ($privateCriteria) ? 'privateCriteria' : 'publicCriteria';
+        if( isset($this->settings['private_criteria']) && $this->settings['private_criteria'] == true )
+        $this->template->showBlock('useBehaviors');
         $this->template->showBlock($criteriaBlocK);
         $this->fileContent = $this->template->fetch('library');
     }

@@ -1,17 +1,18 @@
 bender:
-  add_includes:     false
-  use_base:         true
-  singleton:        true
-  use_constants:    true
-  private_criteria: false
-  encoding:         UTF-8
+  add_includes:         false
+  use_behaviors:        false
+  singleton:            true
+  use_constants:        true
+  private_criteria:     false
+  encoding:             UTF-8
+  add_bender_signature: true
   header:
     author:         Juan Carlos Jarquín
     brandName:      Patitos Corporation
     copyright:      El copiraid =) 
     description:    sistema que controla las cosas de'sas
   mysql:            { username : root, password : temporal , server : localhost , dbname : lyrics_sf }
-  schema:           default
+  schema:           lyrics
   paths:
     model_location: application/models
     catalogs:       Catalogs

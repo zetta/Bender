@@ -49,6 +49,7 @@ class ModelController extends GenericController
         $yaml = Spyc::YAMLLoad($schemaFile);
         $bender['models'] = $yaml['schema'];
         
+        
         $modelPath =  (isset($yaml['workcopy'])) ? $yaml['workcopy'] : "output/{$bender['mysql']['dbname']}";
         $libPath = (isset($yaml['libPath'])) ? $yaml['libPath'] : "output/Project";
         $libfirst = (isset($yaml['libfirst'])) ? $yaml['libfirst'] : true;

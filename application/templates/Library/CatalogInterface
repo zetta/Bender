@@ -29,7 +29,7 @@ interface CatalogInterface
     
     /**
      * Notifica a los observers de los eventos del catálogo
-     * @param mixed $object El bean que jaló el gatillo =O
+     * @param mixed $object El bean que disparó el evento
      * @param int $event 
      */
     public function notifyObservers($object,$event);
@@ -69,28 +69,7 @@ interface CatalogInterface
      * Obtiene un arreglo de todos los ids =S
      * @return array
      */
-    public function retrieveAllIds();   
-  <block:privateCriteria>
-    
-    /**
-     * Obtiene un arreglo de ids determinados por un criteria
-     * @return array 
-     */
-    private function getIdsByCriteria();
-    
-    /**
-     * Obtiene un BEAN por el criteria especificado
-     * @return mixed EL BEAN
-     */
-    private function getByCriteria();
-    
-    /**
-     * Obtiene un arreglo de valores establecidos por el usuario
-     * @param string $field Nombre del campo
-     * @return array
-     */
-    private function getCustomFieldByCriteria($field);
-  </block:privateCriteria>
+    public function retrieveAllIds();
   <block:publicCriteria>
   
     /**

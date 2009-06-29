@@ -22,7 +22,6 @@
  */
 abstract class Catalog implements CatalogInterface
 {
-
     const EVENT_CREATE = 1;
     const EVENT_RETRIEVE = 2;
     const EVENT_UPDATE = 3;
@@ -39,12 +38,13 @@ abstract class Catalog implements CatalogInterface
      * @var string $datePart
      */
     protected $datePart;
-
+  <block:useBehaviors>
     /**
      * Arreglo de observers
      * @var array
      */
     protected $observers;
+  </block:useBehaviors>
 
     /**
      * Constructor de la clase catalogo
@@ -58,7 +58,6 @@ abstract class Catalog implements CatalogInterface
       </block:privateCriteria>
         $this->observers = array();
     }
-    
     
     public function addObserver(BehaviorObserver $behaviorObserver)
     {

@@ -4,9 +4,6 @@
  * @author Juan Carlos Jarquin
  */
 
-require_once 'application/project/Generator/FieldCollection.php';
-require_once 'application/project/Generator/DbField.php';
-
 /**
  * Clase que representa una tabla en la base de datos, para conseguir los tipos de dato etc.
  *

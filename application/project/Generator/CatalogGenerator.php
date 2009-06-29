@@ -80,7 +80,7 @@ class CatalogGenerator extends ModelGenerator
             $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" = \".{$this->table->getExtendedTable()->getPrimaryField()->getCatalogAccesor()}.\" and");
         }
         
-        if($this->table->hasBehaviors())
+        if($this->table->hasBehaviors() && $this->settings['use_behaviors'])
             $this->checkBehaviors();
         
         $this->template->assign('fieldNames', implode(', ', $this->fieldNames));
