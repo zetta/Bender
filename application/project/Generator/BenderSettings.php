@@ -114,13 +114,47 @@ class BenderSettings
      */
     private $collectionLocation = '';
     
-    
+    /**
+     * Nombre de usuario a utilizar en la conexión a la base de datos mysql
+     * @var string
+     */
     private $username = 'db_username';
+    
+    /**
+     * Password 
+     * @var string
+     */
     private $password = 'password';
+    
+    /**
+     * Servidor donde se conectará 
+     * @var string
+     */
     private $server = 'localhost';
+    
+    /**
+     * Nombre de la base de datos
+     * @var string
+     */
     private $dbName = 'db_name';
+    
+    /**
+     * PATH donde se guardaran los archivos ( o donde estan los antiguos)
+     * @var string
+     */
     private $workCopyLocation = 'output/';
-    private 
+    
+    /**
+     * PATH donde se guardan las librerias
+     * @var string
+     */
+    private $libraryLocation = 'output/Project';
+    
+    /**
+     * Determina si las librerias serán generadas antes de los archivos
+     * @var boolean
+     */
+    private $libFirst = false;
     
     /**
      * @return boolean
@@ -379,6 +413,119 @@ class BenderSettings
     }
     
     /**
+     * @return string
+     */
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getLibFirst()
+    {
+        return $this->libFirst;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getLibraryLocation()
+    {
+        return $this->libraryLocation;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getServer()
+    {
+        return $this->server;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getWorkCopyLocation()
+    {
+        return $this->workCopyLocation;
+    }
+    
+    /**
+     * @param string $dbName
+     */
+    public function setDbName($dbName)
+    {
+        $this->dbName = $dbName;
+    }
+    
+    /**
+     * @param boolean $libFirst
+     */
+    public function setLibFirst($libFirst)
+    {
+        $this->libFirst = $libFirst;
+    }
+    
+    /**
+     * @param string $libraryLocation
+     */
+    public function setLibraryLocation($libraryLocation)
+    {
+        $this->libraryLocation = $libraryLocation;
+    }
+    
+    /**
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+    
+    /**
+     * @param string $server
+     */
+    public function setServer($server)
+    {
+        $this->server = $server;
+    }
+    
+    /**
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+    
+    /**
+     * @param string $workCopyLocation
+     */
+    public function setWorkCopyLocation($workCopyLocation)
+    {
+        $this->workCopyLocation = $workCopyLocation;
+    }
+
+    
+    /**
      * Pues obtiene la instancia unica del singleton
      * @return BenderSettings
      */
@@ -399,15 +546,18 @@ class BenderSettings
     {
     
     }
-
+    
     /**
      * Guarda las configuraciones
      * @param Array $settings
      */
     private function setup($settings)
     {
+    
+        
+        
         
     }
-    
+
 }
 
