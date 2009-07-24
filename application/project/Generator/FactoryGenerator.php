@@ -69,7 +69,7 @@ class FactoryGenerator extends ModelGenerator
      * @param FieldCollection
      * @param boolean $isPrimaryTable the table used is a primary or a extended table?
      */
-    private function loopFields(FieldCollection $fields, $isPrimaryTable)
+    private function loopFields(FieldCollection $fields)
     {
         while ( $fields->valid() )
         {

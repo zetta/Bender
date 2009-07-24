@@ -101,6 +101,7 @@ class DbTable
      */
     public function initialize()
     {
+        $benderSettings = BenderSettings::getInstance();
         CommandLineInterface::getInstance()->printSection('DbTable', "Fetching table info '{$this->table}'", 'COMMENT');
         $fieldResource = $this->database->query("select * from {$this->table} where true limit 1");
         $numFields = $this->database->getNumFields($fieldResource);
@@ -118,10 +119,10 @@ class DbTable
             $field->setBaseDataType($fieldData->type);
             $field->setIsPrimaryKey(($fieldData->primary_key == 0 ? false : true));
             $field->setCompleteGetterName( $this->parseCompleteGetterName($field) );
-            if (ModelController::$settings['use_constants'])
+            if ($benderSettings->useConstants())
                 $field->setCatalogAccesor($this->getObject().'::'.$field->getConstantName());
             else
-                $field->setCatalogAccesor($this->getObject()."::TABLENAME.\".{$field->getName()}\"");
+                $field->setCatalogAccesor($this->getObject()."::TABLENAME.'.{$field->getName()}'");
             
             if ($field->isPrimaryKey())
             {
@@ -136,7 +137,8 @@ class DbTable
         }
         if ($this->extends)
         {
-            $this->extendedTable = new DbTable(ModelController::$models[$this->extendedTableName]['table'], $this->databaseName, ModelController::$models[$this->extendedTableName]);
+            $modelInfo = BenderSettings::getInstance()->getModel($this->extendedTableName);
+            $this->extendedTable = new DbTable($modelInfo['table'], $this->databaseName, $modelInfo );
             $this->extendedTable->initialize();
         }
     }
@@ -368,6 +370,22 @@ class DbTable
         if (! $this->fields->offsetExists($fieldName))
             throw new Exception("Field [{$fieldName}] doesn't exists");
         return $this->fields->offsetGet($fieldName);
+    }
+    
+    /**
+     * @return string
+     */
+    public function getExtendedTableName()
+    {
+        return $this->extendedTableName;
+    }
+    
+    /**
+     * @param string $extendedTableName
+     */
+    public function setExtendedTableName($extendedTableName)
+    {
+        $this->extendedTableName = $extendedTableName;
     }
 
 }

@@ -13,6 +13,14 @@
 
 /**
  * Clase Criteria para realizar busquedas o filtros
+ * @category   Project
+ * @package    Project_Db
+ * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
+ * @version    {$version} SVN: $Revision$
  */
 class Criteria
 {

@@ -15,10 +15,14 @@
 /**
  * Clase que representa la abstraccion de nuestro objeto Zend_Db
  *
- * @category   project
+ * @category   Project
  * @package    Project_Db
- * @subpackage Project_Db_DBAO
  * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
+ * @version    {$version} SVN: $Revision$
  */
 abstract class DBAO
 {

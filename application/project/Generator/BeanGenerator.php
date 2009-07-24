@@ -30,7 +30,7 @@ class BeanGenerator extends ModelGenerator
         {
             $this->template->assign('extendedSentence', ' extends '.$this->table->getExtendedTable()->getObject());
             $this->template->assign('extendedBean', $this->table->getExtendedTable()->getObject());
-            if($this->settings['add_includes'])
+            if($this->benderSettings->getAddIncludes())
                 $this->template->showBlock('extendedInclude');
         }
         $this->fileContent = $this->template->fetch('bean');
@@ -45,7 +45,7 @@ class BeanGenerator extends ModelGenerator
         while ( $fields->valid() )
         {
             $field = $fields->current();
-            $this->template->assignBlock('attributes', array('phpName' => $field->getPhpName(), 'dataType' => $field->getDataType()));
+            $this->template->assignBlock('attributes', array('phpName' => $field->getPhpName(), 'dataType' => $field->getDataType(), 'comment' => $field->getComment()));
             $this->template->assignBlock('methods', array(
                     'phpName' => $field->getPhpName(), 
                     'dataType' => $field->getDataType(), 
@@ -54,7 +54,7 @@ class BeanGenerator extends ModelGenerator
                     'getter' => $field->getGetterName(), 
                     'comment' => $field->getComment()));
             
-            if (isset($this->settings['use_constants']) && $this->settings['use_constants'])
+            if ($this->benderSettings->useConstants())
                 $this->template->assignBlock('constants', array(
                     'fieldName' => $field->getConstantName(), 
                     'fieldValue' => $this->table->getTable().'.'.$field->getName()

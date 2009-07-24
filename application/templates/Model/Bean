@@ -25,6 +25,10 @@ require_once '{$modelFolder}/{$beanFolder}/{$extendedBean}.php';
  * @package    Project_Models
  * @subpackage Project_Models_Beans
  * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
 class {$className}{$extendedSentence}
@@ -40,7 +44,8 @@ class {$className}{$extendedSentence}
   
   <block:attributes>
     /**
-     * ${$attributes.phpName}
+     * ${$attributes.phpName} 
+     * {$attributes.comment}
      * @var {$attributes.dataType} ${$attributes.phpName}
      */
     private ${$attributes.phpName};

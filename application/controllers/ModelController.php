@@ -14,18 +14,13 @@ class ModelController extends GenericController
      * Version de la clase utilizada
      *
      */
-    const VERSION = "0.4";
+    const VERSION = "0.5";
     
     /**
      * Los modelos para uso futuro =)
      * @var array
      */
-    public static $models = array();
-    
-    /**
-     * Las settings para poder accesar a ellas cuando se neceesiten =P
-     */
-    public static $settings = array();
+    //public static $models = array();
     
     private $library = array(
             'CatalogInterface' => 'Db/CatalogInterface.php', 
@@ -41,73 +36,70 @@ class ModelController extends GenericController
      */
     public function generateAction()
     {
-        $bender = $this->prepare();
-        $schemaFile = isset($bender['schema']) ? "application/data/{$bender['schema']}.schema.yml" : 'application/data/default.schema.yml';
+        $this->prepare();
+        $benderSettings = BenderSettings::getInstance();
+        $schemaFile = "application/data/{$benderSettings->getSchema()}.schema.yml";
         
         if (! file_exists($schemaFile))
             throw new ErrorException("El archivo [{$schemaFile}] no se encuentra");
         $yaml = Spyc::YAMLLoad($schemaFile);
         $bender['models'] = $yaml['schema'];
-        
-        
-        $modelPath =  (isset($yaml['workcopy'])) ? $yaml['workcopy'] : "output/{$bender['mysql']['dbname']}";
-        $libPath = (isset($yaml['libPath'])) ? $yaml['libPath'] : "output/Project";
-        $libfirst = (isset($yaml['libfirst'])) ? $yaml['libfirst'] : true;
-        
+        $benderSettings->setUp($yaml);
         if(isset($yaml['workcopy']))
-            ProjectAutoloader::getInstance()->addDirectory($yaml['workcopy']);
+            ProjectAutoloader::getInstance()->addDirectory($benderSettings->getWorkCopyLocation());
         if(isset($yaml['libPath']))
-            ProjectAutoloader::getInstance()->addDirectory($yaml['libPath']);
+            ProjectAutoloader::getInstance()->addDirectory($benderSettings->getLibraryLocation());
         
         foreach ( $bender['models'] as $objectName => $model )
             $bender['models'][$objectName]['object'] = $objectName;
-        
-        ModelController::$models = $bender['models'];
-        
-        if($libfirst)
-            $this->generateLibrary($libPath, $bender);
-        
+        $benderSettings->setModels($bender['models']);
+        $models = array();
         foreach ( $bender['models'] as $objectName => $model )
         {
-            $dbTable = new DbTable($model['table'], $bender['mysql']['dbname'], $model);
+            $dbTable = new DbTable($model['table'], $benderSettings->getDbName(), $model);
             $dbTable->initialize();
-            
-            $beanGenerator = new BeanGenerator($objectName, $dbTable, $model['extends'], $bender);
-            $beanGenerator->createBean();
-            $beanGenerator->saveFile("{$modelPath}/{$bender['paths']['beans']}/{$objectName}.php");
-            
-            $factoryGenerator = new FactoryGenerator($objectName, $dbTable, $model['extends'], $bender);
-            $factoryGenerator->createFactory();
-            $factoryGenerator->saveFile("{$modelPath}/{$bender['paths']['factories']}/{$objectName}Factory.php");
-            
-            $catalogGenerator = new CatalogGenerator($objectName, $dbTable, $model['extends'], $bender);
-            $catalogGenerator->createCatalog();
-            $catalogGenerator->saveFile("{$modelPath}/{$bender['paths']['catalogs']}/{$objectName}Catalog.php");
-            
-            $catalogGenerator = new CollectionGenerator($objectName, $dbTable, $model['extends'], $bender);
-            $catalogGenerator->createCollection();
-            $catalogGenerator->saveFile("{$modelPath}/{$bender['paths']['collections']}/{$objectName}Collection.php");
-        
+            $models[$objectName] =$dbTable;
         }
         
-        if(!$libfirst)
-            $this->generateLibrary($libPath, $bender);
         
+        if($benderSettings->getLibFirst())
+            $this->generateLibrary($benderSettings->getLibraryLocation());
+        
+        foreach ( $models as $objectName => $dbTable )
+        {
+            $beanGenerator = new BeanGenerator($objectName, $dbTable);
+            $beanGenerator->createBean();
+            $beanGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getBeanLocation()}/{$objectName}.php", $benderSettings->getPreserveChanges());
+            
+            $factoryGenerator = new FactoryGenerator($objectName, $dbTable);
+            $factoryGenerator->createFactory();
+            $factoryGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getFactoryLocation()}/{$objectName}Factory.php", $benderSettings->getPreserveChanges());
+            
+            $catalogGenerator = new CatalogGenerator($objectName, $dbTable);
+            $catalogGenerator->createCatalog();
+            $catalogGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getCatalogLocation()}/{$objectName}Catalog.php", $benderSettings->getPreserveChanges());
+            
+            $catalogGenerator = new CollectionGenerator($objectName, $dbTable);
+            $catalogGenerator->createCollection();
+            $catalogGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getCollectionLocation()}/{$objectName}Collection.php", $benderSettings->getPreserveChanges());
+        }
+        
+        if(!$benderSettings->getLibFirst())
+            $this->generateLibrary($benderSettings->getLibraryLocation(), $bender);
     }
     
     /**
      * Genera las librerias
      * @param string $libPath
-     * @param array $settings
      */
-    private function generateLibrary($libPath,$settings)
+    private function generateLibrary($libPath)
     {
         CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
         foreach ( $this->library as $objectName => $path )
         {
-            $libraryGenerator = new LibraryGenerator($settings);
+            $libraryGenerator = new LibraryGenerator();
             $libraryGenerator->createLibrary($objectName);
-            $libraryGenerator->saveFile("{$libPath}/{$path}",false);
+            $libraryGenerator->saveFile("{$libPath}/{$path}", BenderSettings::getInstance()->getPreserveChanges());
         }
     }
     
@@ -118,9 +110,9 @@ class ModelController extends GenericController
      */
     public function generateSchemaAction()
     {
-        $bender = $this->prepare();
-        $schemaGenerator = new SchemaGenerator($bender);
-        $schemaGenerator->setDatabaseName($bender['mysql']['dbname']);
+        $this->prepare();
+        $schemaGenerator = new SchemaGenerator();
+        $schemaGenerator->setDatabaseName(BenderSettings::getInstance()->getDbName());
         $schemaGenerator->generate();
         $schemaGenerator->saveFile('application/data/generated.schema.yml');
     }
@@ -128,27 +120,25 @@ class ModelController extends GenericController
     /**
      * Obtiene el arreglo de los ajustes
      * y se conecta a la base de datos
-     * @return mixed
      */
     private function prepare()
     {
+        $benderSettings = BenderSettings::getInstance();
         $settingsFile = 'application/data/settings.yml';
         if (! file_exists($settingsFile))
             throw new ErrorException("El archivo de ajustes [{$settingsFile}] no se encuentra");
         $yaml = Spyc::YAMLLoad($settingsFile);
         try
         {
-            $bender = new ArrayObject(isset($yaml['bender']) ? $yaml['bender'] : null);
+            $benderSettings->setUp($yaml['bender']);
         } catch ( Exception $e )
         {
             throw new Exception("Error {$e->getCode()} : El archivo de configuración parece no ser válido");
         }
         
         $dataBase = Database::getInstance();
-        $dataBase->configure($bender['mysql']['server'], $bender['mysql']['username'], $bender['mysql']['password'], $bender['mysql']['dbname']);
+        $dataBase->configure($benderSettings->getServer(), $benderSettings->getUsername(), $benderSettings->getPassword(), $benderSettings->getDbName());
         $dataBase->connect();
-        ModelController::$settings = $bender;
-        return $bender;
     }
 
 }

@@ -50,18 +50,18 @@ class CatalogGenerator extends ModelGenerator
             $this->template->showBlock('hasPrimaryField');
             $this->template->assign('primaryKeySetter', $this->table->getPrimaryField()->getSetterName());
             $this->template->assign('primaryKeyName', $this->table->getPrimaryField()->getName());
+            $this->template->assign('primaryKeyAccesor', $this->table->getPrimaryField()->getCatalogAccesor());
             $this->template->assign('primaryKeyPhpName', $this->table->getPrimaryField()->getPhpName());
             $this->template->assign('primaryKeyGetter', $this->table->getPrimaryField()->getGetterName());
         }
-        $this->template->showBlock((($this->settings['singleton']) ? 'isSingleton' : 'isntSingleton'));
+        $this->template->showBlock((($this->benderSettings->getSingleton()) ? 'isSingleton' : 'isntSingleton'));
         
         $fields = $this->table->getFields();
         $this->maxFieldLength = $this->getMaxFieldLength($fields);
         $this->loopFields($fields, true, $this->table);
-        $privateCriteria = isset($this->settings['private_criteria']) ? $this->settings['private_criteria'] : false;
-        $criteriaBlocK = ($privateCriteria) ? 'privateCriteria' : 'publicCriteria';
+        $criteriaBlocK = ($this->benderSettings->isPrivateCriteria()) ? 'privateCriteria' : 'publicCriteria';
         $this->template->showBlock($criteriaBlocK);
-        $this->template->assign('criteriaVar', ($privateCriteria ? '$this->criteria' : '$criteria'));
+        $this->template->assign('criteriaVar', ($this->benderSettings->isPrivateCriteria() ? '$this->criteria' : '$criteria'));
         
         if ($this->table->getExtends())
         {
@@ -73,14 +73,14 @@ class CatalogGenerator extends ModelGenerator
             $this->template->assign('extendedPrimaryKeyPhpName', $this->table->getExtendedTable()->getPrimaryField()->getPhpName());
             $this->template->assign('extendedPrimaryKeyName', $this->table->getExtendedTable()->getPrimaryField()->getName());
             
-            if ($this->settings['add_includes'])
+            if ($this->benderSettings->getAddIncludes())
                 $this->template->showBlock('extendedInclude');
             
             $this->loopFields($this->table->getExtendedTable()->getFields(), false, $this->table->getExtendedTable());
-            $this->template->assign('extendedCondition', "\".{$this->table->getObject()}::{$this->table->getExtendedTable()->getPrimaryField()->getConstantName()}.\" = \".{$this->table->getExtendedTable()->getPrimaryField()->getCatalogAccesor()}.\" and");
+            $this->template->assign('extendedCondition', "\".{$this->table->getPrimaryField()->getCatalogAccesor()}.\" = \".{$this->table->getExtendedTable()->getPrimaryField()->getCatalogAccesor()}.\" AND");
         }
         
-        if($this->table->hasBehaviors() && $this->settings['use_behaviors'])
+        if($this->table->hasBehaviors() && $this->benderSettings->getUseBehaviors())
             $this->checkBehaviors();
         
         $this->template->assign('fieldNames', implode(', ', $this->fieldNames));
@@ -117,7 +117,7 @@ class CatalogGenerator extends ModelGenerator
      * @param FieldCollection $fields
      * @param boolean $isPrimaryTable the table used is a primary or a extended table?
      */
-    public function loopFields(FieldCollection $fields, $isPrimaryTable, dbTable $table)
+    public function loopFields(FieldCollection $fields, $isPrimaryTable)
     {
         while ( $fields->valid() )
         {
@@ -148,6 +148,7 @@ class CatalogGenerator extends ModelGenerator
      */
     private function checkBehaviors()
     {
+        $this->template->showBlock('useBehaviors');
         $behaviorArray = array();
         foreach ($this->table->getBehaviors() as $behaviorName => $behaviorData)
         {

@@ -25,10 +25,10 @@ abstract class ModelGenerator
     protected $extends;
     
     /**
-     * YAML settings
-     * @var array
+     * Settings 
+     * @var BenderSettings
      */
-    protected $settings;
+    protected $benderSettings = null;
     
     /**
      * Template
@@ -56,33 +56,38 @@ abstract class ModelGenerator
      *
      * @param string $objectName
      * @param DbTable $table
-     * @param boolean $extends
      * @param array $settings
      */
-    public function __construct($objectName, DbTable $table, $extends, $settings)
+    public function __construct($objectName, DbTable $table)
     {
+        $this->benderSettings = BenderSettings::getInstance();
         $this->object = $objectName;
         $this->table = $table;
-        $this->extends = $extends;
-        $this->settings = $settings;
+        $this->extends = $table->getExtends();
         $this->addHeaderInformation();
-        if ($this->settings['add_includes'])
+        if ($this->benderSettings->getAddIncludes())
             $this->template->showBlock('useIncludes');
         $this->lowerObject = $this->toLower($objectName);
     }
     
+    /**
+     * Agrega las variables comunes a los headers de los archivos 
+     */
     protected function addHeaderInformation()
     {
         $this->template = new Template('application/templates/');
-        $this->template->assign('brandName', $this->settings['header']['brandName']);
-        $this->template->assign('description', $this->settings['header']['description']);
-        $this->template->assign('copyright', $this->settings['header']['copyright']);
-        $this->template->assign('author', $this->settings['header']['author']);
-        $this->template->assign('modelFolder', $this->settings['paths']['model_location']);
-        $this->template->assign('catalogFolder', $this->settings['paths']['catalogs']);
-        $this->template->assign('beanFolder', $this->settings['paths']['beans']);
-        $this->template->assign('factoryFolder', $this->settings['paths']['factories']);
-        $this->template->assign('collectionFolder', $this->settings['paths']['collections']);
+        $this->template->assign('brandName',  $this->benderSettings->getBrandName());
+        $this->template->assign('description',$this->benderSettings->getDescription());
+        $this->template->assign('copyright', $this->benderSettings->getCopyRight());
+        $this->template->assign('author', $this->benderSettings->getAuthor());
+        $this->template->assign('modelFolder', $this->benderSettings->getModelLocation());
+        $this->template->assign('catalogFolder',$this->benderSettings->getCatalogLocation());
+        $this->template->assign('beanFolder', $this->benderSettings->getBeanLocation());
+        $this->template->assign('factoryFolder', $this->benderSettings->getFactoryLocation());
+        $this->template->assign('collectionFolder', $this->benderSettings->getCollectionLocation());
+        $this->template->assign('benderSignature', $this->benderSettings->getBenderSignature());
+        if($this->benderSettings->getAddBenderSignature())
+            $this->template->showBlock('benderSignature');
         $this->template->assign('version', ModelController::VERSION);
     }
     
@@ -98,6 +103,7 @@ abstract class ModelGenerator
      */
     public function saveFile($path, $preserveChanges = true)
     {
+        $path = str_replace('//','/',$path);
         $this->filePath = $path;
         CommandLineInterface::getInstance()->printSection('Generator', 'Saving file ' . $path, 'NOTE');
         $dir = dirname($path);
@@ -107,8 +113,8 @@ abstract class ModelGenerator
             $this->tryToPreserveChanges($path);
         
         $handle = fopen($path, "w");
-        if ($this->settings['encoding'] != 'UTF-8')
-            $this->fileContent = iconv("UTF-8", $this->settings['encoding'], $this->fileContent);
+        if ($this->benderSettings->getEncoding() != 'UTF-8')
+            $this->fileContent = iconv("UTF-8", $this->benderSettings->getEncoding(), $this->fileContent);
         
         fwrite($handle, $this->fileContent);
         fclose($handle);

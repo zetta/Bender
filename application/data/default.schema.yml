@@ -1,39 +1,18 @@
 #workcopy: PATH
-#libPath: PATH
-#libfirst: true
-schema:
-  Artist: 
-    table: lyrics_artists
-    extends: false
-    behaviors: 
-      sluggable: { target : slug , source : name }
-  Song: 
-    table:       lyrics_songs
-    extends:     false
-  Translation: 
-    table:       lyrics_translations
-    extends:     false
+#lib_path: PATH
+#lib_first: true
+schema: 
+  Person: 
+    table:     bender_persons
+    extends:   false
   User: 
-    table:       lyrics_user
-    extends:     false
-  Email: 
-    table:       lyrics_user_emails
-    extends:     false
-#  Friend: 
-#    table:      lyrics_user_friends
-#    extends:    false
-  Invitation: 
-    table:       lyrics_user_invitations
-    extends:     false
-  Message: 
-    table:       lyrics_user_messages
-    extends:     false
-  Photo: 
-    table:       lyrics_user_photos
-    extends:     false
-  Profile: 
-    table:       lyrics_user_profiles
-    extends:     false
-  Settings: 
-    table:       lyrics_user_settings
-    extends:     false
+    table:     bender_users
+    extends:   Person
+  Worker: 
+    table:     bender_workers
+    extends:   Person
+  Post: 
+    table:     bender_posts
+    extends:   false
+    behaviors: 
+      Sluggable : { source : title , target : slug }

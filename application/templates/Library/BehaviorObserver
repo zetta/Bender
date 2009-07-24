@@ -5,7 +5,7 @@
  * {$description}
  *
  * @category   Project
- * @package    Project_Db_Behavior
+ * @package    Project_Db
  * @copyright  {$copyright}
  * @author     zetta
  * @version    {$version} SVN: $Id$
@@ -14,6 +14,15 @@
 /**
  * Clase abstracta Behavior que implementa la interfaz de Observer
  * utilizada para las los comportamientos que se agregen a los catálogos
+ * @category   Project
+ * @package    Project_Db
+ * @subpackage Project_Db_Behavior
+ * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
+ * @version    {$version} SVN: $Revision$
  */
 abstract class BehaviorObserver implements Observer
 {

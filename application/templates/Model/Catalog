@@ -39,9 +39,12 @@ require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}.php';
  * Clase {$catalog}
  *
  * @category   Project
- * @package    Project_Models
- * @subpackage Project_Models_Catalogs
+ * @package    Project_Db
  * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
 class {$catalog} extends {$extendedCatalog}
@@ -94,7 +97,9 @@ class {$catalog} extends {$extendedCatalog}
     {
         if(!(${$classVar} instanceof {$className}))
             throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+      <block:useBehaviors>
         $this->notifyObservers(${$classVar},Catalog::EVENT_CREATE);
+      </block:useBehaviors>
         try
         {
           <block:willExtend>
@@ -126,12 +131,12 @@ class {$catalog} extends {$extendedCatalog}
         try
         {
           <block:privateCriteria>
-            {$criteriaVar}->add('{$primaryKeyName}', ${$primaryKeyPhpName}, Criteria::EQUAL);
+            {$criteriaVar}->add({$primaryKeyAccesor}, ${$primaryKeyPhpName}, Criteria::EQUAL);
             $new{$className} = $this->getByCriteria()->getOne();
           </block:privateCriteria>
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
-            {$criteriaVar}->add('{$primaryKeyName}', ${$primaryKeyPhpName}, Criteria::EQUAL);
+            {$criteriaVar}->add({$primaryKeyAccesor}, ${$primaryKeyPhpName}, Criteria::EQUAL);
             $new{$className} = $this->getByCriteria({$criteriaVar})->getOne();
           </block:publicCriteria>
         }

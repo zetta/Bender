@@ -42,6 +42,10 @@ require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}.php';
  * @package    Project_Models
  * @subpackage Project_Models_Catalogs
  * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
 class {$catalog} extends {$extendedCatalog}

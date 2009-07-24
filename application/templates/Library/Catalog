@@ -5,7 +5,7 @@
  * {$description}
  *
  * @category   Project
- * @package    Project_Models
+ * @package    Project_Db
  * @copyright  {$copyright}
  * @authoer    zetta
  * @version    {$version} SVN: $Id$
@@ -14,11 +14,14 @@
 /**
  * Clase abstracta que representa un catalogo general
  *
- * @category   project
- * @package    Project_Models
- * @subpackage Project_Models_Catalogs
+ * @category   Project
+ * @package    Project_Db
  * @copyright  {$copyright}
- * @version    {$version} SVN: $Rev$
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
+ * @version    {$version} SVN: $Revision$
  */
 abstract class Catalog implements CatalogInterface
 {
@@ -56,9 +59,16 @@ abstract class Catalog implements CatalogInterface
       <block:privateCriteria>
         $this->criteria = new Criteria();
       </block:privateCriteria>
+      <block:useBehaviors>
         $this->observers = array();
+      </block:useBehaviors>
     }
     
+  <block:useBehaviors>
+    /**
+     * Agrega un observer al arreglo
+     * @param BehaviorObserver $behaviorObserver
+     */
     public function addObserver(BehaviorObserver $behaviorObserver)
     {
         $className = get_class($behaviorObserver);
@@ -66,6 +76,11 @@ abstract class Catalog implements CatalogInterface
             $this->observers[$className] = $behaviorObserver;
     }
     
+    /**
+     * Envia una notificacion a los observers que están escuchando 
+     * @param Object $object 
+     * @param int $event 
+     */
     public function notifyObservers($object, $event)
     {
         foreach ($this->observers as $observer)
@@ -73,6 +88,7 @@ abstract class Catalog implements CatalogInterface
             $observer->fireEvent($this, $object, $event);
         }
     }
+  </block:useBehaviors>
     
 }
 

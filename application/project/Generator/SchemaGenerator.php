@@ -14,12 +14,6 @@ class SchemaGenerator
     private $databaseName = '';
     
     /**
-     * Arreglo de las settings 
-     * @var array
-     */
-    private $settings = array();
-    
-    /**
      * El contenido del archivo que se generará
      * @var string
      */
@@ -39,18 +33,6 @@ class SchemaGenerator
     public function setDatabaseName($databaseName)
     {
         $this->databaseName = $databaseName;
-    }
-    
-    /**
-     * Constructor de la clase
-     *
-     * @param array $settings
-     * @return SchemaGenerator
-     */
-    public function SchemaGenerator($settings)
-    {
-        $this->settings = $settings;
-    
     }
     
     /**
@@ -76,14 +58,15 @@ class SchemaGenerator
      */
     public function saveFile($path)
     {
+        $benderSettings = BenderSettings::getInstance();
         CommandLineInterface::getInstance()->printSection('Generator', 'Saving file ' . $path, 'NOTE');
         $dir = dirname($path);
         if (! is_dir($dir))
             mkdir($dir, 0777, true);
         
         $handle = fopen($path, "w");
-        if ($this->settings['encoding'] != 'UTF-8')
-            $this->fileContent = iconv("UTF-8", $this->settings['encoding'], $this->fileContent);
+        if ($benderSettings->getEncoding() != 'UTF-8')
+            $this->fileContent = iconv("UTF-8", $benderSettings->getEncoding(), $this->fileContent);
         
         fwrite($handle, $this->fileContent);
         fclose($handle);

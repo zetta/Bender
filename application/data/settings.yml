@@ -1,21 +1,23 @@
 bender:
-  add_includes:         false
-  use_behaviors:        false
-  singleton:            true
-  use_constants:        true
-  private_criteria:     false
-  encoding:             UTF-8
-  add_bender_signature: true
+  add_includes:          false
+  use_behaviors:         true
+  singleton:             true
+  use_constants:         false
+  private_criteria:      false
+  encoding:              UTF-8
+  add_bender_signature:  true
+  preserve_changes:      false
+  add_bender_signature:  true
   header:
-    author:         Juan Carlos Jarquín
-    brandName:      Patitos Corporation
-    copyright:      El copiraid =) 
-    description:    sistema que controla las cosas de'sas
-  mysql:            { username : root, password : temporal , server : localhost , dbname : lyrics_sf }
-  schema:           lyrics
+    author:              Juan Carlos Jarquín
+    brand_name:          Patitos Corporation
+    copyright:           El copiraid =) 
+    description:         sistema que controla las cosas de'sas
+  mysql:                 { username : root, password : temporal , server : localhost , dbname : bender }
+  schema:                default
   paths:
-    model_location: application/models
-    catalogs:       Catalogs
-    beans:          Beans
-    factories:      Factories
-    collections:    Collections
+    model_location:      application/models
+    catalog_location:    Catalogs
+    bean_location:       Beans
+    factory_location:    Factories
+    collection_location: Collections

@@ -25,6 +25,10 @@ require_once '{$modelFolder}/{$beanFolder}/{$className}.php';
  * @package    Project_Models
  * @subpackage Project_Models_Factories
  * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
 class {$factory}

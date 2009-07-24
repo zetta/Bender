@@ -13,12 +13,11 @@ class LibraryGenerator extends ModelGenerator
     /**
      * Constructor
      *
-     * @param array $settings
      * @return LibraryGenerator
      */
-    public function LibraryGenerator($settings)
+    public function LibraryGenerator()
     {
-        $this->settings = $settings;
+        $this->benderSettings = BenderSettings::getInstance();
         $this->addHeaderInformation();
     }
     
@@ -30,13 +29,10 @@ class LibraryGenerator extends ModelGenerator
     {
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $libraryName, 'NOTE');
         $this->template->set_filenames(array('library' => 'Library/'.$libraryName));
-        
-        $privateCriteria = isset($this->settings['private_criteria']) ? $this->settings['private_criteria'] : false ; 
-        
-        $criteriaBlocK = ($privateCriteria) ? 'privateCriteria' : 'publicCriteria';
-        if( isset($this->settings['private_criteria']) && $this->settings['private_criteria'] == true )
-        $this->template->showBlock('useBehaviors');
+        $criteriaBlocK = ($this->benderSettings->isPrivateCriteria()) ? 'privateCriteria' : 'publicCriteria';
         $this->template->showBlock($criteriaBlocK);
+        if( $this->benderSettings->getUseBehaviors())
+            $this->template->showBlock('useBehaviors');
         $this->fileContent = $this->template->fetch('library');
     }
 }
