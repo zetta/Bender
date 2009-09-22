@@ -31,7 +31,7 @@ interface CatalogInterface
     
     /**
      * Agrega un BehaviorObserver a la lista de observers del catálogo
-     * @ṕaram BehaviorObserver $behaviorObserver El objeto observer que estará escuchando lo que haga el catálogo
+     * @param BehaviorObserver $behaviorObserver El objeto observer que estará escuchando lo que haga el catálogo
      */
     public function addObserver( BehaviorObserver $behaviorObserver);
     
