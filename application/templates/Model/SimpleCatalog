@@ -15,7 +15,7 @@
 /**
  * Catalog
  */
-require_once '{$modelFolder}/Project/Db/Catalog.php';
+require_once '{$libLocation}/{$dbLocation}/Catalog.php';
 
 /**
  * {$className}Factory

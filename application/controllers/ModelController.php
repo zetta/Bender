@@ -14,22 +14,16 @@ class ModelController extends GenericController
      * Version de la clase utilizada
      *
      */
-    const VERSION = "0.5";
-    
-    /**
-     * Los modelos para uso futuro =)
-     * @var array
-     */
-    //public static $models = array();
+    const VERSION = "0.5.1";
     
     private $library = array(
-            'CatalogInterface' => 'Db/CatalogInterface.php', 
-            'Catalog' => 'Db/Catalog.php',
-            'Criteria' => 'Db/Criteria.php', 
-            'DBAO' => 'Db/DBAO.php', 
-            'BehaviorObserver' => 'Db/Behavior/BehaviorObserver.php', 
-            'Observer' => 'Db/Behavior/Observer.php', 
-            'SluggableBehavior' => 'Db/Behavior/SluggableBehavior.php');
+            'CatalogInterface' => '{db-location}/CatalogInterface.php', 
+            'Catalog' => '{db-location}/Catalog.php',
+            'Criteria' => '{db-location}/Criteria.php', 
+            'DBAO' => '{db-location}/DBAO.php', 
+            'BehaviorObserver' => '{db-location}/Behavior/BehaviorObserver.php', 
+            'Observer' => '{db-location}/Behavior/Observer.php', 
+            'SluggableBehavior' => '{db-location}/Behavior/SluggableBehavior.php');
     
     /**
      * Genera los catálogos
@@ -85,7 +79,7 @@ class ModelController extends GenericController
         }
         
         if(!$benderSettings->getLibFirst())
-            $this->generateLibrary($benderSettings->getLibraryLocation(), $bender);
+            $this->generateLibrary($benderSettings->getLibraryLocation());
     }
     
     /**
@@ -97,6 +91,7 @@ class ModelController extends GenericController
         CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
         foreach ( $this->library as $objectName => $path )
         {
+        	$path = str_replace('{db-location}',BenderSettings::getInstance()->getDbLocation(),$path);
             $libraryGenerator = new LibraryGenerator();
             $libraryGenerator->createLibrary($objectName);
             $libraryGenerator->saveFile("{$libPath}/{$path}", BenderSettings::getInstance()->getPreserveChanges());

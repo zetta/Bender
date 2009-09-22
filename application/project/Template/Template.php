@@ -135,8 +135,12 @@ class Template {
         // Run the compiled code.
         if($do_not_echo == true)
            $customTemplate = '';
-        eval($this->compiled_code[$handle]);
-        
+           
+        $code = eval($this->compiled_code[$handle]);
+        if($code === false)
+        {
+        	throw new Exception("Bad php Code\nHandle: {$handle}\nFile: {$this->files[$handle]} \n".$this->compiled_code[$handle]);	
+        }
         if($do_not_echo == true)
             return $customTemplate;
         return true;

@@ -76,6 +76,8 @@ abstract class ModelGenerator
     protected function addHeaderInformation()
     {
         $this->template = new Template('application/templates/');
+        $this->template->assign('libLocation',$this->benderSettings->getLibLocation());
+        $this->template->assign('dbLocation',$this->benderSettings->getDbLocation());
         $this->template->assign('brandName',  $this->benderSettings->getBrandName());
         $this->template->assign('description',$this->benderSettings->getDescription());
         $this->template->assign('copyright', $this->benderSettings->getCopyRight());

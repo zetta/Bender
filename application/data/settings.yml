@@ -1,23 +1,25 @@
 bender:
-  add_includes:          false
-  use_behaviors:         true
+  add_includes:          true
+  use_behaviors:         false
   singleton:             true
-  use_constants:         false
+  use_constants:         true
   private_criteria:      false
-  encoding:              UTF-8
+  encoding:              iso-8859-1
   add_bender_signature:  true
   preserve_changes:      false
-  add_bender_signature:  true
   header:
-    author:              Juan Carlos Jarquín
-    brand_name:          Patitos Corporation
-    copyright:           El copiraid =) 
-    description:         sistema que controla las cosas de'sas
-  mysql:                 { username : root, password : temporal , server : localhost , dbname : bender }
-  schema:                default
+    author:              zetta & chente
+    brand_name:          PCS México / America
+    copyright:           Copyright (c) 2007-2008 PCS Mexico (http://www.pcsmexico.com)
+    description:         Sistema de Control de Clubs
+  mysql:                 { username : root, password : mysql_pwd! , server : prepro , dbname : scc_wellness }
+  schema:                generated
   paths:
     model_location:      application/models
-    catalog_location:    Catalogs
-    bean_location:       Beans
-    factory_location:    Factories
-    collection_location: Collections
+    catalog_location:    catalogs
+    bean_location:       beans
+    factory_location:    factories
+    collection_location: collections
+    lib_location:        lib
+    db_location:         db
+    

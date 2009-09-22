@@ -55,6 +55,12 @@ class BenderSettings
     private $preserveChanges = false;
     
     /**
+     * El Path de las librerias
+     * @var string
+     */
+    private $libLocation = 'Lib';
+    
+    /**
      * Codificación utilizada en los archivos que se generarán
      * @var string
      */
@@ -175,10 +181,30 @@ class BenderSettings
     private $libraryLocation = 'output/Project';
     
     /**
+     * @var string
+     */
+    private $dbLocation = 'Db';
+    
+    /**
      * Determina si las librerias serán generadas antes de los archivos
      * @var boolean
      */
     private $libFirst = false;
+	
+	/**
+	 * @return string
+	 */
+	public function getDbLocation() {
+		return $this->dbLocation;
+	}
+	
+	/**
+	 * @param string $dbLocation
+	 */
+	public function setDbLocation($dbLocation) {
+		$this->dbLocation = $dbLocation;
+	}
+
     
     /**
      * @return boolean
@@ -609,6 +635,20 @@ class BenderSettings
         $this->schema = $schema;
     }
     
+	/**
+	 * @return string
+	 */
+	public function getLibLocation() {
+		return $this->libLocation;
+	}
+	
+	/**
+	 * @param string $libLocation
+	 */
+	public function setLibLocation($libLocation) {
+		$this->libLocation = $libLocation;
+	}
+    
     /**
      * Constructor de la clase
      * @return BenderSettings
@@ -682,7 +722,11 @@ class BenderSettings
         $this->libraryLocation    = isset($settings['lib_path']) ? $settings['lib_path'] : $this->libraryLocation;
         $this->workCopyLocation   = isset($settings['workcopy']) ? $settings['workcopy'] : $this->baseWorkCopyLocation . $this->dbName;
         $this->preserveChanges    = isset($settings['preserve_changes']) ? $settings['preserve_changes'] : $this->preserveChanges;
+        $this->libLocation        = isset($settings['paths']['lib_location']) ? $settings['paths']['lib_location'] : $this->libLocation;
+        $this->dbLocation         = isset($settings['paths']['db_location']) ? $settings['paths']['db_location'] : $this->dbLocation;
     }
+
+
 
 }
 

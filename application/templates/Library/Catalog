@@ -10,7 +10,19 @@
  * @authoer    zetta
  * @version    {$version} SVN: $Id$
  */
+ 
+<block:useIncludes>
+/**
+ * CatalogInterface
+ */
+require_once '{$libLocation}/{$dbLocation}/CatalogInterface.php';
 
+/**
+ * Criteria
+ */
+require_once '{$libLocation}/{$dbLocation}/Criteria.php';
+
+</block:useIncludes>
 /**
  * Clase abstracta que representa un catalogo general
  *
