@@ -122,7 +122,7 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo para Obtener todos los ids en un arreglo
      * @return array
      */
-    public function retrieveAll{$className}Ids()
+    public function retrieveAllIds()
     {
         try
         {
@@ -140,13 +140,13 @@ class {$catalog} extends {$extendedCatalog}
   <block:privateCriteria>
      * @return array Array con todos los id de {$className} que encajen en la busqueda
      */
-    private function get{$className}IdsByCriteria()
+    private function getIdsByCriteria()
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
      * @return array Array con todos los id de {$className} que encajen en la busqueda
      */
-    private function get{$className}IdsByCriteria(Criteria $criteria)
+    private function getIdsByCriteria(Criteria $criteria)
   </block:publicCriteria>
     {
         try
@@ -168,14 +168,14 @@ class {$catalog} extends {$extendedCatalog}
      * @param string $field
      * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
      */
-    {$visibility} function get{$className}CustomFieldByCriteria($field)
+    {$visibility} function getCustomFieldByCriteria($field)
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
      * @param string $field
      * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
      */
-    {$visibility} function get{$className}CustomFieldByCriteria(Criteria $criteria, $field)
+    {$visibility} function getCustomFieldByCriteria(Criteria $criteria, $field)
   </block:publicCriteria>
     {
         try
@@ -197,13 +197,13 @@ class {$catalog} extends {$extendedCatalog}
   <block:privateCriteria>
      * @return {$className}Collection $objects
      */
-    protected function get{$className}sByCriteria()
+    protected function getsByCriteria()
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
      * @return {$className}Collection $objects
      */
-    public function get{$className}sByCriteria(Criteria $criteria)
+    public function getByCriteria(Criteria $criteria)
   </block:publicCriteria> 
     {
         try 
@@ -217,7 +217,7 @@ class {$catalog} extends {$extendedCatalog}
                     WHERE {$extendedCondition} " . {$criteriaVar}->createSql();
             ${$classVar}Collection = new {$className}Collection();
             foreach ($this->db->fetchAll($sql) as $result){
-                ${$classVar}Collection->append($this->create{$className}Internal($result));
+                ${$classVar}Collection->append($this->createInternal($result));
             }
         }
         catch(Exception $e)
@@ -236,7 +236,7 @@ class {$catalog} extends {$extendedCatalog}
      * @uses {$className}Factory::create{$className}Internal
      * @return {$className} 
      */
-    private function create{$className}Internal($result)
+    private function createInternal($result)
     {
         return {$className}Factory::create{$className}Internal({$results});
     }
