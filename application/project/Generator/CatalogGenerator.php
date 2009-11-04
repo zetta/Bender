@@ -72,6 +72,7 @@ class CatalogGenerator extends ModelGenerator
             $this->template->assign('extendedPrimaryKeyUpper', ucfirst($this->table->getExtendedTable()->getPrimaryField()->getPhpName()));
             $this->template->assign('extendedPrimaryKeyPhpName', $this->table->getExtendedTable()->getPrimaryField()->getPhpName());
             $this->template->assign('extendedPrimaryKeyName', $this->table->getExtendedTable()->getPrimaryField()->getName());
+            $this->template->assign('pkSimpleName',$this->table->getExtendedTable()->getPrimaryField()->getSimpleName());
             
             if ($this->benderSettings->getAddIncludes())
                 $this->template->showBlock('extendedInclude');

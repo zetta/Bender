@@ -36,6 +36,12 @@ class DbField
     private $phpName = '';
     
     /**
+     * Nombre del campo (simple)
+     * @var string
+     */
+    private $simpleName = '';
+    
+    /**
      * Nombre que se utilizará en las constantes
      * @var string
      */
@@ -303,6 +309,20 @@ class DbField
     {
         return $this->completeGetterName;
     }
-    
+	
+		/**
+		 * @return string
+		 */
+		public function getSimpleName() {
+			return $this->simpleName;
+		}
+		
+		/**
+		 * @param string $simpleName
+		 */
+		public function setSimpleName($simpleName) {
+			$this->simpleName = $simpleName;
+		}
+
 
 }

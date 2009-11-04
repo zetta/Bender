@@ -329,12 +329,11 @@ class {$catalog} extends {$extendedCatalog}
         try 
         {
             $this->db->setFetchMode(Zend_Db::FETCH_ASSOC);
-            $sql = "SELECT {$fieldNames} 
-                    FROM ".{$className}::TABLENAME."
+            $sql = "SELECT * FROM ".{$className}::TABLENAME."
                   <block:willExtend>
-                    , ".{$extendedClass}::TABLENAME."
+                    INNER JOIN ".{$extendedClass}::TABLENAME." USING ( {$pkSimpleName} )
                   </block:willExtend>
-                    WHERE {$extendedCondition} " . {$criteriaVar}->createSql();
+                    WHERE " . {$criteriaVar}->createSql();
             ${$classVar}Collection = new {$className}Collection();
             foreach ($this->db->fetchAll($sql) as $result){
                 ${$classVar}Collection->append($this->createInternal($result));

@@ -119,6 +119,7 @@ class DbTable
             $field->setBaseDataType($fieldData->type);
             $field->setIsPrimaryKey(($fieldData->primary_key == 0 ? false : true));
             $field->setCompleteGetterName( $this->parseCompleteGetterName($field) );
+            $field->setSimpleName($fieldData->name);
             if ($benderSettings->useConstants())
                 $field->setCatalogAccesor($this->getObject().'::'.$field->getConstantName());
             else
