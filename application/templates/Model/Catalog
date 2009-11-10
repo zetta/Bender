@@ -13,25 +13,14 @@
 <block:useIncludes>
 
 /**
- * Catalog
+ * Dependencias
  */
 require_once '{$libLocation}/{$dbLocation}/Catalog.php';
-
-/**
- * {$className}Factory
- */
+require_once '{$libLocation}/{$exceptionFolder}/{$className}Exception.php';
 require_once '{$modelFolder}/{$factoryFolder}/{$className}Factory.php';
-
-/**
- * {$className}Collection
- */
 require_once '{$modelFolder}/{$collectionFolder}/{$className}Collection.php';
 </block:useIncludes>
 <block:extendedInclude>
-
-/**
- * {$extendedClass}
- */
 require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}Catalog.php';
 </block:extendedInclude>
 
@@ -96,7 +85,7 @@ class {$catalog} extends {$extendedCatalog}
     public function create(${$classVar})
     {
         if(!(${$classVar} instanceof {$className}))
-            throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+            throw new {$className}Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
       <block:useBehaviors>
         $this->notifyObservers(${$classVar},Catalog::EVENT_CREATE);
       </block:useBehaviors>
@@ -117,7 +106,7 @@ class {$catalog} extends {$extendedCatalog}
         }
         catch(Exception $e)
         {
-            throw new Exception("El objeto {$className} no pudo ser guardado en la base de datos\n" . $e->getMessage());
+            throw new {$className}Exception("El objeto {$className} no pudo ser guardado en la base de datos\n" . $e->getMessage());
         }
     }
 
@@ -142,38 +131,36 @@ class {$catalog} extends {$extendedCatalog}
         }
         catch(Exception $e)
         {
-            throw new Exception("El objeto {$className} no pudo ser obtenido\n" . $e->getMessage());
+            throw new {$className}Exception("El objeto {$className} no pudo ser obtenido\n" . $e->getMessage());
         }
         return $new{$className};
-    }    
-  <block:willExtend>
-  
+    }
+    
     /**
-     * Metodo para Obtener los datos de un objeto por la llave primaria de la tabla que extiende
-     * @param int ${$extendedPrimaryKeyPhpName} 
-     * @return {$className}|null Objeto {$className} si existe, caso contrario retorna null;
+     * Metodo para Obtener una colección de objetos por varios ids
+     * @param array $ids
+     * @return {$className}Collection
      */
-    public function getBy{$extendedPrimaryKeyUpper}(${$extendedPrimaryKeyPhpName})
+    public function getByIds($ids)
     {
         try
         {
           <block:privateCriteria>
-            {$criteriaVar}->add('{$extendedPrimaryKeyName}', ${$extendedPrimaryKeyPhpName}, Criteria::EQUAL);
-            $new{$className} = $this->get{$className}sByCriteria()->getOne();
+            {$criteriaVar}->add({$primaryKeyAccesor}, $ids, Criteria::IN);
+            ${$classVar}Collection = $this->getByCriteria();
           </block:privateCriteria>
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
-            {$criteriaVar}->add('{$extendedPrimaryKeyName}', ${$extendedPrimaryKeyPhpName}, Criteria::EQUAL);
-            $new{$className} = $this->getByCriteria({$criteriaVar})->getOne();
+            {$criteriaVar}->add({$primaryKeyAccesor}, $ids, Criteria::IN);
+            ${$classVar}Collection = $this->getByCriteria({$criteriaVar});
           </block:publicCriteria>
         }
         catch(Exception $e)
         {
-            throw new Exception("El objeto {$className} no pudo ser obtenido\n" . $e->getMessage());
+            throw new {$className}Exception("El objeto {$classVar}Collection no pudo ser obtenido\n" . $e->getMessage());
         }
-        return $new{$className};
+        return ${$classVar}Collection;
     }
-  </block:willExtend>
 
     /**
      * Metodo para Obtener todos los ids en un arreglo
@@ -187,7 +174,7 @@ class {$catalog} extends {$extendedCatalog}
         }
         catch(Exception $e)
         {
-            throw new Exception("No se pudieron obtener los ids\n" . $e->getMessage());
+            throw new {$className}Exception("No se pudieron obtener los ids\n" . $e->getMessage());
         }
         return $result;
     }
@@ -199,7 +186,7 @@ class {$catalog} extends {$extendedCatalog}
     public function update(${$classVar})
     {
         if(!(${$classVar} instanceof {$className}))
-            throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+            throw new {$className}Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
         try
         {
             $where[] = "{$primaryKeyName} = '{${$classVar}->{$primaryKeyGetter}()}'";
@@ -215,7 +202,7 @@ class {$catalog} extends {$extendedCatalog}
         }
         catch(Exception $e)
         {
-            throw new Exception("El objeto {$className} no pudo ser actualizado\n" . $e->getMessage());
+            throw new {$className}Exception("El objeto {$className} no pudo ser actualizado\n" . $e->getMessage());
         }
     }
 
@@ -226,16 +213,8 @@ class {$catalog} extends {$extendedCatalog}
     public function delete(${$classVar})
     {
         if(!(${$classVar} instanceof {$className}))
-            throw new Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
-        try
-        {
-            $where[] = "{$primaryKeyName} = '{${$classVar}->{$primaryKeyGetter}()}'";
-            $this->db->delete({$className}::TABLENAME, $where);
-        }
-        catch(Exception $e)
-        {
-            throw new Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
-        }
+            throw new {$className}Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+        $this->deleteById(${$classVar}->{$primaryKeyGetter}());
     }
 
     /**
@@ -246,12 +225,30 @@ class {$catalog} extends {$extendedCatalog}
     {
         try
         {
-            $where[] = "{$primaryKeyName} = '{${$primaryKeyPhpName}}'";
+            $where = array($this->db->quoteInto('{$primaryKeyName} = ?', ${$primaryKeyPhpName}));
             $this->db->delete({$className}::TABLENAME, $where);
         }
         catch(Exception $e)
         {
-            throw new Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
+            throw new {$className}Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Metodo para eliminar varios {$className} a partir de su Id
+     * @param array $ids
+     */
+    public function deleteByIds($ids)
+    {
+        try
+        {
+            $criteria = new Criteria();
+            $criteria->add('{$primaryKeyName}',$ids,Criteria::IN);
+            $this->db->delete({$className}::TABLENAME, array($criteria->createSql()));
+        }
+        catch(Exception $e)
+        {
+            throw new {$className}Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
         }
     }
 
@@ -277,7 +274,7 @@ class {$catalog} extends {$extendedCatalog}
             $result = $this->db->fetchCol($sql);
         } catch(Exception $e)
         {
-            throw new Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
+            throw new {$className}Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
         }
         return $result;
     }
@@ -306,7 +303,7 @@ class {$catalog} extends {$extendedCatalog}
             $result = $this->db->fetchCol($sql);
         } catch(Exception $e)
         {
-            throw new Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
+            throw new {$className}Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
         }
         return $result;
     }
@@ -341,7 +338,7 @@ class {$catalog} extends {$extendedCatalog}
         }
         catch(Exception $e)
         {
-            throw new Exception("No se pudo obtener la colección de items\n" . $e->getMessage());
+            throw new {$className}Exception("No se pudo obtener la colección de items\n" . $e->getMessage());
         }
       <block:privateCriteria>
         $this->criteria->clear();
@@ -359,20 +356,32 @@ class {$catalog} extends {$extendedCatalog}
     {
         return {$className}Factory::create{$className}Internal({$results});
     }
-    
-    
   <block:foreignKeys>
   
     /**
      * Obtiene un {$classVar}Collection dependiendo del {$foreignKeys.fkName}
-     * @param {$foreignKeys.fkType} {$foreignKeys.fkName}
+     * @param {$foreignKeys.fkType} {$foreignKeys.fkName} {$foreignKeys.fkComment} 
      * @return {$className}Collection
      */
     public function getBy{$foreignKeys.fkMethodName}(${$foreignKeys.fkName})
     {
-        $criteria = new Criteria();
-        $criteria->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
-        return $this->getByCriteria($criteria);
+        try
+        {
+          <block:privateCriteria>
+            {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
+            ${$classVar}Collection = $this->getByCriteria();
+          </block:privateCriteria>
+          <block:publicCriteria>
+            {$criteriaVar} = new Criteria();
+            {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
+            ${$classVar}Collection = $this->getByCriteria({$criteriaVar});
+          </block:publicCriteria>
+        }
+        catch(Exception $e)
+        {
+            throw new {$className}Exception("El objeto {$className}Collection no pudo ser obtenido\n" . $e->getMessage());
+        }
+        return ${$classVar}Collection;
     }
   </block:foreignKeys>
 

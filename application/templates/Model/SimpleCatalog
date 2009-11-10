@@ -240,21 +240,34 @@ class {$catalog} extends {$extendedCatalog}
     {
         return {$className}Factory::create{$className}Internal({$results});
     }
-
   <block:foreignKeys>
   
     /**
      * Obtiene un {$classVar}Collection dependiendo del {$foreignKeys.fkName}
-     * @param {$foreignKeys.fkType} {$foreignKeys.fkName}
+     * @param {$foreignKeys.fkType} {$foreignKeys.fkName} {$foreignKeys.fkComment} 
      * @return {$className}Collection
      */
     public function getBy{$foreignKeys.fkMethodName}(${$foreignKeys.fkName})
     {
-        $criteria = new Criteria();
-        $criteria->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
-        return $this->getByCriteria($criteria);
+        try
+        {
+          <block:privateCriteria>
+            {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
+            ${$classVar}Collection = $this->getByCriteria();
+          </block:privateCriteria>
+          <block:publicCriteria>
+            {$criteriaVar} = new Criteria();
+            {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
+            ${$classVar}Collection = $this->getByCriteria({$criteriaVar});
+          </block:publicCriteria>
+        }
+        catch(Exception $e)
+        {
+            throw new Exception("El objeto {$className}Collection no pudo ser obtenido\n" . $e->getMessage());
+        }
+        return ${$classVar}Collection;
     }
-  </block:foreignKeys>    
+  </block:foreignKeys>
 
 } 
  

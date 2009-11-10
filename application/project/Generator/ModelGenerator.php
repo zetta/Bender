@@ -87,6 +87,7 @@ abstract class ModelGenerator
         $this->template->assign('beanFolder', $this->benderSettings->getBeanLocation());
         $this->template->assign('factoryFolder', $this->benderSettings->getFactoryLocation());
         $this->template->assign('collectionFolder', $this->benderSettings->getCollectionLocation());
+        $this->template->assign('exceptionFolder', $this->benderSettings->getExceptionLocation());
         $this->template->assign('benderSignature', $this->benderSettings->getBenderSignature());
         if($this->benderSettings->getAddBenderSignature())
             $this->template->showBlock('benderSignature');

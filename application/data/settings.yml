@@ -20,6 +20,7 @@ bender:
     bean_location:       Beans
     factory_location:    Factories
     collection_location: Collections
+    exception_location:  Exceptions
     lib_location:        application/models
     db_location:         Catalogs
     

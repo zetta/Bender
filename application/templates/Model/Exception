@@ -1,0 +1,32 @@
+<?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Lib
+ * @package    Lib_Exceptions
+ * @copyright  {$copyright}
+ * @author     {$author}, $LastChangedBy$
+ * @version    {$version} SVN: $Id$
+ */
+
+/**
+ * Clase {$collection} que representa una collección de objetos {$className}
+ *
+ * @category   Lib
+ * @package    Lib_Exceptions
+ * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
+ * @version    {$version} SVN: $Revision$
+ */
+class {$exception} extends Exception
+{
+  
+}
+
+
+

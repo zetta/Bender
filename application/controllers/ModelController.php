@@ -14,7 +14,7 @@ class ModelController extends GenericController
      * Version de la clase utilizada
      *
      */
-    const VERSION = "0.5.2";
+    const VERSION = "0.6.0";
     
     private $library = array(
             'CatalogInterface' => '{db-location}/CatalogInterface.php', 
@@ -76,6 +76,10 @@ class ModelController extends GenericController
             $catalogGenerator = new CollectionGenerator($objectName, $dbTable);
             $catalogGenerator->createCollection();
             $catalogGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getCollectionLocation()}/{$objectName}Collection.php", $benderSettings->getPreserveChanges());
+            
+            $exceptionGenerator = new ExceptionGenerator($objectName,$dbTable);
+            $exceptionGenerator->createException();
+            $exceptionGenerator->saveFile("{$benderSettings->getLibraryLocation()}/{$benderSettings->getExceptionLocation()}/{$objectName}Exception.php", $benderSettings->getPreserveChanges());
         }
         
         if(!$benderSettings->getLibFirst())

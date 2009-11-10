@@ -124,25 +124,31 @@ class BenderSettings
      * PATH donde estarán los catálogos (includes)
      * @var string
      */
-    private $catalogLocation = 'Catalogs';
+    private $catalogLocation = 'catalogs';
     
     /**
      * PATH donde estarán los beans (includes)
      * @var string
      */
-    private $beanLocation = '';
+    private $beanLocation = 'beans';
     
     /**
      * PATH donde estarán las factories (includes)
      * @var string
      */
-    private $factoryLocation = '';
+    private $factoryLocation = 'factories';
     
     /**
      * PATH donde estarán las collections (includes)
      * @var string
      */
-    private $collectionLocation = '';
+    private $collectionLocation = 'collections';
+    
+    /**
+     * Donde se va a guardar la excepcion
+     * @var string
+     */
+    private $exceptionLocation = 'exceptions';
     
     /**
      * Nombre de usuario a utilizar en la conexión a la base de datos mysql
@@ -178,7 +184,7 @@ class BenderSettings
      * PATH donde se guardan las librerias
      * @var string
      */
-    private $libraryLocation = 'output/Project';
+    private $libraryLocation = 'output/lib';
     
     /**
      * @var string
@@ -689,6 +695,22 @@ class BenderSettings
     {
         $this->preserveChanges = $preserveChanges;
     }
+  
+  /**
+   * @return string
+   */
+  public function getExceptionLocation()
+  {
+    return $this->exceptionLocation;
+  }
+  
+  /**
+   * @param string $exceptionLocation
+   */
+  public function setExceptionLocation($exceptionLocation)
+  {
+    $this->exceptionLocation = $exceptionLocation;
+  }
 
     
     /**
@@ -718,6 +740,7 @@ class BenderSettings
         $this->beanLocation       = isset($settings['paths']['bean_location']) ? $settings['paths']['bean_location'] : $this->beanLocation;
         $this->factoryLocation    = isset($settings['paths']['factory_location']) ? $settings['paths']['factory_location'] : $this->factoryLocation;
         $this->collectionLocation = isset($settings['paths']['collection_location']) ? $settings['paths']['collection_location'] : $this->collectionLocation;
+        $this->exceptionLocation  = isset($settings['paths']['exception_location']) ? $settings['paths']['exception_location'] : $this->exceptionLocation;
         $this->libFirst           = isset($settings['lib_first']) ? $settings['lib_first'] : $this->libFirst;
         $this->libraryLocation    = isset($settings['lib_path']) ? $settings['lib_path'] : $this->libraryLocation;
         $this->workCopyLocation   = isset($settings['workcopy']) ? $settings['workcopy'] : $this->baseWorkCopyLocation . $this->dbName;

@@ -151,6 +151,7 @@ class CatalogGenerator extends ModelGenerator
      */
     private function loopOverForeignKeys()
     {
+        $criteriaBlocK = ($this->benderSettings->isPrivateCriteria()) ? 'privateCriteria' : 'publicCriteria';
         $fields = $this->table->getForeignKeys();
         while ($fields->valid())
         {
@@ -158,8 +159,10 @@ class CatalogGenerator extends ModelGenerator
             $this->template->assignBlock('foreignKeys',array(
               'fkConstant' => $field->getCatalogAccesor(),
               'fkName' => $field->getPhpName(),
+              'fkComment' => $field->getComment() ? '('.$field->getComment().')' : '',
               'fkMethodName' => $field->getUpperCaseName()
             ));
+            $this->template->showBlock('foreignKeys.' . $criteriaBlocK);
             $fields->next();
         }
         $fields->rewind();
