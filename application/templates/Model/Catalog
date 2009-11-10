@@ -360,6 +360,21 @@ class {$catalog} extends {$extendedCatalog}
         return {$className}Factory::create{$className}Internal({$results});
     }
     
+    
+  <block:foreignKeys>
+  
+    /**
+     * Obtiene un {$classVar}Collection dependiendo del {$foreignKeys.fkName}
+     * @param {$foreignKeys.fkType} {$foreignKeys.fkName}
+     * @return {$className}Collection
+     */
+    public function getBy{$foreignKeys.fkMethodName}(${$foreignKeys.fkName})
+    {
+        $criteria = new Criteria();
+        $criteria->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
+        return $this->getByCriteria($criteria);
+    }
+  </block:foreignKeys>
 
 } 
  

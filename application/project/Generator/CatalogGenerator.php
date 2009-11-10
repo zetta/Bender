@@ -84,6 +84,9 @@ class CatalogGenerator extends ModelGenerator
         if($this->table->hasBehaviors() && $this->benderSettings->getUseBehaviors())
             $this->checkBehaviors();
         
+        if($this->table->getForeignKeys()->count())
+          $this->loopOverForeignKeys();     
+            
         $this->template->assign('fieldNames', implode(', ', $this->fieldNames));
         $this->template->assign('results', implode(', ', $this->results));
         $this->fileContent = $this->template->fetch('catalog');
@@ -143,6 +146,24 @@ class CatalogGenerator extends ModelGenerator
         $fields->rewind();
     }
     
+    /**
+     * Agrega la informacion de las llaves foraneas
+     */
+    private function loopOverForeignKeys()
+    {
+        $fields = $this->table->getForeignKeys();
+        while ($fields->valid())
+        {
+            $field = $fields->current();
+            $this->template->assignBlock('foreignKeys',array(
+              'fkConstant' => $field->getCatalogAccesor(),
+              'fkName' => $field->getPhpName(),
+              'fkMethodName' => $field->getUpperCaseName()
+            ));
+            $fields->next();
+        }
+        $fields->rewind();
+    }
     
     /**
      * Genera la información de los behaviors utilizados en el catálogo

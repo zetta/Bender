@@ -14,7 +14,7 @@ class ModelController extends GenericController
      * Version de la clase utilizada
      *
      */
-    const VERSION = "0.5.1";
+    const VERSION = "0.5.2";
     
     private $library = array(
             'CatalogInterface' => '{db-location}/CatalogInterface.php', 

@@ -92,6 +92,12 @@ class DbField
     private $completeGetterName = '';
     
     /**
+     * Nombre que empieza con mayusculas bueno para usarlo en metodos
+     * @var string
+     */
+    private $upperCaseName = '';
+    
+    /**
      * Nombre de la tabla a la que pertenece el field
      * @var string
      */
@@ -323,6 +329,22 @@ class DbField
 		public function setSimpleName($simpleName) {
 			$this->simpleName = $simpleName;
 		}
+  
+  /**
+   * @return string
+   */
+  public function getUpperCaseName()
+  {
+    return $this->upperCaseName;
+  }
+  
+  /**
+   * @param string $upperCaseName
+   */
+  public function setUpperCaseName($upperCaseName)
+  {
+    $this->upperCaseName = $upperCaseName;
+  }
 
 
 }

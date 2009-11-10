@@ -68,6 +68,12 @@ class DbTable
     private $object = '';
     
     /**
+     * Las llaves foraneas
+     * @var FieldCollection
+     */
+    private $foreignKeys = null;
+    
+    /**
      * Comportamientos que debe tener el objeto
      * @var array
      */
@@ -88,6 +94,7 @@ class DbTable
         $this->databaseName = $database;
         $this->database = Database::getInstance();
         $this->fields = new FieldCollection();
+        $this->foreignKeys = new FieldCollection();
         $this->behaviors = isset($modelInfo['behaviors']) ? $modelInfo['behaviors'] : array();
         $this->extends = $modelInfo['extends'];
         $this->extendedTableName = isset($modelInfo['extends']) ? $modelInfo['extends'] : '';
@@ -113,6 +120,7 @@ class DbTable
             $field->setSetterName('set' . DbTable::getCamelCase($fieldData->name, true));
             $field->setGetterName('get' . DbTable::getCamelCase($fieldData->name, true));
             $field->setPhpName(DbTable::getCamelCase($fieldData->name));
+            $field->setUpperCaseName( ucfirst( $field->getPhpName() ));
             $field->setConstantName(strtoupper($fieldData->name));
             $field->setDataType(DbTable::parseDataType($fieldData->type));
             $field->setCastDataType(DbTable::parseCastDataType($field->getDataType()));
@@ -135,6 +143,8 @@ class DbTable
             $field->setComment($commentData['COLUMN_COMMENT']);
             $this->fields->offsetSet($fieldData->name, $field);
             $this->fields->rewind();
+            if($this->isForeignKey($fieldData->name) && !($field->isPrimaryKey()))
+              $this->foreignKeys->append($field);
         }
         if ($this->extends)
         {
@@ -215,6 +225,16 @@ class DbTable
         }
         // Return the resulting string
         return $string;
+    }
+    
+    /**
+     * Es una llave foranea?
+     * @param string $column
+     * @return boolean
+     */
+    public function isForeignKey($column)
+    {
+      return eregi('^id\_',$column);
     }
     
     /**
@@ -388,5 +408,14 @@ class DbTable
     {
         $this->extendedTableName = $extendedTableName;
     }
+  
+  /**
+   * @return FieldCollection
+   */
+  public function getForeignKeys()
+  {
+    return $this->foreignKeys;
+  }
 
+    
 }
