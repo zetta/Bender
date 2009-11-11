@@ -12,8 +12,8 @@ bender:
     brand_name:          PCS México / America
     copyright:           Copyright (c) 2007-2009 PCS Mexico (http://www.pcsmexico.com)
     description:         Smart Access
-  mysql:                 { username : root, password : mysql_pwd! , server : prepro , dbname : sca_demo }
-  schema:                smart-access
+  mysql:                 { username : root, password : mysql_pwd! , server : prepro , dbname : bender }
+  schema:                default
   paths:
     model_location:      application/models
     catalog_location:    Catalogs
@@ -21,6 +21,6 @@ bender:
     factory_location:    Factories
     collection_location: Collections
     exception_location:  Exceptions
-    lib_location:        application/models
-    db_location:         Catalogs
+    lib_location:        lib
+    db_location:         Db
     
