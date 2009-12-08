@@ -43,9 +43,6 @@ class FactoryGenerator extends ModelGenerator
     {
         CommandLineInterface::getInstance()->printSection('Generator','Creating '.$this->object.'Factory','NOTE'); 
         $this->template->set_filenames(array('factory' => 'Model/Factory'));
-        $this->template->assign('className', $this->object);
-        $this->template->assign('factory', $this->object . 'Factory');
-        $this->template->assign('classVar', $this->getLowerObject());
         
         $this->loopFields($this->table->getFields(),true);
         

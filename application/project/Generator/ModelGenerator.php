@@ -60,7 +60,7 @@ abstract class ModelGenerator
      */
     public function __construct($objectName, DbTable $table)
     {
-    	$this->benderSettings = BenderSettings::getInstance();
+    	  $this->benderSettings = BenderSettings::getInstance();
         $this->object = $objectName;
         $this->table = $table;
         $this->extends = $table->getExtends();
@@ -96,12 +96,17 @@ abstract class ModelGenerator
         $this->template->assign('Catalog',$this->object.'Catalog');
         $this->template->assign('Factory',$this->object.'Factory');
         $this->template->assign('Collection',$this->object.'Collection');
+        $this->template->assign('Exception',$this->object.'Exception');
+        
         $this->template->assign('bean', $this->lowerObject);
         $this->template->assign('controller',$this->lowerObject.'Controller');
         $this->template->assign('catalog',$this->lowerObject.'Catalog');
         $this->template->assign('factory',$this->lowerObject.'Factory');
         $this->template->assign('collection',$this->lowerObject.'Collection');
+        $this->template->assign('exception',$this->lowerObject.'Exception');
         
+        if($this->table instanceof DbTable )
+          $this->template->assign('tableName', $this->table->getTable());
         
         if ($this->benderSettings->getAddIncludes())
             $this->template->showBlock('useIncludes');

@@ -16,8 +16,6 @@ class BeanGenerator extends ModelGenerator
     {
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object, 'NOTE');
         $this->template->set_filenames(array('bean' => 'Model/Bean'));
-        $this->template->assign('className', $this->object);
-        $this->template->assign('tableName', $this->table->getTable());
         
         $this->loopFields($this->table->getFields());
         

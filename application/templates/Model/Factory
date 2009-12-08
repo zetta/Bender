@@ -13,13 +13,13 @@
 <block:useIncludes>
 
 /**
- * {$className}
+ * {$Bean}
  */
-require_once '{$modelFolder}/{$beanFolder}/{$className}.php';
+require_once '{$modelFolder}/{$beanFolder}/{$Bean}.php';
 </block:useIncludes>
 
 /**
- * Clase {$factory}
+ * {$Factory} Class
  *
  * @category   Project
  * @package    Project_Models
@@ -31,22 +31,22 @@ require_once '{$modelFolder}/{$beanFolder}/{$className}.php';
 </block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
-class {$factory}
+class {$Factory}
 {
     /**
-     * Instancia un nuevo objeto {$className}
+     * Instancia un nuevo objeto {$Bean}
    <block:firstPhpDoc>
      * @param {$firstPhpDoc.dataType} ${$firstPhpDoc.phpName} {$firstPhpDoc.comment}
    </block:firstPhpDoc>
-     * @return {$className} Objeto {$className}
+     * @return {$Bean} $bean
      */
     public static function create{$className}({$firstParameters})
     {
-        $new{$className} = new {$className}();
+        $new{$Bean} = new {$Bean}();
       <block:firstSetters>
-        $new{$className}->{$firstSetters.setter}(${$firstSetters.phpName});
+        $new{$Bean}->{$firstSetters.setter}(${$firstSetters.phpName});
       </block:firstSetters>
-        return $new{$className};
+        return $new{$Bean};
     }
 
     /**
@@ -54,15 +54,15 @@ class {$factory}
    <block:secondPhpDoc>
      * @param {$secondPhpDoc.dataType} ${$secondPhpDoc.phpName} {$secondPhpDoc.comment}
    </block:secondPhpDoc>
-     * @return {$className} Objeto {$className}
+     * @return {$Bean} {$bean}
      */
     public static function create{$className}Internal({$secondParameters})
     {
-        $new{$className} = {$factory}::create{$className}({$secondParametersNotCasted});
+        $new{$Bean} = {$factory}::create{$Bean}({$secondParametersNotCasted});
       <block:hasPrimaryField>
-        $new{$className}->{$primaryKeySetter}(${$primaryKeyPhpName});
+        $new{$Bean}->{$primaryKeySetter}(${$primaryKeyPhpName});
       </block:hasPrimaryField>
-        return $new{$className};
+        return $new{$Bean};
     }
 
 } 

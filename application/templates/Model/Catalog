@@ -25,7 +25,7 @@ require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}Catalog.php';
 </block:extendedInclude>
 
 /**
- * Clase {$catalog}
+ * Clase {$Catalog}
  *
  * @category   Project
  * @package    Project_Db
@@ -36,18 +36,18 @@ require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}Catalog.php';
 </block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
-class {$catalog} extends {$extendedCatalog}
+class {$Catalog} extends {$extendedCatalog}
 {
   <block:isSingleton>
     /**
      * Instancia singleton
-     * @var {$catalog}
+     * @var {$Catalog}
      */
     static protected $instance   = null;
     
     /**
      * Método para obtener la instancia del catálogo
-     * @return {$catalog}
+     * @return {$Catalog}
      */
     public static function getInstance()
     {
@@ -65,61 +65,61 @@ class {$catalog} extends {$extendedCatalog}
     
 
     /**
-     * Constructor de la clase {$catalog}
-     * @return {$catalog}
+     * Constructor de la clase {$Catalog}
+     * @return {$Catalog}
      */
-    private function {$catalog}()
+    private function {$Catalog}()
     {
         parent::Catalog();{$behaviors}
     }    
   </block:isSingleton>
   <block:isntSingleton>
     /**
-     * Constructor de la clase {$catalog}
-     * @return {$catalog}
+     * Constructor de la clase {$Catalog}
+     * @return {$Catalog}
      */
-    public function {$catalog}()
+    public function {$Catalog}()
     {{$behaviors}
         parent::Catalog();
     }  
   </block:isntSingleton>
 
     /**
-     * Metodo para agregar un {$className} a la base de datos
-     * @param {$className} ${$classVar} Objeto {$className}
+     * Metodo para agregar un {$Bean} a la base de datos
+     * @param {$Bean} ${$bean} Objeto {$Bean}
      */
-    public function create(${$classVar})
+    public function create(${$bean})
     {
-        if(!(${$classVar} instanceof {$className}))
-            throw new {$className}Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+        if(!(${$bean} instanceof {$Bean}))
+            throw new {$Exception}("El parámetro [\${$bean}] no es una instancia de {$Bean}");
       <block:useBehaviors>
-        $this->notifyObservers(${$classVar},Catalog::EVENT_CREATE);
+        $this->notifyObservers(${$bean},Catalog::EVENT_CREATE);
       </block:useBehaviors>
         try
         {
           <block:willExtend>
-            parent::create(${$classVar});
+            parent::create(${$bean});
           </block:willExtend>
             $data = array(
               <block:getters>
-                '{$getters.name}'{$getters.spaces}=> ${$classVar}->{$getters.getter},
+                '{$getters.name}'{$getters.spaces}=> ${$bean}->{$getters.getter},
               </block:getters>
             );
-            $this->db->insert({$className}::TABLENAME, $data);
+            $this->db->insert({$Bean}::TABLENAME, $data);
           <block:hasPrimaryField>
-            ${$classVar}->{$primaryKeySetter}($this->db->lastInsertId());
+            ${$bean}->{$primaryKeySetter}($this->db->lastInsertId());
           </block:hasPrimaryField>
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("El objeto {$className} no pudo ser guardado en la base de datos\n" . $e->getMessage());
+            throw new {$Exception}("El objeto {$Bean} no pudo ser guardado en la base de datos\n" . $e->getMessage());
         }
     }
 
     /**
      * Metodo para Obtener los datos de un objeto por su llave primaria
      * @param int ${$primaryKeyPhpName}
-     * @return {$className}|null Objeto {$className} si existe, caso contrario retorna null;
+     * @return {$Bean}|null Objeto {$Bean} si existe, caso contrario retorna null;
      */
     public function getById(${$primaryKeyPhpName})
     {
@@ -127,17 +127,17 @@ class {$catalog} extends {$extendedCatalog}
         {
           <block:privateCriteria>
             {$criteriaVar}->add({$primaryKeyAccesor}, ${$primaryKeyPhpName}, Criteria::EQUAL);
-            $new{$className} = $this->getByCriteria()->getOne();
+            $new{$Bean} = $this->getByCriteria()->getOne();
           </block:privateCriteria>
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
             {$criteriaVar}->add({$primaryKeyAccesor}, ${$primaryKeyPhpName}, Criteria::EQUAL);
-            $new{$className} = $this->getByCriteria({$criteriaVar})->getOne();
+            $new{$Bean} = $this->getByCriteria({$criteriaVar})->getOne();
           </block:publicCriteria>
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("El objeto {$className} no pudo ser obtenido\n" . $e->getMessage());
+            throw new {$Exception}("El objeto {$Bean} no pudo ser obtenido\n" . $e->getMessage());
         }
         return $new{$className};
     }
@@ -145,7 +145,7 @@ class {$catalog} extends {$extendedCatalog}
     /**
      * Metodo para Obtener una colección de objetos por varios ids
      * @param array $ids
-     * @return {$className}Collection
+     * @return {$Collection}
      */
     public function getByIds($ids)
     {
@@ -153,19 +153,19 @@ class {$catalog} extends {$extendedCatalog}
         {
           <block:privateCriteria>
             {$criteriaVar}->add({$primaryKeyAccesor}, $ids, Criteria::IN);
-            ${$classVar}Collection = $this->getByCriteria();
+            ${$collection} = $this->getByCriteria();
           </block:privateCriteria>
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
             {$criteriaVar}->add({$primaryKeyAccesor}, $ids, Criteria::IN);
-            ${$classVar}Collection = $this->getByCriteria({$criteriaVar});
+            ${$collection} = $this->getByCriteria({$criteriaVar});
           </block:publicCriteria>
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("El objeto {$classVar}Collection no pudo ser obtenido\n" . $e->getMessage());
+            throw new {$Exception}("El objeto {$Collection} no pudo ser obtenido\n" . $e->getMessage());
         }
-        return ${$classVar}Collection;
+        return ${$collection};
     }
 
     /**
@@ -176,72 +176,72 @@ class {$catalog} extends {$extendedCatalog}
     {
         try
         {
-            $result = $this->db->fetchCol('SELECT {$primaryKeyName} FROM '.{$className}::TABLENAME);
+            $result = $this->db->fetchCol('SELECT {$primaryKeyName} FROM '.{$Bean}::TABLENAME);
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("No se pudieron obtener los ids\n" . $e->getMessage());
+            throw new {$Exception}("No se pudieron obtener los ids\n" . $e->getMessage());
         }
         return $result;
     }
 
     /**
      * Metodo para actualizar un {$className}
-     * @param {$className} ${$className} Objeto {$className}
+     * @param {$Bean} ${$bean} Objeto {$Bean}
      */
-    public function update(${$classVar})
+    public function update(${$bean})
     {
-        if(!(${$classVar} instanceof {$className}))
-            throw new {$className}Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
+        if(!(${$bean} instanceof {$Bean}))
+            throw new {$Exception}("El parámetro [\${$bean}] no es una instancia de {$Bean}");
         try
         {
-            $where[] = "{$primaryKeyName} = '{${$classVar}->{$primaryKeyGetter}()}'";
+            $where[] = "{$primaryKeyName} = '{${$bean}->{$primaryKeyGetter}()}'";
             $data = array(
               <block:getters>
-                '{$getters.name}'{$getters.spaces}=> ${$classVar}->{$getters.getter},
+                '{$getters.name}'{$getters.spaces}=> ${$bean}->{$getters.getter},
               </block:getters>
             );
-            $this->db->update({$className}::TABLENAME, $data, $where);
+            $this->db->update({$Bean}::TABLENAME, $data, $where);
           <block:willExtend>
-            parent::update(${$classVar});
+            parent::update(${$bean});
           </block:willExtend>
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("El objeto {$className} no pudo ser actualizado\n" . $e->getMessage());
+            throw new {$Exception}("El objeto {$Bean} no pudo ser actualizado\n" . $e->getMessage());
         }
     }
 
     /**
-     * Metodo para eliminar un {$className}
-     * @param {$className} ${$className} Objeto {$className}
+     * Metodo para eliminar un {$bean}
+     * @param {$Bean} ${$bean} Objeto {$Bean}
      */
-    public function delete(${$classVar})
+    public function delete(${$bean})
     {
-        if(!(${$classVar} instanceof {$className}))
-            throw new {$className}Exception("El parámetro [${$classVar}] no es una instancia de {$className}");
-        $this->deleteById(${$classVar}->{$primaryKeyGetter}());
+        if(!(${$bean} instanceof {$Bean}))
+            throw new {$Exception}("El parámetro [\${$bean}] no es una instancia de {$Bean}");
+        $this->deleteById(${$bean}->{$primaryKeyGetter}());
     }
 
     /**
      * Metodo para eliminar un {$className} a partir de su Id
-     * @param int ${$className}
+     * @param int ${$primaryKeyPhpName}
      */
     public function deleteById(${$primaryKeyPhpName})
     {
         try
         {
             $where = array($this->db->quoteInto('{$primaryKeyName} = ?', ${$primaryKeyPhpName}));
-            $this->db->delete({$className}::TABLENAME, $where);
+            $this->db->delete({$Bean}::TABLENAME, $where);
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
+            throw new {$Exception}("El objeto {$Bean} no pudo ser eliminado\n" . $e->getMessage());
         }
     }
     
     /**
-     * Metodo para eliminar varios {$className} a partir de su Id
+     * Metodo para eliminar varios {$Bean} a partir de su Id
      * @param array $ids
      */
     public function deleteByIds($ids)
@@ -250,24 +250,24 @@ class {$catalog} extends {$extendedCatalog}
         {
             $criteria = new Criteria();
             $criteria->add('{$primaryKeyName}',$ids,Criteria::IN);
-            $this->db->delete({$className}::TABLENAME, array($criteria->createSql()));
+            $this->db->delete({$Bean}::TABLENAME, array($criteria->createSql()));
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("El objeto {$className} no pudo ser eliminado\n" . $e->getMessage());
+            throw new {$Exception}("El objeto {$Bean} no pudo ser eliminado\n" . $e->getMessage());
         }
     }
 
     /**
-     * Metodo para obtener todos los id de {$className} por criterio
+     * Metodo para obtener todos los id de {$Bean} por criterio
   <block:privateCriteria>
-     * @return array Array con todos los id de {$className} que encajen en la busqueda
+     * @return array Array con todos los id de {$Bean} que encajen en la busqueda
      */
     private function getIdsByCriteria()
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
-     * @return array Array con todos los id de {$className} que encajen en la busqueda
+     * @return array Array con todos los id de {$Bean} que encajen en la busqueda
      */
     public function getIdsByCriteria(Criteria $criteria)
   </block:publicCriteria>
@@ -275,28 +275,28 @@ class {$catalog} extends {$extendedCatalog}
         try
         {
             $sql = "SELECT {$primaryKeyName}
-                    FROM ".{$className}::TABLENAME."
+                    FROM ".{$Bean}::TABLENAME."
                     WHERE  " . {$criteriaVar}->createSql();
             $result = $this->db->fetchCol($sql);
         } catch(Exception $e)
         {
-            throw new {$className}Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
+            throw new {$Exception}("No se pudieron obtener los ids de objetos {$Bean}\n" . $e->getMessage());
         }
         return $result;
     }
 
     /**
-     * Metodo para obtener un campo en particular de un {$className} dado un criterio
+     * Metodo para obtener un campo en particular de un {$Bean} dado un criterio
   <block:privateCriteria>
      * @param string $field
-     * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
+     * @return array Array con el campo de los objetos {$Bean} que encajen en la busqueda
      */
     private function getCustomFieldByCriteria($field)
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
      * @param string $field
-     * @return array Array con el campo de los objetos {$className} que encajen en la busqueda
+     * @return array Array con el campo de los objetos {$Bean} que encajen en la busqueda
      */
     public function getCustomFieldByCriteria(Criteria $criteria, $field)
   </block:publicCriteria>
@@ -304,12 +304,12 @@ class {$catalog} extends {$extendedCatalog}
         try
         {
             $sql = "SELECT {$field{$field}}
-                    FROM ".{$className}::TABLENAME."
+                    FROM ".{$Bean}::TABLENAME."
                     WHERE  " . {$criteriaVar}->createSql();
             $result = $this->db->fetchCol($sql);
         } catch(Exception $e)
         {
-            throw new {$className}Exception("No se pudieron obtener los ids de objetos {$className}\n" . $e->getMessage());
+            throw new {$Exception}("No se pudieron obtener los ids de objetos {$Bean}\n" . $e->getMessage());
         }
         return $result;
     }
@@ -318,13 +318,13 @@ class {$catalog} extends {$extendedCatalog}
      * Metodo que regresa una coleccion de objetos {$className} 
      * dependiendo del criterio establecido
   <block:privateCriteria>
-     * @return {$className}Collection $objects
+     * @return {$Collection} ${$collection}
      */
     private function getByCriteria()
   </block:privateCriteria>
   <block:publicCriteria>
      * @param Criteria $criteria
-     * @return {$className}Collection $objects
+     * @return {$Collection} ${$collection}
      */
     public function getByCriteria(Criteria $criteria)
   </block:publicCriteria> 
@@ -332,41 +332,41 @@ class {$catalog} extends {$extendedCatalog}
         try 
         {
             $this->db->setFetchMode(Zend_Db::FETCH_ASSOC);
-            $sql = "SELECT * FROM ".{$className}::TABLENAME."
+            $sql = "SELECT * FROM ".{$Bean}::TABLENAME."
                   <block:willExtend>
                     INNER JOIN ".{$extendedClass}::TABLENAME." USING ( {$pkSimpleName} )
                   </block:willExtend>
                     WHERE " . {$criteriaVar}->createSql();
-            ${$classVar}Collection = new {$className}Collection();
+            ${$collection} = new {$Collection}();
             foreach ($this->db->fetchAll($sql) as $result){
-                ${$classVar}Collection->append($this->createInternal($result));
+                ${$Collection}->append($this->createInternal($result));
             }
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("No se pudo obtener la colección de items\n" . $e->getMessage());
+            throw new {$Exception}("No se pudo obtener la colección de items\n" . $e->getMessage());
         }
       <block:privateCriteria>
         $this->criteria->clear();
       </block:privateCriteria>
-        return ${$classVar}Collection;
+        return ${$collection};
     }
 
     /**
      * Método que manda a llamar a {$className}Factory para instanciar el objeto
      * @param array $result El arreglo que devolvió el objeto Zend_Db despues del fetch
-     * @uses {$className}Factory::create{$className}Internal
-     * @return {$className} 
+     * @uses {$Factory}::create{$Bean}Internal
+     * @return {$Bean} 
      */
     private function createInternal($result)
     {
-        return {$className}Factory::create{$className}Internal({$results});
+        return {$Factory}::create{$Bean}Internal({$results});
     }
   <block:foreignKeys>
   
     /**
-     * Obtiene un {$classVar}Collection dependiendo del {$foreignKeys.fkName}
-     * @param {$foreignKeys.fkType} {$foreignKeys.fkName} {$foreignKeys.fkComment} 
+     * Obtiene un {$Collection} dependiendo del {$foreignKeys.fkName}
+     * @param {$foreignKeys.fkType} ${$foreignKeys.fkName} {$foreignKeys.fkComment} 
      * @return {$foreignKeys.return}
      */
     public function getBy{$foreignKeys.fkMethodName}(${$foreignKeys.fkName})
@@ -375,19 +375,19 @@ class {$catalog} extends {$extendedCatalog}
         {
           <block:privateCriteria>
             {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
-            ${$classVar}Collection = $this->getByCriteria();
+            ${$collection} = $this->getByCriteria();
           </block:privateCriteria>
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
             {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
-            ${$classVar}Collection = $this->getByCriteria({$criteriaVar});
+            ${$collection} = $this->getByCriteria({$criteriaVar});
           </block:publicCriteria>
         }
         catch(Exception $e)
         {
-            throw new {$className}Exception("El objeto {$className}Collection no pudo ser obtenido\n" . $e->getMessage());
+            throw new {$Exception}("El objeto {$foreignKeys.return} no pudo ser obtenido\n" . $e->getMessage());
         }
-        return ${$classVar}Collection{$foreignKeys.getOne};
+        return ${$collection}{$foreignKeys.getOne};
     }
   </block:foreignKeys>
 

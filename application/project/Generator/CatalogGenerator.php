@@ -41,10 +41,7 @@ class CatalogGenerator extends ModelGenerator
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object . 'Catalog', 'NOTE');
         
         $this->template->set_filenames(array('catalog' => 'Model/' . $template));
-        $this->template->assign('className', $this->object);
-        $this->template->assign('catalog', $this->object . 'Catalog');
         $this->template->assign('extendedCatalog', 'Catalog');
-        $this->template->assign('classVar', $this->getLowerObject());
         if ($this->table->hasPrimaryField())
         {
             $this->template->showBlock('hasPrimaryField');
@@ -166,6 +163,7 @@ class CatalogGenerator extends ModelGenerator
               'getOne' => $field->isUnique() ? '->getOne()' : '',
               'fkConstant' => $field->getCatalogAccesor(),
               'fkName' => $field->getPhpName(),
+              'fkType' => $field->getDataType(),
               'fkComment' => $field->getComment() ? '('.$field->getComment().')' : '',
               'fkMethodName' => $field->getUpperCaseName()
             ));

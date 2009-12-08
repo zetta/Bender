@@ -12,7 +12,7 @@
  */
 
 /**
- * Clase {$collection} que representa una collección de objetos {$className}
+ * Clase {$Exception} que representa una excepción de objetos {$Bean}
  *
  * @category   Lib
  * @package    Lib_Exceptions
@@ -23,7 +23,7 @@
 </block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
-class {$exception} extends Exception
+class {$Exception} extends Exception
 {
   
 }
