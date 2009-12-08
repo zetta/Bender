@@ -60,14 +60,12 @@ abstract class ModelGenerator
      */
     public function __construct($objectName, DbTable $table)
     {
-        $this->benderSettings = BenderSettings::getInstance();
+    	$this->benderSettings = BenderSettings::getInstance();
         $this->object = $objectName;
         $this->table = $table;
         $this->extends = $table->getExtends();
-        $this->addHeaderInformation();
-        if ($this->benderSettings->getAddIncludes())
-            $this->template->showBlock('useIncludes');
         $this->lowerObject = $this->toLower($objectName);
+        $this->addHeaderInformation();
     }
     
     /**
@@ -92,6 +90,21 @@ abstract class ModelGenerator
         if($this->benderSettings->getAddBenderSignature())
             $this->template->showBlock('benderSignature');
         $this->template->assign('version', Bender::VERSION);
+        
+        $this->template->assign('Bean', $this->object);
+        $this->template->assign('Controller',$this->object.'Controller');
+        $this->template->assign('Catalog',$this->object.'Catalog');
+        $this->template->assign('Factory',$this->object.'Factory');
+        $this->template->assign('Collection',$this->object.'Collection');
+        $this->template->assign('bean', $this->lowerObject);
+        $this->template->assign('controller',$this->lowerObject.'Controller');
+        $this->template->assign('catalog',$this->lowerObject.'Catalog');
+        $this->template->assign('factory',$this->lowerObject.'Factory');
+        $this->template->assign('collection',$this->lowerObject.'Collection');
+        
+        
+        if ($this->benderSettings->getAddIncludes())
+            $this->template->showBlock('useIncludes');
     }
     
     /**

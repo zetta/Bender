@@ -24,7 +24,7 @@
 </block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
-class {$collection} extends ArrayIterator
+class {$Collection} extends ArrayIterator
 {
 	/**
      * Appends the value
@@ -32,7 +32,10 @@ class {$collection} extends ArrayIterator
      */
     public function append(${$classVar})
     {
-        parent::append(${$classVar});
+      <block:hasPrimaryField>
+        parent::offsetSet(${$classVar}->{$primaryKeyGetter}(), ${$classVar});
+        $this->rewind();
+      </block:hasPrimaryField>
     }
 
     /**
@@ -70,6 +73,46 @@ class {$collection} extends ArrayIterator
         } else
             return null;
     }
+    
+  <block:hasPrimaryField>
+    /**
+     * Contains one object with ${$primaryKeyPhpName}
+     * @param int ${$primaryKeyPhpName}
+     * @return boolean
+     */
+    public function contains(${$primaryKeyPhpName})
+    {
+        return parent::offsetExists(${$primaryKeyPhpName});
+    }
+    
+    /**
+     * Merge two Collections
+     * @param int ${$primaryKeyPhpName}
+     * @return void
+     */
+    public function merge({$Collection} ${$collection})
+    {
+        while(${$collection}->valid())
+        {
+            ${$bean} = ${$collection}->read();
+            if(!$this->contains(${$bean}->{$primaryKeyGetter}()))
+            {
+                $this->append(${$bean});
+            }             
+        }
+        ${$collection}->rewind();
+    }
+    
+    /**
+     * Retrieve the array with primary keys 
+     * @return array
+     */
+    public function getPrimaryKeys()
+    {
+        return array_keys($this->getArrayCopy());
+    }
+    
+  </block:hasPrimaryField>
 }
 
 

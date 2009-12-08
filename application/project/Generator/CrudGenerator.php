@@ -16,16 +16,7 @@ class CrudGenerator extends ModelGenerator
     {
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'->CRUD', 'NOTE');
         $this->template->set_filenames(array('controller' => 'Crud/Controller'));
-        $this->template->assign('Bean', $this->object);
-        $this->template->assign('Controller',$this->object.'Controller');
-        $this->template->assign('Catalog',$this->object.'Catalog');
-        $this->template->assign('Factory',$this->object.'Factory');
-        $this->template->assign('Collection',$this->object.'Collection');
-        $this->template->assign('bean', $this->lowerObject);
-        $this->template->assign('controller',$this->lowerObject.'Controller');
-        $this->template->assign('catalog',$this->lowerObject.'Catalog');
-        $this->template->assign('factory',$this->lowerObject.'Factory');
-        $this->template->assign('collection',$this->lowerObject.'Collection');
+
         
         $this->template->assign('tableName', $this->table->getTable());
         

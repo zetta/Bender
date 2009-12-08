@@ -23,7 +23,15 @@ class CollectionGenerator extends ModelGenerator
         $this->template->set_filenames(array('collection' => 'Model/Collection'));
         $this->template->assign('className', $this->object);
         $this->template->assign('classVar', $this->getLowerObject());
-        $this->template->assign('collection', $this->object . 'Collection');
+        #$this->template->assign('collection', $this->object . 'Collection');
+        
+        if($this->table->hasPrimaryField())
+        {
+        	$this->template->showBlock('hasPrimaryField');
+        	$this->template->assign('primaryKeyGetter', $this->table->getPrimaryField()->getGetterName());
+        	$this->template->assign('primaryKeyPhpName', $this->table->getPrimaryField()->getPhpName());
+        }
+        
         $this->fileContent = $this->template->fetch('collection');
     }
 }
