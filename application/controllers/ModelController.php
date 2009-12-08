@@ -10,12 +10,7 @@
  */
 class ModelController extends GenericController
 {
-    /**
-     * Version de la clase utilizada
-     *
-     */
-    const VERSION = "0.6.0";
-    
+   
     private $library = array(
             'CatalogInterface' => '{db-location}/CatalogInterface.php', 
             'Catalog' => '{db-location}/Catalog.php',
@@ -30,7 +25,6 @@ class ModelController extends GenericController
      */
     public function generateAction()
     {
-        $this->prepare();
         $benderSettings = BenderSettings::getInstance();
         $schemaFile = "application/data/{$benderSettings->getSchema()}.schema.yml";
         
@@ -109,36 +103,13 @@ class ModelController extends GenericController
      */
     public function generateSchemaAction()
     {
-        $this->prepare();
         $schemaGenerator = new SchemaGenerator();
         $schemaGenerator->setDatabaseName(BenderSettings::getInstance()->getDbName());
         $schemaGenerator->generate();
         $schemaGenerator->saveFile('application/data/generated.schema.yml');
     }
     
-    /**
-     * Obtiene el arreglo de los ajustes
-     * y se conecta a la base de datos
-     */
-    private function prepare()
-    {
-        $benderSettings = BenderSettings::getInstance();
-        $settingsFile = 'application/data/settings.yml';
-        if (! file_exists($settingsFile))
-            throw new ErrorException("El archivo de ajustes [{$settingsFile}] no se encuentra");
-        $yaml = Spyc::YAMLLoad($settingsFile);
-        try
-        {
-            $benderSettings->setUp($yaml['bender']);
-        } catch ( Exception $e )
-        {
-            throw new Exception("Error {$e->getCode()} : El archivo de configuración parece no ser válido");
-        }
-        
-        $dataBase = Database::getInstance();
-        $dataBase->configure($benderSettings->getServer(), $benderSettings->getUsername(), $benderSettings->getPassword(), $benderSettings->getDbName());
-        $dataBase->connect();
-    }
+
 
 }
 

@@ -7,16 +7,26 @@
 /**
  * Clase que genera los Beans
  */
-class BeanGenerator extends ModelGenerator
+class CrudGenerator extends ModelGenerator
 {
     /**
      * Genera el Bean del objeto y lo almacena para su posterior uso
      */
-    public function createBean()
+    public function createCrud()
     {
-        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object, 'NOTE');
-        $this->template->set_filenames(array('bean' => 'Model/Bean'));
-        $this->template->assign('className', $this->object);
+        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'->CRUD', 'NOTE');
+        $this->template->set_filenames(array('controller' => 'Crud/Controller'));
+        $this->template->assign('Bean', $this->object);
+        $this->template->assign('Controller',$this->object.'Controller');
+        $this->template->assign('Catalog',$this->object.'Catalog');
+        $this->template->assign('Factory',$this->object.'Factory');
+        $this->template->assign('Collection',$this->object.'Collection');
+        $this->template->assign('bean', $this->lowerObject);
+        $this->template->assign('controller',$this->lowerObject.'Controller');
+        $this->template->assign('catalog',$this->lowerObject.'Catalog');
+        $this->template->assign('factory',$this->lowerObject.'Factory');
+        $this->template->assign('collection',$this->lowerObject.'Collection');
+        
         $this->template->assign('tableName', $this->table->getTable());
         
         $this->loopFields($this->table->getFields());
@@ -28,7 +38,7 @@ class BeanGenerator extends ModelGenerator
             if($this->benderSettings->getAddIncludes())
                 $this->template->showBlock('extendedInclude');
         }
-        $this->fileContent = $this->template->fetch('bean');
+        $this->fileContent = $this->template->fetch('controller');
     }
     
     /**

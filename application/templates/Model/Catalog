@@ -53,10 +53,16 @@ class {$catalog} extends {$extendedCatalog}
     {
         if (!isset(self::$instance))
         {
-          self::$instance = new {$catalog}();
+          self::$instance = new self();
         }
         return self::$instance;
     }
+    
+    /**
+     * Can't Clone Singleton Class 
+     */
+    private function __clone(){}
+    
 
     /**
      * Constructor de la clase {$catalog}
@@ -361,7 +367,7 @@ class {$catalog} extends {$extendedCatalog}
     /**
      * Obtiene un {$classVar}Collection dependiendo del {$foreignKeys.fkName}
      * @param {$foreignKeys.fkType} {$foreignKeys.fkName} {$foreignKeys.fkComment} 
-     * @return {$className}Collection
+     * @return {$foreignKeys.return}
      */
     public function getBy{$foreignKeys.fkMethodName}(${$foreignKeys.fkName})
     {
@@ -381,7 +387,7 @@ class {$catalog} extends {$extendedCatalog}
         {
             throw new {$className}Exception("El objeto {$className}Collection no pudo ser obtenido\n" . $e->getMessage());
         }
-        return ${$classVar}Collection;
+        return ${$classVar}Collection{$foreignKeys.getOne};
     }
   </block:foreignKeys>
 

@@ -156,7 +156,14 @@ class CatalogGenerator extends ModelGenerator
         while ($fields->valid())
         {
             $field = $fields->current();
+            if($field->isPrimaryKey())
+            {
+              $fields->next();
+              continue;
+            }
             $this->template->assignBlock('foreignKeys',array(
+              'return' => $field->isUnique() ? $this->object : $this->object.'Collection',
+              'getOne' => $field->isUnique() ? '->getOne()' : '',
               'fkConstant' => $field->getCatalogAccesor(),
               'fkName' => $field->getPhpName(),
               'fkComment' => $field->getComment() ? '('.$field->getComment().')' : '',

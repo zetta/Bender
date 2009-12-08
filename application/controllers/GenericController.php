@@ -19,6 +19,7 @@ abstract class GenericController
     public function dispatch()
     {
         $method = new ReflectionMethod($this, $this->actionName . 'Action');
+        $this->prepare();
         $method->invoke($this);
     }
     
@@ -37,6 +38,30 @@ abstract class GenericController
      */
     function postDispatch()
     {
+    }
+    
+    /**
+     * Obtiene el arreglo de los ajustes
+     * y se conecta a la base de datos
+     */
+    private function prepare()
+    {
+        $benderSettings = BenderSettings::getInstance();
+        $settingsFile = 'application/data/settings.yml';
+        if (! file_exists($settingsFile))
+            throw new ErrorException("El archivo de ajustes [{$settingsFile}] no se encuentra");
+        $yaml = Spyc::YAMLLoad($settingsFile);
+        try
+        {
+            $benderSettings->setUp($yaml['bender']);
+        } catch ( Exception $e )
+        {
+            throw new Exception("Error {$e->getCode()} : El archivo de configuración parece no ser válido");
+        }
+        
+        $dataBase = Database::getInstance();
+        $dataBase->configure($benderSettings->getServer(), $benderSettings->getUsername(), $benderSettings->getPassword(), $benderSettings->getDbName());
+        $dataBase->connect();
     }
 
 }

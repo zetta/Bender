@@ -18,6 +18,8 @@ bender:
     model_location:      application/models
     catalog_location:    Catalogs
     bean_location:       Beans
+    controller_location: Controllers
+    view_location:       Views
     factory_location:    Factories
     collection_location: Collections
     exception_location:  Exceptions

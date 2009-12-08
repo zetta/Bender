@@ -133,6 +133,18 @@ class BenderSettings
     private $beanLocation = 'beans';
     
     /**
+     * Path donde se guardarán los controllers
+     * @var string
+     */
+    private $controllerLocation = 'controllers';
+    
+    /**
+     * Path donde se guardarán las vistas
+     * @var string
+     */
+    private $viewLocation = "views";
+    
+    /**
      * PATH donde estarán las factories (includes)
      * @var string
      */
@@ -712,6 +724,39 @@ class BenderSettings
     $this->exceptionLocation = $exceptionLocation;
   }
 
+  /**
+   * @return string
+   */
+  public function getControllerLocation()
+  {
+    return $this->controllerLocation;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getViewLocation()
+  {
+    return $this->viewLocation;
+  }
+  
+  /**
+   * @param string $controllerLocation
+   */
+  public function setControllerLocation($controllerLocation)
+  {
+    $this->controllerLocation = $controllerLocation;
+  }
+  
+  /**
+   * @param string $viewLocation
+   */
+  public function setViewLocation($viewLocation)
+  {
+    $this->viewLocation = $viewLocation;
+  }
+
+  
     
     /**
      * Guarda las configuraciones
@@ -747,6 +792,8 @@ class BenderSettings
         $this->preserveChanges    = isset($settings['preserve_changes']) ? $settings['preserve_changes'] : $this->preserveChanges;
         $this->libLocation        = isset($settings['paths']['lib_location']) ? $settings['paths']['lib_location'] : $this->libLocation;
         $this->dbLocation         = isset($settings['paths']['db_location']) ? $settings['paths']['db_location'] : $this->dbLocation;
+        $this->controllerLocation = isset($settings['paths']['controller_location']) ? $settings['paths']['controller_location'] : $this->controllerLocation;
+        $this->viewLocation       = isset($settings['paths']['view_location']) ? $settings['paths']['view_location'] : $this->viewLocation;
     }
 
 

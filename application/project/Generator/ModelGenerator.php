@@ -91,7 +91,7 @@ abstract class ModelGenerator
         $this->template->assign('benderSignature', $this->benderSettings->getBenderSignature());
         if($this->benderSettings->getAddBenderSignature())
             $this->template->showBlock('benderSignature');
-        $this->template->assign('version', ModelController::VERSION);
+        $this->template->assign('version', Bender::VERSION);
     }
     
     /**

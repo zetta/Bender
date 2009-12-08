@@ -128,6 +128,9 @@ class DbTable
             $field->setIsPrimaryKey(($fieldData->primary_key == 0 ? false : true));
             $field->setCompleteGetterName( $this->parseCompleteGetterName($field) );
             $field->setSimpleName($fieldData->name);
+            $field->setIsUnique( $fieldData->unique_key == 1 ? true : false );
+            if($fieldData->def)
+              $field->setDefaultValues($fieldData->def);
             if ($benderSettings->useConstants())
                 $field->setCatalogAccesor($this->getObject().'::'.$field->getConstantName());
             else
@@ -143,8 +146,9 @@ class DbTable
             $field->setComment($commentData['COLUMN_COMMENT']);
             $this->fields->offsetSet($fieldData->name, $field);
             $this->fields->rewind();
-            if($this->isForeignKey($fieldData->name) && !($field->isPrimaryKey()))
+            if($this->isForeignKey($fieldData->name) || $field->isUnique() )
               $this->foreignKeys->append($field);
+              
         }
         if ($this->extends)
         {
