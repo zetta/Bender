@@ -12,7 +12,7 @@
  */
 
 /**
- * Clase {$collection} que representa una collección de objetos {$className}
+ * Clase {$Collection} que representa una collección de objetos {$className}
  *
  * @category   Project
  * @package    Project_Models
@@ -26,21 +26,26 @@
  */
 class {$Collection} extends ArrayIterator
 {
+
 	/**
      * Appends the value
-     * @param {$className} ${$classVar}
+     * @param {$Bean} ${$bean}
      */
-    public function append(${$classVar})
+    public function append(${$bean})
     {
       <block:hasPrimaryField>
-        parent::offsetSet(${$classVar}->{$primaryKeyGetter}(), ${$classVar});
+        parent::offsetSet(${$bean}->{$primaryKeyGetter}(), ${$bean});
         $this->rewind();
       </block:hasPrimaryField>
+      <block:noPrimaryField>
+        parent::append(${$bean});
+        $this->rewind();
+      </block:noPrimaryField>
     }
 
     /**
      * Return current array entry
-     * @return {$className}
+     * @return {$Bean}
      */
     public function current()
     {
@@ -50,19 +55,19 @@ class {$Collection} extends ArrayIterator
     /**
      * Return current array entry and 
      * move to next entry
-     * @return {$className} 
+     * @return {$Bean} 
      */
     public function read()
     {
-        ${$classVar} = $this->current();
+        ${$bean} = $this->current();
         $this->next();
-        return ${$classVar};
+        return ${$bean};
     }
 
     /**
      * Get the first array entry
      * if exists or null if not 
-     * @return {$className}|null 
+     * @return {$Bean}|null 
      */
     public function getOne()
     {
@@ -87,7 +92,7 @@ class {$Collection} extends ArrayIterator
     
     /**
      * Merge two Collections
-     * @param int ${$primaryKeyPhpName}
+     * @param {$Collection} ${$collection}
      * @return void
      */
     public function merge({$Collection} ${$collection})
