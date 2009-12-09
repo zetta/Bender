@@ -134,8 +134,8 @@ abstract class ModelGenerator
             $this->tryToPreserveChanges($path);
         
         $handle = fopen($path, "w");
-        if ($this->benderSettings->getEncoding() != 'UTF-8')
-            $this->fileContent = iconv("UTF-8", $this->benderSettings->getEncoding(), $this->fileContent);
+        #if ($this->benderSettings->getEncoding() != 'UTF-8')
+        #    $this->fileContent = iconv("UTF-8", $this->benderSettings->getEncoding(), $this->fileContent);
         
         fwrite($handle, $this->fileContent);
         fclose($handle);

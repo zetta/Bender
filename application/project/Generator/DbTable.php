@@ -143,7 +143,7 @@ class DbTable
             $query = "select COLUMN_COMMENT FROM information_schema.COLUMNS where TABLE_SCHEMA = '{$this->databaseName}' and TABLE_NAME = '{$this->table}' and  COLUMN_NAME = '{$fieldData->name}'";
             $commentResource = $this->database->query($query);
             $commentData = $this->database->fetch_array($commentResource);
-            $field->setComment($commentData['COLUMN_COMMENT']);
+            $field->setComment( $this->parseComment($commentData['COLUMN_COMMENT']));
             $this->fields->offsetSet($fieldData->name, $field);
             $this->fields->rewind();
             if($this->isForeignKey($fieldData->name) || $field->isUnique() )
@@ -167,6 +167,25 @@ class DbTable
         foreach($fields as $offset => $field){
             $this->fields->offsetSet($offset, $field);
         }
+    }
+    
+    /**
+     * Limpia los comentarios (les quita los acentos para que no se muera esta cosa)
+     *
+     * @param string $comment
+     * @return string $comment
+     */
+    private function parseComment($string)
+    {
+      $string = strtr($string,
+         "\xe1\xc1\xe0\xc0\xe2\xc2\xe4\xc4\xe3\xc3\xe5\xc5".
+         "\xaa\xe7\xc7\xe9\xc9\xe8\xc8\xea\xca\xeb\xcb\xed".
+         "\xcd\xec\xcc\xee\xce\xef\xcf\xf1\xd1\xf3\xd3\xf2".
+         "\xd2\xf4\xd4\xf6\xd6\xf5\xd5\x8\xd8\xba\xf0\xfa\xda".
+         "\xf9\xd9\xfb\xdb\xfc\xdc\xfd\xdd\xff\xe6\xc6\xdf\xf8",
+         "aAaAaAaAaAaAacCeEeEeEeEiIiIiIiInNo".
+         "OoOoOoOoOoOoouUuUuUuUyYyaAso");
+      return $string;
     }
     
     /**

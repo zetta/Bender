@@ -13,7 +13,7 @@
 
 <block:extendedInclude>
 /**
- * {extendedBean}
+ * {$extendedBean}
  */
 require_once '{$modelFolder}/{$beanFolder}/{$extendedBean}.php';
 

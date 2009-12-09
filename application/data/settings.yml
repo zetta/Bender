@@ -4,7 +4,7 @@ bender:
   singleton:             true
   use_constants:         true
   private_criteria:      false
-  encoding:              iso-8859-1
+  encoding:              UTF-8
   add_bender_signature:  true
   preserve_changes:      false
   header:
