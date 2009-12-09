@@ -73,7 +73,7 @@ class ModelController extends GenericController
             
             $exceptionGenerator = new ExceptionGenerator($objectName,$dbTable);
             $exceptionGenerator->createException();
-            $exceptionGenerator->saveFile("{$benderSettings->getLibraryLocation()}/{$benderSettings->getExceptionLocation()}/{$objectName}Exception.php", $benderSettings->getPreserveChanges());
+            $exceptionGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getExceptionLocation()}/{$objectName}Exception.php", $benderSettings->getPreserveChanges());
         }
         
         if(!$benderSettings->getLibFirst())

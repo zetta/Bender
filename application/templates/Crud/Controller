@@ -50,7 +50,7 @@ class {$Controller}
     }
     
     /**
-     * Acción para eliminar un banco
+     * {$Bean} Delete 
      */
     public function deleteAction()
     {
@@ -61,7 +61,7 @@ class {$Controller}
     }
     
     /**
-     * Pantalla de edición
+     * {$Bean} Edit (View)
      */
     public function editAction()
     {
@@ -73,53 +73,19 @@ class {$Controller}
     }
     
     /**
-     * Acción que recibe los parámetros de un nuevo banco
+     * {$Bean} Create
      */
     public function createAction()
     {
-      
-      
-      
-      
-      #${$catalog} = {$Catalog}::getInstance();
-      
-      
-      #$id = $this->getRequest()->getParam('id');
-      #${$bean} = ${$catalog}->getById($id);
-      
-    
-    
-      $name = utf8_decode($this->getRequest()->getParam('name'));
-      $bankCatalog = BankCatalog::getInstance();
-      $bank = $bankCatalog->getOrCreateByName($name);
-      if($bank->getIdStatus() == Bank::$Status['Inactivo'])
-      {
-        $bank->setIdStatus(Bank::$Status['Activo']);
-        $bankCatalog->update($bank);
-      }
-      $this->view->setTpl('_row');
-      $this->view->setLayoutFile(false);
-      $this->view->name = $bank->getName();
-      $this->view->id = $bank->getIdBank();
+      //TODO
     }
     
     /**
-     * Acción que recibe los parámetros de la edición de un banco
+     * {$Bean} Update
      */
     public function updateAction()
     {
-      $bankCatalog = BankCatalog::getInstance();
-      $idBank = $this->getRequest()->getParam('id');
-      $bank = $bankCatalog->getById($idBank);
-      
-            <block:setters>
-        ${$bean}->{$setters.setter}({$setters.value});
-      </block:setters>
-      
-      $bank->setName($this->getRequest()->getParam('name'));
-      $bankCatalog->update($bank);
-      $this->setFlash('ok','Se edito correctamente el banco');
-      $this->_redirect('bank');
+       //TODO
     }
     
 }
