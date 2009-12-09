@@ -16,7 +16,7 @@
  * Dependencias
  */
 require_once '{$libLocation}/{$dbLocation}/Catalog.php';
-require_once '{$libLocation}/{$exceptionFolder}/{$className}Exception.php';
+require_once '{$modelFolder}/{$exceptionFolder}/{$className}Exception.php';
 require_once '{$modelFolder}/{$factoryFolder}/{$className}Factory.php';
 require_once '{$modelFolder}/{$collectionFolder}/{$className}Collection.php';
 </block:useIncludes>
