@@ -15,11 +15,11 @@
 /**
  * {$Bean}Catalog
  */
-require_once '{$modelFolder}/{$catalogFolder}/{$className}Catalog.php';
+require_once '{$modelFolder}/{$catalogFolder}/{$Catalog}.php';
 </block:useIncludes>
 
 /**
- * {$Controller}Class
+ * {$Controller} Class
  *
  * @category   Project
  * @package    Project_Controllers

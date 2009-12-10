@@ -12,7 +12,7 @@
  */
 
 /**
- * Clase {$Collection} que representa una collección de objetos {$className}
+ * Clase {$Collection} que representa una collección de objetos {$Bean}
  *
  * @category   Project
  * @package    Project_Models

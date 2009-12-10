@@ -7,8 +7,7 @@
 
 
 require_once 'application/project/Autoloader/ProjectAutoloader.php';
-$autoloader = ProjectAutoloader::getInstance('application/data/autoloadCache.file');
-$autoloader->register();
+$autoloader = ProjectAutoloader::getInstance('application/data/autoloadCache.file',true)->register();
 
 
 try 

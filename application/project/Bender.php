@@ -13,6 +13,6 @@ final class Bender
   /**
    * Bender Version
    */
-  const VERSION = "0.6.1";
+  const VERSION = "0.7-dev";
   
 }

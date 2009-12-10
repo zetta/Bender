@@ -197,7 +197,7 @@ class DbTable
     {
         if($field->getBaseDataType() == 'date')
         {
-            return "{$field->getGetterName()}()->get('YYYY-MM-dd')";
+            return "{$field->getGetterName()}()->get('yyyy-MM-dd')";
         }
         else if($field->getBaseDataType() == 'time')
         {
@@ -205,7 +205,7 @@ class DbTable
         }
         else if($field->getBaseDataType() == 'datetime' || $field->getBaseDataType() == 'timestamp')
         {
-            return "{$field->getGetterName()}()->get('YYYY-MM-dd HH:mm:ss')";
+            return "{$field->getGetterName()}()->get('yyyy-MM-dd HH:mm:ss')";
         }
         else
         {

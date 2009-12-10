@@ -15,11 +15,15 @@ class TestController extends GenericController
         $config = new Zend_Config(array('database' => array('adapter' => 'Pdo_Mysql', 'params' => $bender['mysql'])));
         DBAO::$config = $config->database;
         
-        ##
-        ## utilice este espacio de trabajo para ir probando las clases que se generaron 
-        ## 
-    
+        $user = new User();
+        $user->setUsername('zetta');
+        $user->setPassword('secret');
+        $user->setFirstName('Juan Carlos');
+        
+        UserCatalog::create($user);
+        
+        
+        
 
     }
-
 }

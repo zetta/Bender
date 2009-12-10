@@ -1,5 +1,5 @@
 bender:
-  add_includes:          true
+  add_includes:          false
   use_behaviors:         false
   singleton:             true
   use_constants:         true

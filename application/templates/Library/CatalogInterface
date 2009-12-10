@@ -28,20 +28,7 @@ interface CatalogInterface
      * Método público abstracto que permite tener solo una instancia del catálogo
      */
     public static function getInstance();
-    
-    /**
-     * Agrega un BehaviorObserver a la lista de observers del catálogo
-     * @param BehaviorObserver $behaviorObserver El objeto observer que estará escuchando lo que haga el catálogo
-     */
-    public function addObserver( BehaviorObserver $behaviorObserver);
-    
-    /**
-     * Notifica a los observers de los eventos del catálogo
-     * @param mixed $object El bean que disparó el evento
-     * @param int $event 
-     */
-    public function notifyObservers($object,$event);
-    
+
     /**
      * Guarda en la base de datos
      * @param mixed Un bean para guardar
@@ -101,7 +88,24 @@ interface CatalogInterface
      * @return array
      */
     public function getCustomFieldByCriteria(Criteria $criteria, $field);
+    
   </block:publicCriteria>
+  <block:useBehaviors>
+  
+    /**
+     * Agrega un BehaviorObserver a la lista de observers del catálogo
+     * @param BehaviorObserver $behaviorObserver El objeto observer que estará escuchando lo que haga el catálogo
+     */
+    public function addObserver( BehaviorObserver $behaviorObserver);
+    
+    /**
+     * Notifica a los observers de los eventos del catálogo
+     * @param mixed $object El bean que disparó el evento
+     * @param int $event 
+     */
+    public function notifyObservers($object,$event);
+    
+  </block:useBehaviors>
 }
 
 

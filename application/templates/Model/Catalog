@@ -16,9 +16,9 @@
  * Dependencias
  */
 require_once '{$libLocation}/{$dbLocation}/Catalog.php';
-require_once '{$modelFolder}/{$exceptionFolder}/{$className}Exception.php';
-require_once '{$modelFolder}/{$factoryFolder}/{$className}Factory.php';
-require_once '{$modelFolder}/{$collectionFolder}/{$className}Collection.php';
+require_once '{$libLocation}/{$exceptionFolder}/{$Exception}.php';
+require_once '{$modelFolder}/{$factoryFolder}/{$Factory}.php';
+require_once '{$modelFolder}/{$collectionFolder}/{$Collection}.php';
 </block:useIncludes>
 <block:extendedInclude>
 require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}Catalog.php';
@@ -139,7 +139,7 @@ class {$Catalog} extends {$extendedCatalog}
         {
             throw new {$Exception}("El objeto {$Bean} no pudo ser obtenido\n" . $e->getMessage());
         }
-        return $new{$className};
+        return $new{$Bean};
     }
     
     /**
@@ -186,7 +186,7 @@ class {$Catalog} extends {$extendedCatalog}
     }
 
     /**
-     * Metodo para actualizar un {$className}
+     * Metodo para actualizar un {$Bean}
      * @param {$Bean} ${$bean} Objeto {$Bean}
      */
     public function update(${$bean})
@@ -224,7 +224,7 @@ class {$Catalog} extends {$extendedCatalog}
     }
 
     /**
-     * Metodo para eliminar un {$className} a partir de su Id
+     * Metodo para eliminar un {$Bean} a partir de su Id
      * @param int ${$primaryKeyPhpName}
      */
     public function deleteById(${$primaryKeyPhpName})
@@ -315,7 +315,7 @@ class {$Catalog} extends {$extendedCatalog}
     }
 
     /**
-     * Metodo que regresa una coleccion de objetos {$className} 
+     * Metodo que regresa una coleccion de objetos {$Bean} 
      * dependiendo del criterio establecido
   <block:privateCriteria>
      * @return {$Collection} ${$collection}
@@ -339,7 +339,7 @@ class {$Catalog} extends {$extendedCatalog}
                     WHERE " . {$criteriaVar}->createSql();
             ${$collection} = new {$Collection}();
             foreach ($this->db->fetchAll($sql) as $result){
-                ${$Collection}->append($this->createInternal($result));
+                ${$collection}->append($this->get{$Bean}Instance($result));
             }
         }
         catch(Exception $e)
@@ -353,14 +353,17 @@ class {$Catalog} extends {$extendedCatalog}
     }
 
     /**
-     * Método que manda a llamar a {$className}Factory para instanciar el objeto
+     * Método que construye un objeto {$Bean} y lo rellena con la información del rowset
      * @param array $result El arreglo que devolvió el objeto Zend_Db despues del fetch
-     * @uses {$Factory}::create{$Bean}Internal
      * @return {$Bean} 
      */
-    private function createInternal($result)
+    private function get{$Bean}Instance($result)
     {
-        return {$Factory}::create{$Bean}Internal({$results});
+        $new{$Bean} = new {$Bean}();
+      <block:setters>
+        $new{$Bean}->{$setters.setter}($result['{$setters.simpleName}']);
+      </block:setters>
+        return $new{$Bean};
     }
   <block:foreignKeys>
   

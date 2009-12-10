@@ -40,7 +40,7 @@ class {$Factory}
    </block:firstPhpDoc>
      * @return {$Bean} $bean
      */
-    public static function create{$className}({$firstParameters})
+    public static function create{$Bean}({$firstParameters})
     {
         $new{$Bean} = new {$Bean}();
       <block:firstSetters>
@@ -50,13 +50,13 @@ class {$Factory}
     }
 
     /**
-     * Crea un objeto {$className} con parametros solo para uso de catalogos
+     * Crea un objeto {$Bean} con parametros solo para uso de catalogos
    <block:secondPhpDoc>
      * @param {$secondPhpDoc.dataType} ${$secondPhpDoc.phpName} {$secondPhpDoc.comment}
    </block:secondPhpDoc>
      * @return {$Bean} {$bean}
      */
-    public static function create{$className}Internal({$secondParameters})
+    public static function create{$Bean}Internal({$secondParameters})
     {
         $new{$Bean} = {$factory}::create{$Bean}({$secondParametersNotCasted});
       <block:hasPrimaryField>

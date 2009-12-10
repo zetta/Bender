@@ -7,7 +7,7 @@
  * @package    Project
  * @subpackage Project_Autoloader
  * @author     Juan Carlos Jarquin
- * @version    0.1
+ * @version    0.2
  */
 class ProjectAutoloader
 {
@@ -33,13 +33,18 @@ class ProjectAutoloader
     protected $cacheLoaded = false;
     
     /**
+     *
+     * @var boolean
+     */
+    protected $useIncludePaths = false;
+    
+    /**
      * @var string
      */
     protected $cacheChanged = false;
     
     /**
-     * Directorios donde se buscarán las clases
-     * @var ArrayObject
+     * @var mixed
      */
     protected $dirs = array();
     
@@ -51,28 +56,37 @@ class ProjectAutoloader
     /**
      * Constructor de la clase
      * @param string $cacheFile
-     * @return ProjectAutoloader
+     * @param boolean [OPTIONAL] $useIncludePaths
+     * @param array [OPTIONAL] $dirs
      */
-    protected function ProjectAutoloader($cacheFile = null)
+    protected function __construct($cacheFile = null, $useIncludePaths = false, $dirs = NULL)
     {
         if (! is_null($cacheFile))
         {
             $this->cacheFile = $cacheFile;
+            $this->useIncludePaths = $useIncludePaths;
+            if($this->useIncludePaths == false && $dirs == NULL)
+              $dirs = array('.');
+            $this->dirs = $dirs;
+            if (!is_writable(dirname($this->cacheFile)))
+              throw new Exception( dirname($this->cacheFile). ' folder is not writable ');
         }
-        $this->dirs = new ArrayObject(explode(PATH_SEPARATOR, get_include_path()));
         $this->loadCache();
     }
     
     /**
      * Retrieves the singleton instance of this class.
+     *
      * @param  string $cacheFile  The file path to save the cache
+     * @param boolean [OPTIONAL] $useIncludePaths
+     * @param array [OPTIONAL] $dirs
      * @return ProjectAutoloader   A ProjectAutoloader implementation instance.
      */
-    static public function getInstance($cacheFile = null)
+    static public function getInstance($cacheFile = null, $useIncludePaths = false, $dirs = NULL)
     {
         if (! isset(self::$instance))
         {
-            self::$instance = new ProjectAutoloader($cacheFile);
+            self::$instance = new ProjectAutoloader($cacheFile,$useIncludePaths, $dirs);
         }
         
         return self::$instance;
@@ -143,6 +157,21 @@ class ProjectAutoloader
     }
     
     /**
+     * Check if we have a class in our proyect
+     */
+    public function hasClass($className, $revalidate = false)
+    {
+      if (isset($this->classes[$className]))
+        return true;
+      else if($revalidate)
+      {
+         $this->cacheChanged = true;
+         $this->saveCache();
+         $this->hasClass($className,false);
+      }
+    }
+    
+    /**
      * Loads the cache.
      */
     public function loadCache()
@@ -163,12 +192,9 @@ class ProjectAutoloader
     {
         if ($this->cacheChanged)
         {
-            if (is_writable(dirname($this->cacheFile)))
-            {
-                $this->parseIncludePaths();
-                file_put_contents($this->cacheFile, serialize($this->classes));
-                chmod($this->cacheFile, 0777);
-            }
+            $this->parseIncludePaths();
+            file_put_contents($this->cacheFile, serialize($this->classes));
+            chmod($this->cacheFile, 0777);
             $this->cacheChanged = false;
         }
     }
@@ -182,10 +208,11 @@ class ProjectAutoloader
     }
     
     /**
-     * Checa en los include paths las clases que se pueden cargar automáticamente
+     * 
      */
     public function parseIncludePaths()
     {
+        $this->dirs = ($this->useIncludePaths) ? explode(PATH_SEPARATOR, get_include_path()) : $this->dirs;
         foreach ( $this->dirs as $dir )
         {
             $this->parseDirectory($dir);
@@ -234,23 +261,7 @@ class ProjectAutoloader
             $this->classes[$class] = $file;
         }
     }
-    
-    /**
-     * Agrega un directorio donde se buscarán las clases 
-     * @param string $directory
-     */
-    public function addDirectory($directory)
-    {
-        $this->dirs->append($directory);
-    }
 
 }
-
-
-
-
-
-
-
 
 
