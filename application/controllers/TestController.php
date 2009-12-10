@@ -2,28 +2,56 @@
 
 class TestController extends GenericController
 {
-    
+   public function preDispatch()
+   {
+        $benderSettings = BenderSettings::getInstance();
+        $config = new Zend_Config(array('database' => array('adapter' => 'pdo_mysql', 'params' => $benderSettings->getMysql())));
+        DBAO::$config = $config->database;        
+   }
+  
+  
     /**
      * Test 
      */
     public function testAction()
     {
-        
-        $settingsFile = 'application/data/settings.yml';
-        $yaml = Spyc::YAMLLoad($settingsFile);
-        $bender = new ArrayObject(isset($yaml['bender']) ? $yaml['bender'] : null);
-        $config = new Zend_Config(array('database' => array('adapter' => 'Pdo_Mysql', 'params' => $bender['mysql'])));
-        DBAO::$config = $config->database;
-        
         $user = new User();
         $user->setUsername('zetta');
         $user->setPassword('secret');
         $user->setFirstName('Juan Carlos');
         
-        UserCatalog::create($user);
+        #$user->setBirthDate(new Zend_Date());
         
+        try 
+        {
         
-        
-
+          UserCatalog::getInstance()->create($user);
+        }
+        catch (ValidatorException $e)
+        {
+          foreach  ($e->getErrors() as $error)
+          {
+            foreach ($error as $field => $message)
+            {
+              CommandLineInterface::getInstance()->printSection($field,$message);
+            }
+          }       
+        }
     }
+    
+    /**
+     * Modo interactivo
+     */
+    public function interactiveAction()
+    {
+      do{
+        $entry = CommandLineInterface::getInstance()->prompt('');
+        eval($entry);
+        echo "\n";
+      }
+      while ($entry != 'quit;');
+      $figlet = new Zend_Text_Figlet();
+      echo $figlet->render('bye!');
+    }
+    
 }

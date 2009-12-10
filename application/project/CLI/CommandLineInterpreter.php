@@ -76,6 +76,8 @@ class CommandLineInterpreter
         
         $controller = $reflectedModule->newInstance();
         $controller->setActionName($this->action);
+        $controller->prepare();
+        $controller->preDispatch();
         $controller->dispatch();
         $controller->postDispatch();
     }

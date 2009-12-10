@@ -12,7 +12,7 @@ bender:
     brand_name:          PCS México / America
     copyright:           Copyright (c) 2007-2009 PCS Mexico (http://www.pcsmexico.com)
     description:         Smart Access
-  mysql:                 { username : root, password : mysql_pwd! , server : prepro , dbname : bender }
+  mysql:                 { username : root, password : mysql_pwd! , host : prepro , dbname : bender }
   schema:                default
   paths:
     model_location:      application/models
@@ -20,7 +20,7 @@ bender:
     bean_location:       Beans
     controller_location: Controllers
     view_location:       Views
-    factory_location:    Factories
+    validator_location:  Validators
     collection_location: Collections
     exception_location:  Exceptions
     lib_location:        lib

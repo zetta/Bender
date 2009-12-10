@@ -17,7 +17,6 @@
  */
 require_once '{$libLocation}/{$dbLocation}/Catalog.php';
 require_once '{$libLocation}/{$exceptionFolder}/{$Exception}.php';
-require_once '{$modelFolder}/{$factoryFolder}/{$Factory}.php';
 require_once '{$modelFolder}/{$collectionFolder}/{$Collection}.php';
 </block:useIncludes>
 <block:extendedInclude>

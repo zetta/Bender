@@ -19,7 +19,6 @@ abstract class GenericController
     public function dispatch()
     {
         $method = new ReflectionMethod($this, $this->actionName . 'Action');
-        $this->prepare();
         $method->invoke($this);
     }
     
@@ -36,7 +35,15 @@ abstract class GenericController
      * método que se mandará llamar al final del dispatch
      * está aqui por si las moscas =) 
      */
-    function postDispatch()
+    public function postDispatch()
+    {
+    }
+    
+    /**
+     * método que se mandará llamar antes del dispatch
+     * está aqui por si las moscas =) 
+     */
+    public function preDispatch()
     {
     }
     
@@ -44,7 +51,7 @@ abstract class GenericController
      * Obtiene el arreglo de los ajustes
      * y se conecta a la base de datos
      */
-    private function prepare()
+    public function prepare()
     {
         $benderSettings = BenderSettings::getInstance();
         $settingsFile = 'application/data/settings.yml';

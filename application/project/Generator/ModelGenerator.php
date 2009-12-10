@@ -69,6 +69,12 @@ abstract class ModelGenerator
     }
     
     /**
+     * Create the content of file
+     *
+     */
+    abstract public function create();
+    
+    /**
      * Agrega las variables comunes a los headers de los archivos 
      */
     protected function addHeaderInformation()
@@ -83,7 +89,7 @@ abstract class ModelGenerator
         $this->template->assign('modelFolder', $this->benderSettings->getModelLocation());
         $this->template->assign('catalogFolder',$this->benderSettings->getCatalogLocation());
         $this->template->assign('beanFolder', $this->benderSettings->getBeanLocation());
-        $this->template->assign('factoryFolder', $this->benderSettings->getFactoryLocation());
+        $this->template->assign('validatorFolder', $this->benderSettings->getValidatorLocation());
         $this->template->assign('collectionFolder', $this->benderSettings->getCollectionLocation());
         $this->template->assign('exceptionFolder', $this->benderSettings->getExceptionLocation());
         $this->template->assign('benderSignature', $this->benderSettings->getBenderSignature());
@@ -94,14 +100,14 @@ abstract class ModelGenerator
         $this->template->assign('Bean', $this->object);
         $this->template->assign('Controller',$this->object.'Controller');
         $this->template->assign('Catalog',$this->object.'Catalog');
-        $this->template->assign('Factory',$this->object.'Factory');
+        $this->template->assign('Validator',$this->object.'Validator');
         $this->template->assign('Collection',$this->object.'Collection');
         $this->template->assign('Exception',$this->object.'Exception');
         
         $this->template->assign('bean', $this->lowerObject);
         $this->template->assign('controller',$this->lowerObject.'Controller');
         $this->template->assign('catalog',$this->lowerObject.'Catalog');
-        $this->template->assign('factory',$this->lowerObject.'Factory');
+        $this->template->assign('validator',$this->lowerObject.'Validator');
         $this->template->assign('collection',$this->lowerObject.'Collection');
         $this->template->assign('exception',$this->lowerObject.'Exception');
         

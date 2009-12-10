@@ -60,7 +60,7 @@ class CommandLineInterface
      */
     public function renderException(Exception $e)
     {
-        $this->printMessage($e->getMessage(),'ERROR');
+        $this->printMessage($e,'ERROR');
         fwrite(STDOUT,"\n");
     }
     

@@ -1,0 +1,65 @@
+<?php
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @copyright  {$copyright}
+ * @author     {$author}, $LastChangedBy$
+ * @version    {$version} SVN: $Id$
+ */
+
+/**
+ * Clase {$Validator} que representa una excepción de objetos {$Bean}
+ *
+ * @category   Project
+ * @package    Project_Models
+ * @subpackage Project_Models_Validators
+ * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
+ * @version    {$version} SVN: $Revision$
+ */
+class {$Validator} implements ValidatorInterface
+{
+
+  private $messages = array();
+  
+  public function validate($user)
+  {
+
+     $usernameValidate = new Zend_Validate();
+     $usernameValidate->addValidator(new Zend_Validate_StringLength(2,5) );
+     $usernameValidate->addValidator(new Zend_Validate_NotEmpty());
+     if(!$usernameValidate->isValid( $user->getUsername()))
+     {
+       $this->messages['username'] = $usernameValidate->getMessages();
+     }
+     
+     
+     
+     $lastNameValidate = new Zend_Validate();
+     $lastNameValidate->addValidator(new Zend_Validate_NotEmpty());
+     if(!$lastNameValidate->isValid( $user->getLastName()))
+     {
+       $this->messages['lastname'] = $lastNameValidate->getMessages();
+     }
+
+     
+     $chain = new Zend_Validate();
+     $chain->addValidator(new Zend_Validate());
+     
+     
+     if(count($this->messages))
+      throw new ValidatorException('El objeto no es valido',500,$this->messages);
+
+  }
+  
+}
+
+
+

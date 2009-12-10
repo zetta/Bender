@@ -21,18 +21,25 @@ class LibraryGenerator extends ModelGenerator
         $this->addHeaderInformation();
     }
     
+    private $libraryName = '';
+    
     /**
      * Genera el Collection del objeto y lo almacena para su posterior uso
-     * @param string $libraryName
      */
-    public function createLibrary($libraryName)
+    public function create()
     {
-        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $libraryName, 'NOTE');
-        $this->template->set_filenames(array('library' => 'Library/'.$libraryName));
+        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->libraryName, 'NOTE');
+        $this->template->set_filenames(array('library' => 'Library/'.$this->libraryName));
         $criteriaBlocK = ($this->benderSettings->isPrivateCriteria()) ? 'privateCriteria' : 'publicCriteria';
         $this->template->showBlock($criteriaBlocK);
         if( $this->benderSettings->getUseBehaviors())
             $this->template->showBlock('useBehaviors');
         $this->fileContent = $this->template->fetch('library');
+    }
+    
+    public function createLibrary($libraryName)
+    {
+      $this->libraryName = $libraryName;
+      $this->create();
     }
 }

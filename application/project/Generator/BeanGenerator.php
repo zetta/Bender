@@ -12,9 +12,9 @@ class BeanGenerator extends ModelGenerator
     /**
      * Genera el Bean del objeto y lo almacena para su posterior uso
      */
-    public function createBean()
+    public function create()
     {
-        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object, 'NOTE');
+        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object, 'INFO');
         $this->template->set_filenames(array('bean' => 'Model/Bean'));
         
         $this->loopFields($this->table->getFields());

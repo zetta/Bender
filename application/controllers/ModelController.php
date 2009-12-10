@@ -12,7 +12,9 @@ class ModelController extends GenericController
 {
    
     private $library = array(
-            'CatalogInterface' => '{db-location}/CatalogInterface.php', 
+            'CatalogInterface' => '{db-location}/CatalogInterface.php',
+            'ValidatorInterface' => '{db-location}/ValidatorInterface.php',
+            'ValidatorException' => '{db-location}/ValidatorException.php', 
             'Catalog' => '{db-location}/Catalog.php',
             'Criteria' => '{db-location}/Criteria.php', 
             'DBAO' => '{db-location}/DBAO.php', 
@@ -56,23 +58,21 @@ class ModelController extends GenericController
         foreach ( $models as $objectName => $dbTable )
         {
             $beanGenerator = new BeanGenerator($objectName, $dbTable);
-            $beanGenerator->createBean();
-            $beanGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getBeanLocation()}/{$objectName}.php", $benderSettings->getPreserveChanges());
-            
-            $factoryGenerator = new FactoryGenerator($objectName, $dbTable);
-            $factoryGenerator->createFactory();
-            $factoryGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getFactoryLocation()}/{$objectName}Factory.php", $benderSettings->getPreserveChanges());
-            
+            $validatorGenerator = new ValidatorGenerator($objectName, $dbTable);
             $catalogGenerator = new CatalogGenerator($objectName, $dbTable);
-            $catalogGenerator->createCatalog();
-            $catalogGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getCatalogLocation()}/{$objectName}Catalog.php", $benderSettings->getPreserveChanges());
-            
-            $catalogGenerator = new CollectionGenerator($objectName, $dbTable);
-            $catalogGenerator->createCollection();
-            $catalogGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getCollectionLocation()}/{$objectName}Collection.php", $benderSettings->getPreserveChanges());
-            
+            $collectionGenerator = new CollectionGenerator($objectName, $dbTable);
             $exceptionGenerator = new ExceptionGenerator($objectName,$dbTable);
-            $exceptionGenerator->createException();
+            
+            $beanGenerator->create();
+            $validatorGenerator->create();
+            $catalogGenerator->create();
+            $collectionGenerator->create();
+            $exceptionGenerator->create();
+            
+            $beanGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getBeanLocation()}/{$objectName}.php", $benderSettings->getPreserveChanges());
+            $validatorGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getValidatorLocation()}/{$objectName}Validator.php", $benderSettings->getPreserveChanges());
+            $catalogGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getCatalogLocation()}/{$objectName}Catalog.php", $benderSettings->getPreserveChanges());
+            $collectionGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getCollectionLocation()}/{$objectName}Collection.php", $benderSettings->getPreserveChanges());
             $exceptionGenerator->saveFile("{$benderSettings->getWorkCopyLocation()}/{$benderSettings->getExceptionLocation()}/{$objectName}Exception.php", $benderSettings->getPreserveChanges());
         }
         

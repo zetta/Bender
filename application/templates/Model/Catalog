@@ -17,7 +17,6 @@
  */
 require_once '{$libLocation}/{$dbLocation}/Catalog.php';
 require_once '{$libLocation}/{$exceptionFolder}/{$Exception}.php';
-require_once '{$modelFolder}/{$factoryFolder}/{$Factory}.php';
 require_once '{$modelFolder}/{$collectionFolder}/{$Collection}.php';
 </block:useIncludes>
 <block:extendedInclude>
@@ -28,7 +27,8 @@ require_once '{$modelFolder}/{$catalogFolder}/{$extendedClass}Catalog.php';
  * Clase {$Catalog}
  *
  * @category   Project
- * @package    Project_Db
+ * @package    Project_Models
+ * @subpackage Project_Models_Catalogs
  * @copyright  {$copyright}
 <block:benderSignature>
  * @copyright  {$benderSignature}
@@ -70,6 +70,7 @@ class {$Catalog} extends {$extendedCatalog}
      */
     private function {$Catalog}()
     {
+        $this->validator = new {$Validator}();
         parent::Catalog();{$behaviors}
     }    
   </block:isSingleton>
@@ -92,6 +93,7 @@ class {$Catalog} extends {$extendedCatalog}
     {
         if(!(${$bean} instanceof {$Bean}))
             throw new {$Exception}("El parámetro [\${$bean}] no es una instancia de {$Bean}");
+        $this->validator->validate(${$bean});
       <block:useBehaviors>
         $this->notifyObservers(${$bean},Catalog::EVENT_CREATE);
       </block:useBehaviors>

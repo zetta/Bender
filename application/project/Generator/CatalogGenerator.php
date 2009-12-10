@@ -35,10 +35,10 @@ class CatalogGenerator extends ModelGenerator
     /**
      * Genera el Catalog del objeto y lo almacena para su posterior uso
      */
-    public function createCatalog()
+    public function create()
     {
         $template = $this->table->hasPrimaryField() ? 'Catalog' : 'SimpleCatalog';
-        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object . 'Catalog', 'NOTE');
+        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object . 'Catalog', 'INFO');
         
         $this->template->set_filenames(array('catalog' => 'Model/' . $template));
         $this->template->assign('extendedCatalog', 'Catalog');

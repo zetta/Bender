@@ -49,6 +49,12 @@ abstract class Catalog implements CatalogInterface
     protected $db;
 
     /**
+     * Validador
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
      * Date part usado para los campos tipo Date o DateTime
      * @var string $datePart
      */

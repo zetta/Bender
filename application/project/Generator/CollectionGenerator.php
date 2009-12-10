@@ -17,9 +17,9 @@ class CollectionGenerator extends ModelGenerator
     /**
      * Genera el Collection del objeto y lo almacena para su posterior uso
      */
-    public function createCollection()
+    public function create()
     {
-        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'Collection', 'NOTE');
+        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'Collection', 'INFO');
         $this->template->set_filenames(array('collection' => 'Model/Collection'));
         
         if($this->table->hasPrimaryField())

@@ -5,7 +5,7 @@
  */
 
 /**
- * Clase que genera los Beans
+ * Clase que genera los Cruds
  */
 class CrudGenerator extends ModelGenerator
 {
@@ -14,7 +14,7 @@ class CrudGenerator extends ModelGenerator
      */
     public function createCrud()
     {
-        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'->CRUD', 'NOTE');
+        CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'->CRUD', 'INFO');
         $this->template->set_filenames(array('controller' => 'Crud/Controller'));
 
         

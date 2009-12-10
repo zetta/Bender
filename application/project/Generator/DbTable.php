@@ -110,45 +110,43 @@ class DbTable
     {
         $benderSettings = BenderSettings::getInstance();
         CommandLineInterface::getInstance()->printSection('DbTable', "Fetching table info '{$this->table}'", 'COMMENT');
-        $fieldResource = $this->database->query("select * from {$this->table} where true limit 1");
-        $numFields = $this->database->getNumFields($fieldResource);
-        for($i = 0; $i < $numFields; $i ++)
+        $fieldResource = $this->database->query("SHOW FULL COLUMNS FROM {$this->table} WHERE TRUE");
+        while (($column = $this->database->fetch_array($fieldResource)))
         {
-            $fieldData = $this->database->fetchfield($i, $fieldResource);
-            $field = new DbField($fieldData->name);
+            $type = $this->parseTypeAndLength( $column['Type'] );            
+            $field = new DbField($column['Field']);
             $field->setTable($this->table);
-            $field->setSetterName('set' . DbTable::getCamelCase($fieldData->name, true));
-            $field->setGetterName('get' . DbTable::getCamelCase($fieldData->name, true));
-            $field->setPhpName(DbTable::getCamelCase($fieldData->name));
-            $field->setUpperCaseName( ucfirst( $field->getPhpName() ));
-            $field->setConstantName(strtoupper($fieldData->name));
-            $field->setDataType(DbTable::parseDataType($fieldData->type));
-            $field->setCastDataType(DbTable::parseCastDataType($field->getDataType()));
-            $field->setBaseDataType($fieldData->type);
-            $field->setIsPrimaryKey(($fieldData->primary_key == 0 ? false : true));
+            $field->setSetterName('set' . DbTable::getCamelCase($field->getName(), true));
+            $field->setGetterName('get' . DbTable::getCamelCase($field->getName(), true));
+            $field->setPhpName(DbTable::getCamelCase($field->getName()));
+            $field->setUpperCaseName(ucfirst( $field->getPhpName()));
+            $field->setConstantName(strtoupper($field->getName()));
             $field->setCompleteGetterName( $this->parseCompleteGetterName($field) );
-            $field->setSimpleName($fieldData->name);
-            $field->setIsUnique( $fieldData->unique_key == 1 ? true : false );
-            if($fieldData->def)
-              $field->setDefaultValues($fieldData->def);
+            $field->setSimpleName($field->getName());
+            
+            $field->setMaxlength($type['max']);
+            $field->setBaseDataType($type['type']);
+            $field->setDataType(DbTable::parseDataType($field->getBaseDataType()));
+            $field->setCastDataType(DbTable::parseCastDataType($field->getDataType()));
+            
+            
+            $field->setComment( $this->parseComment( $column->Comment ));
+            
+            $field->setIsPrimaryKey(($column['Key'] == 'PRI' ? true : false));
+            $field->setIsUnique( $column['Key'] == 'UNI' ? true : false );
+            
+            $field->setDefaultValue($column['Default']);
             if ($benderSettings->useConstants())
                 $field->setCatalogAccesor($this->getObject().'::'.$field->getConstantName());
             else
                 $field->setCatalogAccesor($this->getObject()."::TABLENAME.'.{$field->getName()}'");
-            
-            if ($field->isPrimaryKey())
-            {
-                $this->primaryField = $field;
-            }
-            $query = "select COLUMN_COMMENT FROM information_schema.COLUMNS where TABLE_SCHEMA = '{$this->databaseName}' and TABLE_NAME = '{$this->table}' and  COLUMN_NAME = '{$fieldData->name}'";
-            $commentResource = $this->database->query($query);
-            $commentData = $this->database->fetch_array($commentResource);
-            $field->setComment( $this->parseComment($commentData['COLUMN_COMMENT']));
-            $this->fields->offsetSet($fieldData->name, $field);
+           
+            $this->fields->offsetSet($field->getName(), $field);
             $this->fields->rewind();
-            if($this->isForeignKey($fieldData->name) || $field->isUnique() )
+            if($this->isForeignKey($field) || $field->isUnique() )
               $this->foreignKeys->append($field);
-              
+            if ($field->isPrimaryKey())
+                $this->primaryField = $field;  
         }
         if ($this->extends)
         {
@@ -252,12 +250,12 @@ class DbTable
     
     /**
      * Es una llave foranea?
-     * @param string $column
+     * @param dbField $field
      * @return boolean
      */
-    public function isForeignKey($column)
+    public function isForeignKey(dbField $field)
     {
-      return eregi('^id\_',$column);
+      return eregi('^id\_',$field->getName());
     }
     
     /**
@@ -274,14 +272,35 @@ class DbTable
         $patterns[3] = '/^time$/i';
         $patterns[4] = '/^timestamp$/i';
         $patterns[5] = '/^real$/i';
+        $patterns[6] = '/^varchar$/i';
+        $patterns[7] = '/^text$/i';
+        $patterns[8] = '/^char$/i';
         $replacements[0] = 'Zend_Date';
         $replacements[1] = 'Zend_Date';
         $replacements[2] = 'string';
         $replacements[3] = 'Zend_Date';
         $replacements[4] = 'Zend_Date';
         $replacements[5] = 'float';
+        $replacements[6] = 'string';
+        $replacements[7] = 'string';
+        $replacements[8] = 'string';
         return preg_replace($patterns, $replacements, $type);
     
+    }
+    
+    /**
+     * Saca la informacion del tipo de dato que contiene la columna y el numero maximo de caracteres
+     *
+     * @param string $type
+     * @return Array
+     */
+    public function parseTypeAndLength( $type )
+    {
+      if(strpos($type,'(') === FALSE) 
+        return array('type' => $type, 'max' => 0);
+      $m = array();
+      preg_match("/([a-zA-Z]{1,10})\\(([0-9]{1,8})\\)/i",$type, $m );
+      return array('type' => $m[1], 'max' => $m[2]);
     }
     
     /**
@@ -381,7 +400,7 @@ class DbTable
      */
     public function hasPrimaryField()
     {
-        return (get_class($this->primaryField) == 'DbField') ? true : false;
+        return $this->primaryField instanceof DbField;
     }
     
     /**
