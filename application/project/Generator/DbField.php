@@ -12,6 +12,26 @@ class DbField
 {
   
   /**
+   * @var boolean
+   */
+  private $required = false;
+  
+  /**
+   * @var int
+   */
+  private $maxlength = 0;
+  
+  /**
+   * @var int
+   */
+  private $minlength = 0;
+  
+  /**
+   * @var string
+   */
+  private $dataTypeValidator = NULL;
+  
+  /**
    * Nombre de la tabla a la que se va a consultar
    * @var string
    */
@@ -399,5 +419,71 @@ class DbField
     $this->defaultValue = $defaultValue;
   }
 
+  
+  
+  /**
+   * @return string
+   */
+  public function getDataTypeValidator()
+  {
+    return $this->dataTypeValidator;
+  }
+  
+  /**
+   * @return int
+   */
+  public function getMaxlength()
+  {
+    return $this->maxlength;
+  }
+  
+  /**
+   * @return int
+   */
+  public function getMinlength()
+  {
+    return $this->minlength;
+  }
+  
+  /**
+   * @return boolean
+   */
+  public function isRequired()
+  {
+    return $this->required;
+  }
+  
+  /**
+   * @param string $dataTypeValidator
+   */
+  public function setDataTypeValidator($dataTypeValidator)
+  {
+    $this->dataTypeValidator = $dataTypeValidator;
+  }
+  
+  /**
+   * @param int $maxlength
+   */
+  public function setMaxlength($maxlength)
+  {
+    $this->maxlength = $maxlength;
+  }
+  
+  /**
+   * @param int $minlength
+   */
+  public function setMinlength($minlength)
+  {
+    $this->minlength = $minlength;
+  }
+  
+  /**
+   * @param boolean $required
+   */
+  public function setRequired($required)
+  {
+    $this->required = $required;
+  }
 
+  
 }

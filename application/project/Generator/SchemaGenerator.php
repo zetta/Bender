@@ -47,9 +47,25 @@ class SchemaGenerator
             if($table['Table_type'] == 'VIEW') continue;
             $tableName = $table['Tables_in_' . $this->databaseName];
             $objectName = StringFormatter::toCamelCase($tableName, '_', true);
-            $schema[$objectName] = array('table' => $tableName, 'extends' => false);
+            
+            $dbTable = new DbTable($tableName,  BenderSettings::getInstance()->getDbName(), array('object' => $tableName));
+            $dbTable->initialize();
+            
+            $dbFields = array();
+            
+            $fields = $dbTable->getFields();
+            while ($fields->valid())
+            {
+              $field = $fields->current();
+              $dbFields[ $field->getName() ] = array(
+                'type' => $field->getDataType()
+              );
+              $fields->next();
+            }
+            
+            $schema[$objectName] = array('table' => $tableName, 'extends' => false,'fields' => $dbFields);
         }
-        $this->fileContent = Spyc::YAMLDump(array('schema' => $schema),2,100);
+        $this->fileContent = Spyc::YAMLDump(array('schema' => $schema),2,150);
     }
     
     /**
