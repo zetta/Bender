@@ -206,7 +206,17 @@ class BenderSettings
   /**
    * @var string
    */
-  private $dbLocation = 'Db';
+  private $dbLocation = 'db';
+  
+  /**
+   * @var string
+   */
+  private $libValidatorLocation = "validator";
+  
+  /**
+   * @var string
+   */
+  private $libDateLocation = "date";
   
   /**
    * Determina si las librerias serán generadas antes de los archivos
@@ -317,7 +327,7 @@ class BenderSettings
   {
     return $this->encoding;
   }
-
+  
   /**
    * @return string
    */
@@ -779,7 +789,38 @@ class BenderSettings
   {
     $this->validatorLocation = $validatorLocation;
   }
-
+  
+  /**
+   * @return string
+   */
+  public function getLibValidatorLocation()
+  {
+    return $this->libValidatorLocation;
+  }
+  
+  /**
+   * @param string $libValidatorLocation
+   */
+  public function setLibValidatorLocation($libValidatorLocation)
+  {
+    $this->libValidatorLocation = $libValidatorLocation;
+  }
+  
+  /**
+   * @return string
+   */
+  public function getLibDateLocation()
+  {
+    return $this->libDateLocation;
+  }
+  
+  /**
+   * @param string $libDateLocation
+   */
+  public function setLibDateLocation($libDateLocation)
+  {
+    $this->libDateLocation = $libDateLocation;
+  }
   
   /**
    * Guarda las configuraciones
@@ -814,7 +855,9 @@ class BenderSettings
     $this->workCopyLocation = isset($settings['workcopy']) ? $settings['workcopy'] : $this->baseWorkCopyLocation . $this->dbName;
     $this->preserveChanges = isset($settings['preserve_changes']) ? $settings['preserve_changes'] : $this->preserveChanges;
     $this->libLocation = isset($settings['paths']['lib_location']) ? $settings['paths']['lib_location'] : $this->libLocation;
-    $this->dbLocation = isset($settings['paths']['db_location']) ? $settings['paths']['db_location'] : $this->dbLocation;
+    $this->dbLocation = isset($settings['paths']['lib_db_location']) ? $settings['paths']['lib_db_location'] : $this->dbLocation;
+    $this->libValidatorLocation = isset($settings['paths']['lib_validator_location']) ? $settings['paths']['lib_validator_location'] : $this->libValidatorLocation;
+    $this->libDateLocation = isset($settings['paths']['lib_date_location']) ? $settings['paths']['lib_date_location'] : $this->libDateLocation;
     $this->controllerLocation = isset($settings['paths']['controller_location']) ? $settings['paths']['controller_location'] : $this->controllerLocation;
     $this->viewLocation = isset($settings['paths']['view_location']) ? $settings['paths']['view_location'] : $this->viewLocation;
     $this->mysql = isset($settings['mysql']) ? $settings['mysql'] : $this->mysql;

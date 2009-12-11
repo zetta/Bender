@@ -12,9 +12,11 @@ class ModelController extends GenericController
 {
    
     private $library = array(
+            'ValidatorInterface' => '{validator-location}/ValidatorInterface.php',
+            'ValidatorException' => '{validator-location}/ValidatorException.php',
+            'ZendDateValidate' => '{validator-location}/Validates/ZendDateValidate.php',
+            'EmptyDate' => '{date-location}/EmptyDate.php',
             'CatalogInterface' => '{db-location}/CatalogInterface.php',
-            'ValidatorInterface' => '{db-location}/ValidatorInterface.php',
-            'ValidatorException' => '{db-location}/ValidatorException.php', 
             'Catalog' => '{db-location}/Catalog.php',
             'Criteria' => '{db-location}/Criteria.php', 
             'DBAO' => '{db-location}/DBAO.php', 
@@ -89,7 +91,9 @@ class ModelController extends GenericController
         CommandLineInterface::getInstance()->printSection('Model', "Generating Library", 'COMMENT');
         foreach ( $this->library as $objectName => $path )
         {
-        	$path = str_replace('{db-location}',BenderSettings::getInstance()->getDbLocation(),$path);
+        	  $path = str_replace('{db-location}',BenderSettings::getInstance()->getDbLocation(),$path);
+        	  $path = str_replace('{validator-location}',BenderSettings::getInstance()->getLibValidatorLocation(),$path);
+        	  $path = str_replace('{date-location}',BenderSettings::getInstance()->getLibDateLocation(),$path);
             $libraryGenerator = new LibraryGenerator();
             $libraryGenerator->createLibrary($objectName);
             $libraryGenerator->saveFile("{$libPath}/{$path}", BenderSettings::getInstance()->getPreserveChanges());

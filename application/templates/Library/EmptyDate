@@ -1,0 +1,73 @@
+<?php 
+/**
+ * {$brandName}
+ *
+ * {$description}
+ *
+ * @category   Project
+ * @package    Project_Date
+ * @copyright  {$copyright}
+ * @author     zetta
+ * @version    {$version} SVN: $Id$
+ */
+
+/**
+ * Interfaz Validator
+ * @category   Project
+ * @package    Project_Date
+ * @copyright  {$copyright}
+<block:benderSignature>
+ * @copyright  {$benderSignature}
+ * @author     zetta 
+</block:benderSignature>
+ * @version    {$version} SVN: $Revision$
+ */
+class EmptyDate extends Zend_Date
+{
+    /**
+     * Si la fecha enviada es un valor null
+     * @var boolean $isNull
+     */
+    private $isNull;
+    
+    /**
+     * Generates the standard date object, could be a unix timestamp, localized date,
+     * string, integer, array and so on. Also parts of dates or time are supported
+     * Always set the default timezone: http://php.net/date_default_timezone_set
+     * For example, in your bootstrap: date_default_timezone_set('America/Los_Angeles');
+     * For detailed instructions please look in the docu.
+     *
+     * @param  string|integer|Zend_Date|array  $date    OPTIONAL Date value or value of date part to set
+     *                                                 ,depending on $part. If null the actual time is set
+     * @param  string                          $part    OPTIONAL Defines the input format of $date
+     * @param  string|Zend_Locale              $locale  OPTIONAL Locale for parsing input
+     * @return Zend_Date
+     * @throws Zend_Date_Exception
+     */
+    public function __construct($date = null, $part = null, $locale = null)
+    {
+        $this->isNull = ($date === null || $date === '') ? true : false;
+        if(!$this->isNull)
+            parent::__construct($date,$part,$locale);
+    }
+    
+    /**
+     * Favor de no utilizar en fechas reales pues podria generar resultados inesperados, esta clase y método
+     * son exclusivamente para poder guardar fechas en Zero en mysql pues eso de estar guardando fechas "actuales" cuando 
+     * no se especifica una, es medio chafa =) 
+     *
+     * @param  string              $part    OPTIONAL Part of the date to return, if null the timestamp is returned
+     * @param  string|Zend_Locale  $locale  OPTIONAL Locale for parsing input
+     * @return integer|string  date or datepart
+     */
+    public function get($part = null, $locale = null)
+    {
+        $string = parent::get($part, $locale);
+        # solo si la fecha enviada es null entonces se regresaran ceros   
+        if ($this->isNull)
+        {
+            $string = eregi_replace('[^ \:/-]', '0', $string);
+        }
+        return $string;
+    }
+}

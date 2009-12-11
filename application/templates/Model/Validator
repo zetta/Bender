@@ -27,35 +27,30 @@
 class {$Validator} implements ValidatorInterface
 {
 
+  /**
+   * Error messages
+   * @var Array
+   */
   private $messages = array();
   
-  public function validate($user)
+  /**
+   * Validate this {$Bean}
+   * @param {$Bean} ${$bean}
+   */
+  public function validate(${$bean})
   {
-
-     $usernameValidate = new Zend_Validate();
-     $usernameValidate->addValidator(new Zend_Validate_StringLength(2,5) );
-     $usernameValidate->addValidator(new Zend_Validate_NotEmpty());
-     if(!$usernameValidate->isValid( $user->getUsername()))
-     {
-       $this->messages['username'] = $usernameValidate->getMessages();
-     }
-     
-     
-     
-     $lastNameValidate = new Zend_Validate();
-     $lastNameValidate->addValidator(new Zend_Validate_NotEmpty());
-     if(!$lastNameValidate->isValid( $user->getLastName()))
-     {
-       $this->messages['lastname'] = $lastNameValidate->getMessages();
-     }
-
-     
+    <block:field>
      $chain = new Zend_Validate();
-     $chain->addValidator(new Zend_Validate());
+       <block:validator>
+     $chain->addValidator(new {$field.validator.construct} );
+       </block:validator>
+     if(!$chain->isValid( ${$bean}->{$field.getter}))
+       $this->messages['{$field.simpleName}'] = $chain->getMessages();
      
+   </block:field>  
      
      if(count($this->messages))
-      throw new ValidatorException('El objeto no es valido',500,$this->messages);
+      throw new ValidatorException('Invalid Object',1,$this->messages);
 
   }
   

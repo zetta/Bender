@@ -24,13 +24,38 @@ class ValidatorGenerator extends ModelGenerator
         
         
         
-        //$this->loop();
+        $this->loopFields();
         
         
         
         $this->fileContent = $this->template->fetch('validator');
     }
     
-    
-    //public function 
+    /**
+     * Loop over fields
+     */
+    private function loopFields()
+    {
+      $fields = $this->table->getFields();
+      while($fields->valid())
+      {
+        $field = $fields->current();
+        
+        $this->template->assignBlock('field', array(
+                    'simpleName' => $field->getSimpleName(), 
+                    'getter' => $field->getCompleteGetterName()
+        ));
+        
+        for($i = 0; $i<3; $i++)
+        {
+          $this->template->assignBlock('field.validator',array(
+            'construct' => 'Constructor'.$i.'()'
+          ));
+        }
+        
+        
+        $fields->next();
+      }
+      
+    }
 }
