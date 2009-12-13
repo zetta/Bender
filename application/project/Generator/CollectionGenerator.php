@@ -1,6 +1,6 @@
 <?php
 /**
- * BeanGenerator
+ * CollectionGenerator
  * @author Juan Carlos Jarquin
  */
 
@@ -22,6 +22,7 @@ class CollectionGenerator extends ModelGenerator
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'Collection', 'INFO');
         $this->template->set_filenames(array('collection' => 'Model/Collection'));
         
+        $this->template->assign('libUtilsLocation', BenderSettings::getInstance()->getLibUtilsLocation());
         if($this->table->hasPrimaryField())
         {
         	$this->template->showBlock('hasPrimaryField');

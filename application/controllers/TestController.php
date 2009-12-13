@@ -39,6 +39,42 @@ class TestController extends GenericController
         }
     }
     
+    public function collectionAction()
+    {   
+        $user1 = new User();
+        $user1->setIdUser(1)
+        ->setIdPerson(1)
+        ->setFirstName('Vicente')
+        ->setLastName('Mendoza')
+        ->setBirthDate(new Zend_Date('1986-01-11', 'yyyy-MM-dd'))
+        ->setUsername('chentepixtol')
+        ->setPassword(md5(123));
+        
+        $user2 = new User();
+        $user2->setIdUser(5)
+        ->setIdPerson(5)
+        ->setFirstName('Juan Carlos')
+        ->setLastName('Jarquin')
+        ->setBirthDate(new Zend_Date('1986-03-13', 'yyyy-MM-dd'))
+        ->setUsername('zetta')
+        ->setPassword(md5(123));
+        
+        $userCollection = new UserCollection();
+        $userCollection->append($user1);
+        $userCollection->append($user2);
+    
+        $users = $userCollection->toArray();
+        print_r($users);
+        
+        $combo = $userCollection->toKeyValueArray(User::ID_USER, User::USERNAME);
+        print_r($combo);
+        
+        $keys = $userCollection->getPrimaryKeys();
+        print_r($keys);
+        
+        
+    }
+    
     /**
      * Modo interactivo
      */

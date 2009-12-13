@@ -22,7 +22,9 @@ class ModelController extends GenericController
             'DBAO' => '{db-location}/DBAO.php', 
             'BehaviorObserver' => '{db-location}/Behavior/BehaviorObserver.php', 
             'Observer' => '{db-location}/Behavior/Observer.php', 
-            'SluggableBehavior' => '{db-location}/Behavior/SluggableBehavior.php');
+            'SluggableBehavior' => '{db-location}/Behavior/SluggableBehavior.php',
+            'Parser' => '{utils-location}/Parser.php',
+    );
     
     /**
      * Genera los catálogos
@@ -94,6 +96,7 @@ class ModelController extends GenericController
         	  $path = str_replace('{db-location}',BenderSettings::getInstance()->getDbLocation(),$path);
         	  $path = str_replace('{validator-location}',BenderSettings::getInstance()->getLibValidatorLocation(),$path);
         	  $path = str_replace('{date-location}',BenderSettings::getInstance()->getLibDateLocation(),$path);
+        	  $path = str_replace('{utils-location}',BenderSettings::getInstance()->getLibUtilsLocation(),$path);
             $libraryGenerator = new LibraryGenerator();
             $libraryGenerator->createLibrary($objectName);
             $libraryGenerator->saveFile("{$libPath}/{$path}", BenderSettings::getInstance()->getPreserveChanges());

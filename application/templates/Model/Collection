@@ -10,6 +10,12 @@
  * @author     {$author}, $LastChangedBy$
  * @version    {$version} SVN: $Id$
  */
+<block:useIncludes> 
+/**
+ * Dependencias
+ */
+require_once '{$libLocation}/{$libUtilsLocation}/Parser.php';
+</block:useIncludes>
 
 /**
  * Clase {$Collection} que representa una collección de objetos {$Bean}
@@ -27,7 +33,23 @@
 class {$Collection} extends ArrayIterator
 {
 
-	/**
+    /**
+     * @var Parser
+     */
+    private $parser;
+    
+    /**
+     * Constructor
+     * @param array $array
+     * @return void
+     */
+    public function __construct($array = array())
+    {
+        $this->parser = new Parser('{$Bean}');
+        parent::__construct($array);
+    }
+
+    /**
      * Appends the value
      * @param {$Bean} ${$bean}
      */
@@ -118,6 +140,49 @@ class {$Collection} extends ArrayIterator
     }
     
   </block:hasPrimaryField>
+  
+    /**
+     * Transforma una collection a un array
+     * @return array
+     */
+    public function toArray()
+    {
+        $array = array();
+        while ($this->valid())
+        {
+            ${$bean} = $this->read();
+            $this->parser->changeBean(${$bean});
+          <block:hasPrimaryField>
+            $array[${$bean}->{$primaryKeyGetter}()] = $this->parser->toArray();
+          </block:hasPrimaryField>
+          <block:noPrimaryField>
+            $array[] = $this->parser->toArray();
+          </block:noPrimaryField>
+        }
+        $this->rewind();
+        return $array;
+    }
+    
+    /**
+     * Crea un array asociativo de $key => $value a partir de las constantes de un bean
+     * @param string $ckey
+     * @param string $cvalue
+     * @return array
+     */
+    public function toKeyValueArray($ckey, $cvalue)
+    {
+        $array = array();
+        while ($this->valid())
+        {
+            ${$bean} = $this->read();
+            $this->parser->changeBean(${$bean});
+            $array += $this->parser->toKeyValueArray($ckey, $cvalue);
+        }
+        $this->rewind();
+        return $array;
+    }
+  
+  
 }
 
 

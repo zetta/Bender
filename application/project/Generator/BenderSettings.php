@@ -219,6 +219,11 @@ class BenderSettings
   private $libDateLocation = "date";
   
   /**
+   * @var string
+   */
+  private $libUtilsLocation = "utils";
+  
+  /**
    * Determina si las librerias serán generadas antes de los archivos
    * @var boolean
    */
@@ -809,6 +814,22 @@ class BenderSettings
   /**
    * @return string
    */
+  public function getLibUtilsLocation()
+  {
+    return $this->libUtilsLocation;
+  }
+  
+  /**
+   * @param string $libUtilsLocation
+   */
+  public function setLibUtilsLocation($libUtilsLocation)
+  {
+    $this->libUtilsLocation = $libUtilsLocation;
+  }
+  
+  /**
+   * @return string
+   */
   public function getLibDateLocation()
   {
     return $this->libDateLocation;
@@ -858,6 +879,7 @@ class BenderSettings
     $this->dbLocation = isset($settings['paths']['lib_db_location']) ? $settings['paths']['lib_db_location'] : $this->dbLocation;
     $this->libValidatorLocation = isset($settings['paths']['lib_validator_location']) ? $settings['paths']['lib_validator_location'] : $this->libValidatorLocation;
     $this->libDateLocation = isset($settings['paths']['lib_date_location']) ? $settings['paths']['lib_date_location'] : $this->libDateLocation;
+    $this->libUtilsLocation = isset($settings['paths']['lib_utils_location']) ? $settings['paths']['lib_utils_location'] : $this->libUtilsLocation;
     $this->controllerLocation = isset($settings['paths']['controller_location']) ? $settings['paths']['controller_location'] : $this->controllerLocation;
     $this->viewLocation = isset($settings['paths']['view_location']) ? $settings['paths']['view_location'] : $this->viewLocation;
     $this->mysql = isset($settings['mysql']) ? $settings['mysql'] : $this->mysql;
