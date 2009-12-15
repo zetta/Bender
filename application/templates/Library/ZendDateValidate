@@ -23,7 +23,7 @@
 </block:benderSignature>
  * @version    {$version} SVN: $Revision$
  */
-ZendDateValidate extends Zend_Validate_Abstract
+class ZendDateValidate extends Zend_Validate_Abstract
 {
     const FLOAT = 'float';
 

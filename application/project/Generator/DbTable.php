@@ -112,7 +112,8 @@ class DbTable
         CommandLineInterface::getInstance()->printSection('DbTable', "Fetching table info '{$this->table}'", 'COMMENT');
         $fieldResource = $this->database->query("SHOW FULL COLUMNS FROM {$this->table} WHERE TRUE");
         while (($column = $this->database->fetch_array($fieldResource)))
-        {
+        { 
+            //aqui ponemos todos los defaults
             $type = $this->parseTypeAndLength( $column['Type'] );            
             $field = new DbField($column['Field']);
             $field->setTable($this->table);
@@ -129,7 +130,7 @@ class DbTable
             $field->setDataType(DbTable::parseDataType($field->getBaseDataType()));
             $field->setCastDataType(DbTable::parseCastDataType($field->getDataType()));
             
-            
+            $field->setType( $field->getDataType() );
             $field->setComment( $this->parseComment( $column->Comment ));
             
             $field->setIsPrimaryKey(($column['Key'] == 'PRI' ? true : false));
@@ -141,6 +142,16 @@ class DbTable
             else
                 $field->setCatalogAccesor($this->getObject()."::TABLENAME.'.{$field->getName()}'");
            
+                
+            // ahora aqui debemos poner todo lo que el usuario especificó en el schema    
+            $info = BenderSettings::getInstance()->getModel($this->object);
+            if( isset($info['fields'][$field->getName()]) )
+            {
+              $custom = $info['fields'][$field->getName()];
+              if(isset($custom['type']))
+                $field->setType($custom['type']);
+            }
+            
             $this->fields->offsetSet($field->getName(), $field);
             $this->fields->rewind();
             if($this->isForeignKey($field) || $field->isUnique() )

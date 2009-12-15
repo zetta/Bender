@@ -91,6 +91,7 @@ class {$Catalog} extends {$extendedCatalog}
     {
         if(!(${$bean} instanceof {$Bean}))
             throw new {$Exception}("El parámetro [\${$bean}] no es una instancia de {$Bean}");
+        $this->validator->validate(${$bean});
       <block:useBehaviors>
         $this->notifyObservers(${$bean},Catalog::EVENT_CREATE);
       </block:useBehaviors>

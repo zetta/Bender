@@ -29,7 +29,7 @@ class DbField
   /**
    * @var string
    */
-  private $dataTypeValidator = NULL;
+  private $type = '';
   
   /**
    * Nombre de la tabla a la que se va a consultar
@@ -134,7 +134,6 @@ class DbField
    * @var string
    */
   private $table = '';
-  
   
   /**
    * Constructor Class
@@ -418,15 +417,21 @@ class DbField
   {
     $this->defaultValue = $defaultValue;
   }
-
-  
   
   /**
    * @return string
    */
-  public function getDataTypeValidator()
+  public function getType()
   {
-    return $this->dataTypeValidator;
+    return $this->type;
+  }
+  
+  /**
+   * @param string $type
+   */
+  public function setType($type)
+  {
+    $this->type = $type;
   }
   
   /**
@@ -454,14 +459,6 @@ class DbField
   }
   
   /**
-   * @param string $dataTypeValidator
-   */
-  public function setDataTypeValidator($dataTypeValidator)
-  {
-    $this->dataTypeValidator = $dataTypeValidator;
-  }
-  
-  /**
    * @param int $maxlength
    */
   public function setMaxlength($maxlength)
@@ -485,5 +482,4 @@ class DbField
     $this->required = $required;
   }
 
-  
 }

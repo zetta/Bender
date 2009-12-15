@@ -208,6 +208,7 @@ class Template {
             $str .= '[\'' . $blocks[$blockcount] . '.\'][] = $vararray;';
 
             // Now we evaluate this assignment we've built up.
+            echo "assign:" , $str,"\n";
             eval($str);
         }
         else
@@ -221,6 +222,42 @@ class Template {
         return true;
     }
 
+    function unAssignBlock($blockname)
+    {
+        if (strstr($blockname, '.'))
+        {
+            // Nested block.
+            $blocks = explode('.', $blockname);
+            $blockcount = sizeof($blocks) - 1;
+            $str = 'unset($this->_tpldata';
+            for ($i = 0; $i < $blockcount; $i++)
+            {
+                $str .= '[\'' . $blocks[$i] . '.\']';
+                eval('$lastiteration = sizeof(' . $str . ') - 1;');
+                eval("\$str .= '[' . \$lastiteration . ']';");
+            }
+            // Now we add the block that we're actually assigning to.
+            // We're adding a new iteration to this block with the given
+            // variable assignments.
+            $str .= '[\'' . $blocks[$blockcount] . '.\'][] = $vararray;';
+
+            
+            echo "unassign:" , $str,"\n";
+            // Now we evaluate this assignment we've built up.
+            eval($str);
+        }
+        else
+        {
+            // Top-level block.
+            // Add a new iteration to this block with the variable assignments
+            // we were given.
+            unset($this->_tpldata[$blockname . '.'][ count($this->_tpldata[$blockname . '.'])-1]);
+        }
+
+        return true;
+    }
+    
+    
     /**
      * Root-level variable assignment. Adds to current assignments, overriding
      * any existing variable assignment with the same name.
@@ -503,6 +540,16 @@ class Template {
         }
 
         return $varref;
+    }
+    
+    public function getCompiledCode($handle)
+    {
+      return $this->compiled_code[$handle];
+    }
+    
+    public function getTplData()
+    {
+      return $this->_tpldata;
     }
 
 }

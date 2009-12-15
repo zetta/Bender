@@ -40,14 +40,20 @@ class {$Validator} implements ValidatorInterface
   public function validate(${$bean})
   {
     <block:field>
+    
      $chain = new Zend_Validate();
-       <block:validatorMail>
-     $chain->addValidator(new {$field.validator.construct} );
-       </block:validatorMail>
+       <block:length>
+     $chain->addValidator(new Zend_Validate_StringLength({$field.length.min},{$field.length.max}));
+       </block:length>
+       <block:email>
+     $chain->addValidator(new Zend_Validate_EmailAddress());
+       </block:email>
      if(!$chain->isValid( ${$bean}->{$field.getter}))
        $this->messages['{$field.simpleName}'] = $chain->getMessages();
+   </block:field>
      
-   </block:field>  
+     
+     
      
      if(count($this->messages))
       throw new ValidatorException('Invalid Object',1,$this->messages);

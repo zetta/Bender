@@ -8,11 +8,13 @@ schema:
   User: 
     table:     bender_users
     extends:   Person
-  Worker: 
-    table:     bender_workers
-    extends:   Person
-  Post: 
-    table:     bender_posts
-    extends:   false
-    behaviors: 
-      Sluggable : { source : title , target : slug }
+    fields:
+      email:   { type: email, required : true }
+#  Worker: 
+#    table:     bender_workers
+#    extends:   Person
+#  Post: 
+#    table:     bender_posts
+#    extends:   false
+#    behaviors: 
+#      Sluggable : { source : title , target : slug }
