@@ -150,6 +150,15 @@ class DbTable
               $custom = $info['fields'][$field->getName()];
               if(isset($custom['type']))
                 $field->setType($custom['type']);
+              if(isset($custom['required']))
+                $field->setRequired( $custom['required'] ? true : false );
+              if(isset($custom['max']))
+                $field->setMaxlength($custom['max']);
+              if(isset($custom['min']))
+                $field->setMinlength($custom['min']);
+              if(isset($custom['unique']))
+                $field->setIsUnique($custom['unique'] ? true : false);
+              
             }
             
             $this->fields->offsetSet($field->getName(), $field);

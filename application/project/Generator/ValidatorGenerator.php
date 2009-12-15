@@ -21,20 +21,9 @@ class ValidatorGenerator extends ModelGenerator
   {
     CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object . 'Validator', 'INFO');
     $this->template->set_filenames(array('validator' => 'Model/Validator'));
-    
     $this->loopFields();
-    
-    
-    
-    
-    
     $this->fileContent = $this->template->fetch('validator');
-    
-    
-    
   }
-  
-  
   
   /**
    * Loop over fields
@@ -46,24 +35,27 @@ class ValidatorGenerator extends ModelGenerator
     {
       $field = $fields->current();
       $this->validates = 0;
-      
       $this->template->assignBlock('field', array('simpleName' => $field->getSimpleName(), 'getter' => $field->getCompleteGetterName()));
       
-      if ($field->getBaseDataType() == 'string' && ($field->getMaxlength() || $field->getMinlength()))
+      if (eregi('string|char|varchar', $field->getBaseDataType()) && ($field->getMaxlength() || $field->getMinlength()))
         $this->addStringLength($field->getMinlength(), $field->getMaxlength());
       
+      if($field->isRequired())
+        $this->addRequired();   
+        
       if ($field->getType() == 'email')
         $this->addEmail();
       
+      if($field->getType() == 'Zend_Date')
+        $this->addZendDate();  
         
-      if($this->validates == 0)
-        $this->template->unAssignBlock('field');  
-      
+      if ($this->validates == 0)
+      {
+        $this->template->unAssignBlock('field');
+      }
       $fields->next();
-    } 
-    
-    //print_r($this->template->getTplData());
-    
+    }
+  
   }
   
   /**
@@ -75,7 +67,7 @@ class ValidatorGenerator extends ModelGenerator
   private function addStringLength($min, $max)
   {
     $this->template->assignBlock('field.length', array('min' => $min, 'max' => $max));
-    $this->validates+=1;
+    $this->validates += 1;
   }
   
   /**
@@ -84,8 +76,30 @@ class ValidatorGenerator extends ModelGenerator
   private function addEmail()
   {
     $this->template->showBlock('field.email');
-    $this->validates+=1;
+    $this->validates += 1;
   }
-
+  
+  /**
+   * Bloque de email
+   */
+  private function addRequired()
+  {
+    $this->template->showBlock('field.required');
+    $this->validates += 1;
+  }
+  
+  /**
+   * Bloque de email
+   */
+  private function addZendDate()
+  {
+    $this->template->showBlock('field.zenddate');
+    $this->validates += 1;
+  }
+  
+  /**
+   * Used validates
+   * @var int
+   */
   private $validates = 0;
 }

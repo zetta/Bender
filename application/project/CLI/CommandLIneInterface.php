@@ -6,7 +6,7 @@
 
 class CommandLineInterface
 {
-    const SIZE = 64;
+    const SIZE = 80;
     
     /**
      * Styles And Colors

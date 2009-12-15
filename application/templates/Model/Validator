@@ -48,6 +48,12 @@ class {$Validator} implements ValidatorInterface
        <block:email>
      $chain->addValidator(new Zend_Validate_EmailAddress());
        </block:email>
+       <block:required>
+     $chain->addValidator(new Zend_Validate_NotEmpty());
+       </block:required>
+       <block:zenddate>
+     $chain->addValidator(new ZendDateValidate());
+       </block:zenddate>
      if(!$chain->isValid( ${$bean}->{$field.getter}))
        $this->messages['{$field.simpleName}'] = $chain->getMessages();
    </block:field>

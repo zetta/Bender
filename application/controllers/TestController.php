@@ -18,9 +18,11 @@ class TestController extends GenericController
         $user = new User();
         $user->setUsername('zetta');
         $user->setPassword('secret');
-        $user->setFirstName('Juan Carlos');
+        $user->setEmail('correo@correo.de');
+        //$user->setFirstName('Juan Carlos');
         
-        #$user->setBirthDate(new Zend_Date());
+        //$user->setBirthDate(new Zend_Date('2009-10-14'));
+        //$user->setBirthDate('lol');
         
         try 
         {
@@ -29,16 +31,19 @@ class TestController extends GenericController
         }
         catch (ValidatorException $e)
         {
-          foreach  ($e->getErrors() as $error)
+          foreach  ($e->getErrors() as $campo => $error)
           {
-            foreach ($error as $field => $message)
+            foreach ($error as $code => $message)
             {
-              CommandLineInterface::getInstance()->printSection($field,$message);
+              CommandLineInterface::getInstance()->printSection($campo,$message.' '. $code);
             }
           }       
         }
     }
     
+    /**
+     * Collection Test
+     */
     public function collectionAction()
     {   
     	$testSuite = new TestSuite('all');

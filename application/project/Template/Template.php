@@ -216,7 +216,7 @@ class Template {
             // Top-level block.
             // Add a new iteration to this block with the variable assignments
             // we were given.
-            $this->_tpldata[$blockname . '.'][] = $vararray;
+            $this->_tpldata[$blockname . '.'][ count($this->_tpldata[$blockname . '.']) ] = $vararray;
         }
 
         return true;

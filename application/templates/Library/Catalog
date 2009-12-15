@@ -47,12 +47,11 @@ abstract class Catalog implements CatalogInterface
      * @var Zend_Db_Adapter_Abstract Objeto Zend_Db_Adapter_Abstract
      */
     protected $db;
-
+    
     /**
-     * Validador
-     * @var ValidatorInterface
+     * Can't Clone Singleton Class 
      */
-    protected $validator;
+    private function __clone(){}
 
     /**
      * Date part usado para los campos tipo Date o DateTime

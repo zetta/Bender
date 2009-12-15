@@ -58,6 +58,12 @@ class {$Catalog} extends {$extendedCatalog}
     }
     
     /**
+     * Validador
+     * @var {$Validator}
+     */
+    private $validator;
+    
+    /**
      * Can't Clone Singleton Class 
      */
     private function __clone(){}
@@ -67,9 +73,9 @@ class {$Catalog} extends {$extendedCatalog}
      * Constructor de la clase {$Catalog}
      * @return {$Catalog}
      */
-    private function {$Catalog}()
+    protected function __construct()
     {
-        parent::Catalog();{$behaviors}
+        parent::__construct();{$behaviors}
     }    
   </block:isSingleton>
   <block:isntSingleton>
@@ -110,7 +116,7 @@ class {$Catalog} extends {$extendedCatalog}
             ${$bean}->{$primaryKeySetter}($this->db->lastInsertId());
           </block:hasPrimaryField>
         }
-        catch(Exception $e)
+        catch(Zend_Db_Exception $e)
         {
             throw new {$Exception}("El objeto {$Bean} no pudo ser guardado en la base de datos\n" . $e->getMessage());
         }
@@ -126,7 +132,7 @@ class {$Catalog} extends {$extendedCatalog}
         {
             $result = $this->db->fetchCol('SELECT {$primaryKeyName} FROM '.{$Bean}::TABLENAME);
         }
-        catch(Exception $e)
+        catch(Zend_Db_Exception $e)
         {
             throw new {$Exception}("No se pudieron obtener los ids\n" . $e->getMessage());
         }
@@ -155,7 +161,7 @@ class {$Catalog} extends {$extendedCatalog}
                     FROM ".{$Bean}::TABLENAME."
                     WHERE  " . {$criteriaVar}->createSql();
             $result = $this->db->fetchCol($sql);
-        } catch(Exception $e)
+        } catch(Zend_Db_Exception $e)
         {
             throw new {$Exception}("No se pudieron obtener los ids de objetos {$Bean}\n" . $e->getMessage());
         }
@@ -191,7 +197,7 @@ class {$Catalog} extends {$extendedCatalog}
                 ${$collection}->append($this->get{$Bean}Instance($result));
             }
         }
-        catch(Exception $e)
+        catch(Zend_Db_Exception $e)
         {
             throw new {$Exception}("No se pudo obtener la colección de items\n" . $e->getMessage());
         }
@@ -235,7 +241,7 @@ class {$Catalog} extends {$extendedCatalog}
             ${$collection} = $this->getByCriteria({$criteriaVar});
           </block:publicCriteria>
         }
-        catch(Exception $e)
+        catch(Zend_Db_Exception $e)
         {
             throw new {$Exception}("El objeto {$foreignKeys.return} no pudo ser obtenido\n" . $e->getMessage());
         }

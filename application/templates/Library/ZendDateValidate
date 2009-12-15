@@ -25,21 +25,22 @@
  */
 class ZendDateValidate extends Zend_Validate_Abstract
 {
-    const FLOAT = 'float';
+    const DATE = 'date';
 
     protected $_messageTemplates = array(
-        self::FLOAT => "'%value%' is not a floating point value"
+        self::DATE => "'%value%' is not a zend date"
     );
 
+    /**
+     * Check the value
+     */
     public function isValid($value)
     {
         $this->_setValue($value);
-
-        if (!is_float($value)) {
+        if (!($value instanceof Zend_Date)) {
             $this->_error();
             return false;
         }
-
         return true;
     }
 }
