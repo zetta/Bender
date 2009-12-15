@@ -62,7 +62,7 @@ class ValidatorGenerator extends ModelGenerator
       $fields->next();
     } 
     
-    print_r($this->template->getTplData());
+    //print_r($this->template->getTplData());
     
   }
   

@@ -208,7 +208,7 @@ class Template {
             $str .= '[\'' . $blocks[$blockcount] . '.\'][] = $vararray;';
 
             // Now we evaluate this assignment we've built up.
-            echo "assign:" , $str,"\n";
+            //echo "assign:" , $str,"\n";
             eval($str);
         }
         else
@@ -242,7 +242,7 @@ class Template {
             $str .= '[\'' . $blocks[$blockcount] . '.\'][] = $vararray;';
 
             
-            echo "unassign:" , $str,"\n";
+            //echo "unassign:" , $str,"\n";
             // Now we evaluate this assignment we've built up.
             eval($str);
         }
