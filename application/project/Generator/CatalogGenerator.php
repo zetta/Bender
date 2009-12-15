@@ -164,7 +164,8 @@ class CatalogGenerator extends ModelGenerator
           $fields->next();
           continue;
         }
-        $this->template->assignBlock('setters', array('simpleName' => $field->getSimpleName(), 'setter' => $field->getSetterName()));
+        $value = ($field->getDataType() == 'Zend_Date') ? "new Zend_Date(\$result['{$field->getSimpleName()}'], \$this->datePart)" : "\$result['{$field->getSimpleName()}']";
+        $this->template->assignBlock('setters', array('value' => $value, 'setter' => $field->getSetterName()));
         $assigned[$field->getSimpleName()] = true;
         $fields->next();
       }

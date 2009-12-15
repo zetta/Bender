@@ -364,7 +364,7 @@ class {$Catalog} extends {$extendedCatalog}
     {
         $new{$Bean} = new {$Bean}();
       <block:setters>
-        $new{$Bean}->{$setters.setter}($result['{$setters.simpleName}']);
+        $new{$Bean}->{$setters.setter}({$setters.value});
       </block:setters>
         return $new{$Bean};
     }
