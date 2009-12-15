@@ -181,6 +181,15 @@ class {$Collection} extends ArrayIterator
         $this->rewind();
         return $array;
     }
+    
+    /**
+     * Retrieve the parser object
+     * @return Parser
+     */
+    public function getParser()
+    {
+        return $this->parser;
+    }
   
   
 }
