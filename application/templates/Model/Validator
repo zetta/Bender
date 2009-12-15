@@ -54,7 +54,7 @@ class {$Validator} implements ValidatorInterface
        <block:zenddate>
      $chain->addValidator(new ZendDateValidate());
        </block:zenddate>
-     if(!$chain->isValid( ${$bean}->{$field.getter}))
+     if( !$chain->isValid( ${$bean}->{$field.getter}) {$field.optional})
        $this->messages['{$field.simpleName}'] = $chain->getMessages();
    </block:field>
      

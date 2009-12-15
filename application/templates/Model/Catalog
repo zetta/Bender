@@ -107,6 +107,7 @@ class {$Catalog} extends {$extendedCatalog}
                 '{$getters.name}'{$getters.spaces}=> ${$bean}->{$getters.getter},
               </block:getters>
             );
+            $data = array_filter($data,array('Catalog','notNull'));
             $this->db->insert({$Bean}::TABLENAME, $data);
           <block:hasPrimaryField>
             ${$bean}->{$primaryKeySetter}($this->db->lastInsertId());
@@ -204,6 +205,7 @@ class {$Catalog} extends {$extendedCatalog}
                 '{$getters.name}'{$getters.spaces}=> ${$bean}->{$getters.getter},
               </block:getters>
             );
+            $data = array_filter($data,array('Catalog','notNull'));
             $this->db->update({$Bean}::TABLENAME, $data, $where);
           <block:willExtend>
             parent::update(${$bean});

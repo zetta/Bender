@@ -18,7 +18,7 @@ class TestController extends GenericController
         $user = new User();
         $user->setUsername('zetta');
         $user->setPassword('secret');
-        $user->setEmail('correo@correo.de');
+        //$user->setEmail('correo@correo.de');
         //$user->setFirstName('Juan Carlos');
         
         //$user->setBirthDate(new Zend_Date('2009-10-14'));

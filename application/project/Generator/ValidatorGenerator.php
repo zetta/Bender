@@ -35,13 +35,20 @@ class ValidatorGenerator extends ModelGenerator
     {
       $field = $fields->current();
       $this->validates = 0;
-      $this->template->assignBlock('field', array('simpleName' => $field->getSimpleName(), 'getter' => $field->getCompleteGetterName()));
+      
+      $optional = $field->isRequired() ? '' : '&& $'.$this->lowerObject.'->'.$field->getCompleteGetterName().' != NULL ';
+      
+      $this->template->assignBlock('field', array(
+        'simpleName' => $field->getSimpleName(),
+        'optional' => $optional , 
+        'getter' => $field->getCompleteGetterName()
+      ));
       
       if (eregi('string|char|varchar', $field->getBaseDataType()) && ($field->getMaxlength() || $field->getMinlength()))
         $this->addStringLength($field->getMinlength(), $field->getMaxlength());
       
       if($field->isRequired())
-        $this->addRequired();   
+        $this->addRequired($field);
         
       if ($field->getType() == 'email')
         $this->addEmail();
@@ -82,7 +89,7 @@ class ValidatorGenerator extends ModelGenerator
   /**
    * Bloque de email
    */
-  private function addRequired()
+  private function addRequired(dbField $field)
   {
     $this->template->showBlock('field.required');
     $this->validates += 1;

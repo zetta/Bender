@@ -38,7 +38,7 @@ class ZendDateValidate extends Zend_Validate_Abstract
     {
         $this->_setValue($value);
         if (!($value instanceof Zend_Date)) {
-            $this->_error();
+            $this->_error(self::DATE);
             return false;
         }
         return true;

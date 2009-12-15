@@ -100,6 +100,7 @@ class CatalogGenerator extends ModelGenerator
   private function getMaxFieldLength(FieldCollection $fields)
   {
     $maxFieldLength = 0;
+    $fields->rewind();
     while ( $fields->valid() )
     {
       $field = $fields->current();
@@ -138,7 +139,11 @@ class CatalogGenerator extends ModelGenerator
       
       $spaces = $this->maxFieldLength - strlen($field->getName());
       $spaces = sprintf("% " . $spaces . "s", '');
-      $this->template->assignBlock('getters', array('name' => $field->getName(), 'getter' => $field->getCompleteGetterName(), 'spaces' => $spaces));
+      $this->template->assignBlock('getters', array(
+        'name' => $field->getName(), 
+        'getter' => $field->getCompleteGetterName(), 
+        'spaces' => $spaces
+      ));
       $fields->next();
     }
     $fields->rewind();

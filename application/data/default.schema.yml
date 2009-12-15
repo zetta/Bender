@@ -6,12 +6,13 @@ schema:
     table:         bender_persons
     extends:       false
     fields: 
-      first_name:  { required: true }
+      first_name:  { required: false }
+      last_name:   { required: false }
   User: 
     table:         bender_users
     extends:       Person
     fields:
-      email:       { type: email, required: true }
+      email:       { type: email, required: false }
       username:    { type: string, required: true, unique: true }
   Worker: 
     table:         bender_workers
