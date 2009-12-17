@@ -95,7 +95,7 @@ class Template {
         }
 
         reset($filename_array);
-        while(list($handle, $filename) = each($filename_array))
+        while((list($handle, $filename) = each($filename_array)))
         {
             $this->files[$handle] = $this->make_filename($filename);
         }

@@ -30,6 +30,11 @@ interface CatalogInterface
     public static function getInstance();
 
     /**
+     * Factory Method
+     */
+    public static function factory();
+
+    /**
      * Guarda en la base de datos
      * @param mixed Un bean para guardar
      */

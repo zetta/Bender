@@ -114,19 +114,21 @@ class DbTable
         while (($column = $this->database->fetch_array($fieldResource)))
         { 
             //aqui ponemos todos los defaults
-            $type = $this->parseTypeAndLength( $column['Type'] );            
+            $type = $this->parseTypeAndLength( $column['Type'] ); 
             $field = new DbField($column['Field']);
             $field->setTable($this->table);
+            $field->setMaxlength($type['max']);
+            $field->setBaseDataType($type['type']);
             $field->setSetterName('set' . DbTable::getCamelCase($field->getName(), true));
             $field->setGetterName('get' . DbTable::getCamelCase($field->getName(), true));
             $field->setPhpName(DbTable::getCamelCase($field->getName()));
             $field->setUpperCaseName(ucfirst( $field->getPhpName()));
             $field->setConstantName(strtoupper($field->getName()));
             $field->setCompleteGetterName( $this->parseCompleteGetterName($field) );
+            $field->setFormat( $this->parseFormat($field) );
             $field->setSimpleName($field->getName());
             
-            $field->setMaxlength($type['max']);
-            $field->setBaseDataType($type['type']);
+            
             $field->setDataType(DbTable::parseDataType($field->getBaseDataType()));
             $field->setCastDataType(DbTable::parseCastDataType($field->getDataType()));
             
@@ -230,6 +232,27 @@ class DbTable
             return "{$field->getGetterName()}()";
         }
     
+    }
+    
+    
+    /**
+     * Obtiene el formato esperado en el campo
+     * @param DbField $field
+     * @return string 
+     */
+    private function parseFormat(DbField $field)
+    {
+    	  switch ($field->getBaseDataType())
+    	  {
+    	  	case 'date':
+    	  		return 'yyyy-MM-dd';
+    	  	case 'time':
+    	  		return 'HH:mm:ss';
+    	  	case 'datetime':
+    	  	case 'timestamp': 
+    	  		return 'yyyy-MM-dd HH:mm:ss';
+    	  }
+    	  return '';
     }
     
     

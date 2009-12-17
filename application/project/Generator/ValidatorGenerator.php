@@ -36,18 +36,19 @@ class ValidatorGenerator extends ModelGenerator
       $field = $fields->current();
       $this->validates = 0;
       
-      $optional = $field->isRequired() ? '' : '&& $'.$this->lowerObject.'->'.$field->getCompleteGetterName().' != NULL ';
+      $optional = $field->isRequired() ? '' : '&& $'.$this->lowerObject.'->'.$field->getGetterName().'() != NULL ';
       
       $this->template->assignBlock('field', array(
         'simpleName' => $field->getSimpleName(),
         'optional' => $optional , 
-        'getter' => $field->getCompleteGetterName()
+        'getter' => $field->getGetterName(),
+        'setter' => $field->getSetterName()
       ));
       
       if (eregi('string|char|varchar', $field->getBaseDataType()) && ($field->getMaxlength() || $field->getMinlength()))
         $this->addStringLength($field->getMinlength(), $field->getMaxlength());
       
-      if($field->isRequired())
+      if($field->isRequired() && $field->getType() != 'Zend_Date')
         $this->addRequired($field);
         
       if ($field->getType() == 'email')
@@ -55,7 +56,7 @@ class ValidatorGenerator extends ModelGenerator
       
       if($field->getType() == 'Zend_Date')
         $this->addZendDate();  
-        
+
       if ($this->validates == 0)
       {
         $this->template->unAssignBlock('field');
@@ -103,6 +104,7 @@ class ValidatorGenerator extends ModelGenerator
     $this->template->showBlock('field.zenddate');
     $this->validates += 1;
   }
+ 
   
   /**
    * Used validates

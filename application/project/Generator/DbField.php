@@ -22,6 +22,11 @@ class DbField
   private $maxlength = 0;
   
   /**
+   * @var data format
+   */
+  private $format = '';
+  
+  /**
    * @var int
    */
   private $minlength = 0;
@@ -481,5 +486,22 @@ class DbField
   {
     $this->required = $required;
   }
+  
+  /**
+	 * @return the $format
+	 */
+	public function getFormat() {
+		return $this->format;
+	}
 
+  /**
+	 * @param $format the $format to set
+	 */
+	public function setFormat($format) {
+		$this->format = $format;
+	}
+
+
+  
+  
 }

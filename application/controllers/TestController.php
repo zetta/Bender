@@ -15,14 +15,14 @@ class TestController extends GenericController
      */
     public function testAction()
     {
-        $user = new User();
+        $user = UserCatalog::factory();
         $user->setUsername('zetta');
         $user->setPassword('secret');
+        $user->setBirthDate(new Zend_Date());
+        //$user->setBirthDate(new Zend_Date());
         //$user->setEmail('correo@correo.de');
         //$user->setFirstName('Juan Carlos');
-        
         //$user->setBirthDate(new Zend_Date('2009-10-14'));
-        //$user->setBirthDate('lol');
         
         try 
         {
@@ -46,10 +46,8 @@ class TestController extends GenericController
      */
     public function collectionAction()
     {   
-    	$testSuite = new TestSuite('all');
-    	
+    	  $testSuite = new TestSuite('Collection Test');
         $testSuite->add(new CollectionTest());
-        
         $testSuite->run(new TextReporter());
     }
     

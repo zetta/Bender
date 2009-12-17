@@ -73,9 +73,9 @@ class {$Catalog} extends {$extendedCatalog}
      * Constructor de la clase {$Catalog}
      * @return {$Catalog}
      */
-    protected function __construct()
+    protected function {$Catalog}()
     {
-        parent::__construct();{$behaviors}
+        parent::{$extendedCatalog}();{$behaviors}
     }    
   </block:isSingleton>
   <block:isntSingleton>
@@ -85,7 +85,7 @@ class {$Catalog} extends {$extendedCatalog}
      */
     public function {$Catalog}()
     {{$behaviors}
-        parent::Catalog();
+        parent::{$extendedCatalog}();
     }  
   </block:isntSingleton>
 
@@ -221,6 +221,20 @@ class {$Catalog} extends {$extendedCatalog}
       </block:setters>
         return $new{$Bean};
     }
+
+    /**
+     * Get {$Bean} Instance
+     * @return {$Bean} $new{$Bean}
+     */
+    public static function factory()
+    {
+      ${$bean} = new {$Bean}();
+      <block:emptydate>
+      ${$bean}->{$emptydate.setter}(new EmptyDate());
+     </block:emptydate>
+      return ${$bean};
+    }
+    
   <block:foreignKeys>
   
     /**

@@ -12,7 +12,7 @@ class CrudGenerator extends ModelGenerator
     /**
      * Genera el Bean del objeto y lo almacena para su posterior uso
      */
-    public function createCrud()
+    public function create()
     {
         CommandLineInterface::getInstance()->printSection('Generator', 'Creating ' . $this->object.'->CRUD', 'INFO');
         $this->template->set_filenames(array('controller' => 'Crud/Controller'));

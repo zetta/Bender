@@ -8,6 +8,7 @@ schema:
     fields: 
       first_name:  { required: false }
       last_name:   { required: false }
+      birth_date:  { required: true }
   User: 
     table:         bender_users
     extends:       Person

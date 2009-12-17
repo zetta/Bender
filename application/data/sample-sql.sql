@@ -32,7 +32,7 @@ CREATE TABLE `bender_persons` (
   `last_name` varchar(100) collate latin1_spanish_ci NOT NULL COMMENT 'apellidos',
   `birth_date` date NOT NULL COMMENT 'fecha de nacimiento',
   PRIMARY KEY  (`id_person`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `bender_users` (
   `password` varchar(60) collate latin1_spanish_ci NOT NULL COMMENT 'Password del usuario',
   `email` varchar(70) collate latin1_spanish_ci NOT NULL,
   PRIMARY KEY  (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_spanish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,4 +96,4 @@ CREATE TABLE `bender_workers` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-12-14 19:37:09
+-- Dump completed on 2009-12-16 16:42:42

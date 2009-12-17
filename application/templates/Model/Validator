@@ -40,7 +40,7 @@ class {$Validator} implements ValidatorInterface
   public function validate(${$bean})
   {
     <block:field>
-    
+     
      $chain = new Zend_Validate();
        <block:length>
      $chain->addValidator(new Zend_Validate_StringLength({$field.length.min},{$field.length.max}));
@@ -54,11 +54,9 @@ class {$Validator} implements ValidatorInterface
        <block:zenddate>
      $chain->addValidator(new ZendDateValidate());
        </block:zenddate>
-     if( !$chain->isValid( ${$bean}->{$field.getter}) {$field.optional})
+     if( !$chain->isValid( ${$bean}->{$field.getter}()) {$field.optional})
        $this->messages['{$field.simpleName}'] = $chain->getMessages();
    </block:field>
-     
-     
      
      
      if(count($this->messages))

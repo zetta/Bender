@@ -70,7 +70,6 @@ class CatalogGenerator extends ModelGenerator
       $this->template->assign('extendedPrimaryKeyPhpName', $this->table->getExtendedTable()->getPrimaryField()->getPhpName());
       $this->template->assign('extendedPrimaryKeyName', $this->table->getExtendedTable()->getPrimaryField()->getName());
       $this->template->assign('pkSimpleName', $this->table->getExtendedTable()->getPrimaryField()->getSimpleName());
-      
       if ($this->benderSettings->getAddIncludes())
         $this->template->showBlock('extendedInclude');
       
@@ -144,6 +143,13 @@ class CatalogGenerator extends ModelGenerator
         'getter' => $field->getCompleteGetterName(), 
         'spaces' => $spaces
       ));
+      
+      if($field->getDataType() == 'Zend_Date')
+      {
+	      $this->template->assignBlock('emptydate', array( 
+	        'setter' => $field->getSetterName(), 
+	      ));
+      }
       $fields->next();
     }
     $fields->rewind();
@@ -169,7 +175,9 @@ class CatalogGenerator extends ModelGenerator
           $fields->next();
           continue;
         }
-        $value = ($field->getDataType() == 'Zend_Date') ? "new Zend_Date(\$result['{$field->getSimpleName()}'], \$this->datePart)" : "\$result['{$field->getSimpleName()}']";
+        $value = eregi_replace('[^ \:/-]', '0',$field->getFormat());
+        $dateSetter = "\$result['{$field->getSimpleName()}'] === '{$value}' ? new EmptyDate() : new Zend_Date(\$result['{$field->getSimpleName()}'], \$this->datePart)";
+        $value = ($field->getDataType() == 'Zend_Date') ? $dateSetter : "\$result['{$field->getSimpleName()}']";
         $this->template->assignBlock('setters', array('value' => $value, 'setter' => $field->getSetterName()));
         $assigned[$field->getSimpleName()] = true;
         $fields->next();
