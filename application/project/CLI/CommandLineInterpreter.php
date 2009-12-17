@@ -50,11 +50,16 @@ class CommandLineInterpreter
         $arguments = $_SERVER['argv'];
         $this->executedFile = array_shift($arguments);
         $firstParameter = array_shift($arguments);
-        if (! eregi(":", $firstParameter))
-            throw new Exception("El primer parámetro debe estar en formato [controller]:[action]");
-        $firstParameter = explode(":", $firstParameter);
-        $this->controller = $this->parseController($firstParameter[0]);
-        $this->action = $this->parseAction($firstParameter[1]);
+        if (eregi(":", $firstParameter))
+        {
+            $firstParameter = explode(":", $firstParameter);
+            $this->controller = $this->parseController($firstParameter[0]);
+            $this->action = $this->parseAction($firstParameter[1]);
+        }else
+        {
+          $this->controller = $this->parseController($firstParameter);
+          $this->action = 'default';
+        }
     }
     
     /**

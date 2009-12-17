@@ -2,16 +2,16 @@
 
 class TestController extends GenericController
 {
+
    public function preDispatch()
    {
         $benderSettings = BenderSettings::getInstance();
         $config = new Zend_Config(array('database' => array('adapter' => 'pdo_mysql', 'params' => $benderSettings->getMysql())));
         DBAO::$config = $config->database;        
    }
-  
-  
+ 
     /**
-     * Test 
+     * Genera un test básico
      */
     public function testAction()
     {
@@ -19,10 +19,6 @@ class TestController extends GenericController
         $user->setUsername('zetta');
         $user->setPassword('secret');
         $user->setBirthDate(new Zend_Date());
-        //$user->setBirthDate(new Zend_Date());
-        //$user->setEmail('correo@correo.de');
-        //$user->setFirstName('Juan Carlos');
-        //$user->setBirthDate(new Zend_Date('2009-10-14'));
         
         try 
         {
@@ -42,7 +38,7 @@ class TestController extends GenericController
     }
     
     /**
-     * Collection Test
+     * Realiza las pruebas de los objetos Collection
      */
     public function collectionAction()
     {   
@@ -52,7 +48,7 @@ class TestController extends GenericController
     }
     
     /**
-     * Modo interactivo
+     * Entra a modo interactivo
      */
     public function interactiveAction()
     {
@@ -64,6 +60,17 @@ class TestController extends GenericController
       while ($entry != 'quit;');
       $figlet = new Zend_Text_Figlet();
       echo $figlet->render('bye!');
+    }
+    
+    /**
+     * Carga los datos de prueba
+     */
+    public function loadTestDataAction()
+    {
+      $bender = BenderSettings::getInstance();
+      CommandLineInterface::getInstance()->printSection('Test','Loading test data');
+      exec("mysql -u {$bender->getUsername()} -p{$bender->getPassword()} bender < application/data/sample-sql.sql");
+      CommandLineInterface::getInstance()->printSection('Test','done.');
     }
     
 }
