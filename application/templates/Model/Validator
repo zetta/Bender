@@ -10,6 +10,15 @@
  * @author     {$author}, $LastChangedBy$
  * @version    {$version} SVN: $Id$
  */
+<block:useIncludes>
+
+/**
+ * Dependencias
+ */
+require_once '{$libLocation}/validator/ValidatorInterface.php';
+require_once '{$libLocation}/validator/ValidatorException.php';
+require_once '{$libLocation}/validator/validates/ZendDateValidate.php';
+</block:useIncludes>
 
 /**
  * Clase {$Validator} que representa una excepción de objetos {$Bean}
