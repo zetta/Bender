@@ -10,7 +10,13 @@
  * @author     zetta
  * @version    {$version} SVN: $Id$
  */
+<block:useIncludes>
 
+/**
+ * Dependencias
+ */
+require_once 'Zend/Db.php';
+</block:useIncludes>
 
 /**
  * Clase que representa la abstraccion de nuestro objeto Zend_Db
