@@ -53,7 +53,7 @@ class {$Collection} extends ArrayIterator
      * Appends the value
      * @param {$Bean} ${$bean}
      */
-    public function append(${$bean})
+    public function append({$Bean} ${$bean})
     {
       <block:hasPrimaryField>
         parent::offsetSet(${$bean}->{$primaryKeyGetter}(), ${$bean});

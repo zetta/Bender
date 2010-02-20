@@ -358,6 +358,40 @@ class {$Catalog} extends {$extendedCatalog}
       </block:privateCriteria>
         return ${$collection};
     }
+    
+    /**
+     * Metodo que cuenta {$Bean} 
+     * dependiendo del criterio establecido
+  <block:privateCriteria>
+     * @return int $count
+     */
+    private function countByCriteria()
+  </block:privateCriteria>
+  <block:publicCriteria>
+     * @param Criteria $criteria
+     * @return int $count
+     */
+    public function countByCriteria(Criteria $criteria)
+  </block:publicCriteria> 
+    {
+        try 
+        {
+            $sql = "SELECT COUNT({$primaryKeyName}) FROM ".{$Bean}::TABLENAME."
+                  <block:willExtend>
+                    INNER JOIN ".{$extendedClass}::TABLENAME." USING ( {$pkSimpleName} )
+                  </block:willExtend>
+                    WHERE " . {$criteriaVar}->createSql();   
+            $count = $this->db->fetchOne($sql);
+        }
+        catch(Zend_Db_Exception $e)
+        {
+            throw new {$Exception}("No se pudo contar \n" . $e->getMessage());
+        }
+      <block:privateCriteria>
+        $this->criteria->clear();
+      </block:privateCriteria>
+        return $count;
+    }
 
     /**
      * Método que construye un objeto {$Bean} y lo rellena con la información del rowset
@@ -398,12 +432,12 @@ class {$Catalog} extends {$extendedCatalog}
         try
         {
           <block:privateCriteria>
-            {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
+            {$criteriaVar}->add({$foreignKeys.fkConstant}, ${$foreignKeys.fkName}, Criteria::EQUAL);
             ${$collection} = $this->getByCriteria();
           </block:privateCriteria>
           <block:publicCriteria>
             {$criteriaVar} = new Criteria();
-            {$criteriaVar}->add({$foreignKeys.fkConstant},${$foreignKeys.fkName},Criteria::EQUAL);
+            {$criteriaVar}->add({$foreignKeys.fkConstant}, ${$foreignKeys.fkName}, Criteria::EQUAL);
             ${$collection} = $this->getByCriteria({$criteriaVar});
           </block:publicCriteria>
         }

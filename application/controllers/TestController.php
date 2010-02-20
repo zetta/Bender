@@ -42,8 +42,9 @@ class TestController extends GenericController
      */
     public function collectionAction()
     {   
-    	  $testSuite = new TestSuite('Collection Test');
+        $testSuite = new TestSuite('Collection Test');
         $testSuite->add(new CollectionTest());
+        $testSuite->add(new ValidatorTest());
         $testSuite->run(new TextReporter());
     }
     

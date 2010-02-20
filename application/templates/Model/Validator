@@ -48,6 +48,9 @@ class {$Validator} implements ValidatorInterface
    */
   public function validate(${$bean})
   {
+  
+     $this->messages = array();
+  
     <block:field>
      
      $chain = new Zend_Validate();
