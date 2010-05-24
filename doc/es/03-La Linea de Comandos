@@ -51,6 +51,14 @@ generará las carpetas necesarias para comenzar a escribir un nuevo script.
 Una vez que haya terminado de escribir su test (o si quiere probarlo) puede ejecutar el siguiente comando 
 con los mismos parámetros que especificó para crearlo.
 
+
+### generator:remove 
+
+Parámetros que recibe:
+- **lang** El lenguaje de programacion que utilizaremos 
+- **pattern** El patrón a eliminar
+
+
 ### pack
 
 Parámetros que recibe:
