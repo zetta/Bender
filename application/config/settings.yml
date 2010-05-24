@@ -1,0 +1,13 @@
+bender:
+  db:
+    dsn:                     sqlite:application/config/bender.db
+    username:                root
+    password:                temporal
+    schema_file:             default
+  add_bender_signature:      true
+  encoding:                  UTF-8
+  header:
+    author:                  <zetta> <chentepixtol>
+    brand_name:              Bender
+    copyright:               Copyright (c) 2008-2010 Bender Modeler (http://www.ctrl-zetta.com/#code)
+    description:             Our Simple Models

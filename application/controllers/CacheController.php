@@ -1,56 +1,26 @@
 <?php 
-
-
-
-
-class CacheController extends GenericController 
+/*
+ * This file is part of Bender.
+ *
+ * (c) 2009-2010 Juan Carlos Clemente
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+class CacheController extends BenderController 
 {
 
     /**
-     * Limpia el caché generado y las clases =)  
+     * Limpia la carpeta `output` y el caché
      */
     public function clearAction()
     {
-        $this->deleteDirectoryContent('output');
-        $this->deleteFile('application/data/autoloadCache.file');
+        $dumper = new BenderDumper();
+        $dumper->deleteDirectoryContent('output');
+        if(BenderRequest::getInstance()->getFlag('keep-autoloader') == FALSE)
+          $dumper->deleteFile('cache/autoloadCache.file');
     }
     
-    /**
-     * Elimina los contenidos de un directorio
-     * @param string $path 
-     * @param boolean $deleteItself
-     */ 
-    private function deleteDirectoryContent($path,$deleteItself = false)
-    {
-	    if(!$dh = @opendir($path)) 
-	        return;
-	    while (false !== ($obj = readdir ($dh)))
-	    {
-	        if($obj == '.' || $obj == '..' || $obj == '.svn') continue;
-		    $file = $path . '/' . $obj;
-		    if(is_dir($file))
-		    {
-		        $this->deleteDirectoryContent($file,true);
-		    }else{
-		        $this->deleteFile($file);
-		    }
-	    }
-	    closedir ($dh);
-	    if($deleteItself)
-	    {
-	        CommandLineInterface::getInstance()->printSection('Cache', "Deleting {$path}", 'NOTE');
-    	    @rmdir ($path);
-    	}
-    }
-    
-    /**
-     * Elimina un archivo
-     * @param string $filePath
-     */
-    private function deleteFile($filePath)
-    {
-        @unlink ($filePath);
-		CommandLineInterface::getInstance()->printSection('Cache', "Deleting {$filePath}", 'NOTE');
-    }
+
     
 }

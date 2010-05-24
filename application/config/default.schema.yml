@@ -1,0 +1,29 @@
+schema:
+  Person:
+    table:     persons
+    extends:   false
+    options:   [ generate-crud ]
+  User:
+    table:     users
+    extends:   Person
+    options:   [ generate-crud ]
+    relations:
+      Photo:   { type : OneToMany }  #TODO
+  Photo:
+    table:     photos
+    extends:   false
+    options:   [ generate-crud ]
+    fields:
+      title:   { comment : 'El titulo de la fotografia' }
+    relations:
+      Album:   { type : manyToMany, table : albums_photos }
+  Album: 
+    table:     albums
+    extends:   false
+    options:   [ generate-crud ]
+    relations:
+      Photo:   { type : manyToMany, table : albums_photos }
+  Test:
+    table:     non_primary_table
+    extends:   false
+    options:   [ ]
