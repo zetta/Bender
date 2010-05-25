@@ -13,10 +13,18 @@ abstract class BenderController
 
     /**
      * Action to be dispatched
+     * @var string
      */
     protected $actionName = '';
+    
+    /**
+     * @var BenderRequest
+     */
     protected $request = null;
     
+    /**
+     * Class constructor
+     */
     public function BenderController()
     {
       $this->request = BenderRequest::getInstance();
@@ -37,6 +45,16 @@ abstract class BenderController
         $method = new ReflectionMethod($this, $action . 'Action');
         if($this->request->getFlag('debug'))
           CommandLineInterface::getInstance()->printSection('CLI', 'invoking '.$this->request->getController().':'.$this->request->getAction(),'INFO');
+        $mf = new MetaDataFetcher();
+        foreach( $mf->getArguments($method) as $arg)
+        {
+        	$val = $this->request->getArg($arg['index'],$arg['default']);
+        	if( $val == NULL && !$arg['isOptional'])
+        	{
+        	   throw new InvalidArgumentException("Argument `{$arg['name']}` is not optional ");
+        	}
+            $this->{$arg['name']} = $val;
+        }
         $method->invoke($this);
     }
 

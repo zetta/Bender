@@ -20,26 +20,25 @@ class HelpController extends BenderController
     */
    public function defaultAction()
    {
-      $command = $this->request->getArg(0);
       $this->request->setFlag('no-truncate-text',true);
       $out = CommandLineInterface::getInstance();
       $out->printMessage("Bender Usage\n",'NOTE');
       $out->printMessage("./bender controller[:action]\n\n",'INFO');
-      if($command)
+      if($this->controller)
       {
-        $file = Formatter::slugToUpperCamelCase($command).'Controller.php';
+        $file = Formatter::slugToUpperCamelCase($this->controller).'Controller.php';
         if(!file_exists('application/controllers/'.$file))
-           throw new Exception("There's no `{$command}` controller");
-        $help = new HelpFetcher($file);
+           throw new Exception("There's no `{$this->controller}` controller");
+        $help = new MetaDataFetcher($file);
         if(!class_exists($help->getClassName()))
-           throw new Exception("There's no `{$command}` controller");
+           throw new Exception("There's no `{$this->controller}` controller");
         $help->showHelp();
       }
       else
       {
         foreach (new DirectoryIterator('application/controllers') as $fileInfo) {
           if($fileInfo->isDot() || $fileInfo->isDir()) continue;
-          $help = new HelpFetcher($fileInfo->getFilename());
+          $help = new MetaDataFetcher($fileInfo->getFilename());
           if(class_exists($help->getClassName()))
             $help->showHelp();
         }

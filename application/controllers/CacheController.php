@@ -21,6 +21,4 @@ class CacheController extends BenderController
           $dumper->deleteFile('cache/autoloadCache.file');
     }
     
-
-    
 }

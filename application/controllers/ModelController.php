@@ -13,11 +13,7 @@
  *
  */
 class ModelController extends BenderController
-{    
-    private $lang;
-    private $mode;
-  
-
+{
     /**
      * Corre los scripts especificados para `lang` y `pattern`
      * @param string $lang
@@ -27,13 +23,9 @@ class ModelController extends BenderController
     {
         if(BenderRequest::getInstance()->getFlag('isolated'))
           $this->forward('cache:clear',null,array('keep-autoloader'=>true));
-        $this->lang = $this->request->getArg(0);
-        if($this->lang === null)
-          throw new InvalidArgumentException("Must specify a language");
-        $this->mode = $this->request->getArg(1,'default');
-        $path = "application/lib/generators/{$this->lang}/{$this->mode}/generators/";
+        $path = "application/lib/generators/{$this->lang}/{$this->pattern}/generators/";
         $this->directoryIteration($path);
-        $path = "application/lib/generators/{$this->lang}/{$this->mode}/libs/";
+        $path = "application/lib/generators/{$this->lang}/{$this->pattern}/libs/";
         $this->directoryIteration($path,true);
         $fs = new FileSaver();
         CommandLineInterface::getInstance()->printSection('End', $fs->getCount() . ' files generated');
@@ -181,12 +173,12 @@ class ModelController extends BenderController
     
     /**
      * Genera un schema a partir de la configuración en el archivo settings
-     * @param string $schema [OPTIONAL]
+     * @param string $schema [OPTIONAL] (generated)
      */
     public function generateSchemaAction()
     {
         $schemaGenerator = new SchemaGenerator();
-        $schemaGenerator->generate($this->request->getArg(0,'generated'));
+        $schemaGenerator->generate($this->schema);
     }
     
 

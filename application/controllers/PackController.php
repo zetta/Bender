@@ -18,13 +18,9 @@ class PackController extends BenderController
    */
   public function defaultAction()
   {
-     $lang = $this->request->getArg(0);
-     $pattern = $this->request->getArg(1);
-     if(!$lang || !$pattern)
-       throw new Exception('must pass 2 arguments');
      $pack = new BenderPacker();
-     $pack->setLang($lang);
-     $pack->setPattern($pattern);
+     $pack->setLang($this->lang);
+     $pack->setPattern($this->pattern);
      $pack->pack();
   }
 

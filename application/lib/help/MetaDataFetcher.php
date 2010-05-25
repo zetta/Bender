@@ -86,6 +86,7 @@ class MetaDataFetcher
   {
      $args = array();
   	 $doc = $method->getDocComment();
+  	 $i = 0;
      foreach (explode("\n",$method->getDocComment()) as $line)
      {
      	$isOptional = false;
@@ -102,8 +103,10 @@ class MetaDataFetcher
 		    $args[] = array(
 		      'name' => $a[1],
 		      'isOptional' => $isOptional,
-		      'default' => $default
+		      'default' => $default,
+		      'index' => $i
 		    );
+		    $i++;
         }
      }
      return $args;

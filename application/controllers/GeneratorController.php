@@ -17,21 +17,16 @@ class GeneratorController extends BenderController
     /**
      * Genera un nuevo script
      * @param string $lang
-     * @param string $pattern [OPTIONAL]
+     * @param string $pattern [OPTIONAL] (default)
      */
     public function createNewAction()
     {
-        $this->lang = $this->request->getArg(0);
-        if($this->lang === null)
-          throw new InvalidArgumentException("Must specify a language");
-        $this->mode = $this->request->getArg(1,'default');
-        
-        $path = "application/lib/generators/{$this->lang}/{$this->mode}";
+        $path = "application/lib/generators/{$this->lang}/{$this->pattern}";
         if(is_dir($path))
-          throw new Exception("Lang [{$this->lang}] mode [{$this->mode}] already exists");
+          throw new Exception("Lang [{$this->lang}] mode [{$this->pattern}] already exists");
         $this->createStructure();
-        $this->forward('model:generate', array('php','bender',100 => $this->lang, 101 => $this->mode), array(
-            'output-dir' => "application/lib/generators/{$this->lang}/{$this->mode}",
+        $this->forward('model:generate', array('php','bender',100 => $this->lang, 101 => $this->pattern), array(
+            'output-dir' => "application/lib/generators/{$this->lang}/{$this->pattern}",
             'ignore-database' => true
         ));
     }
@@ -43,16 +38,19 @@ class GeneratorController extends BenderController
      */
     public function removeAction()
     {
-        $this->lang = $this->request->getArg(0);
-        if($this->lang === null)
-          throw new InvalidArgumentException("Must specify a language");
-        $this->mode = $this->request->getArg(1);
-        if($this->lang === null)
-          throw new InvalidArgumentException("Must specify a pattern");
-        
         $dumper = new BenderDumper();
-        $dumper->deleteDirectoryContent("application/lib/generators/{$this->lang}/{$this->mode}");
-        $dumper->deleteDirectoryContent("application/views/{$this->lang}/{$this->mode}");
+        $dumper->deleteDirectoryContent("application/lib/generators/{$this->lang}/{$this->pattern}");
+        $dumper->deleteDirectoryContent("application/views/{$this->lang}/{$this->pattern}");
+    }
+    
+    /**
+     * Clona un script
+     * @param string $lang
+     * @param string $pattern
+     */
+    public function cloneAction()
+    {
+       
     }
     
     
@@ -63,9 +61,9 @@ class GeneratorController extends BenderController
     private function createStructure()
     {
       $paths = array(
-         "application/lib/generators/{$this->lang}/{$this->mode}/libs",
-         "application/lib/generators/{$this->lang}/{$this->mode}/generators",
-         "application/views/{$this->lang}/{$this->mode}/libs"
+         "application/lib/generators/{$this->lang}/{$this->pattern}/libs",
+         "application/lib/generators/{$this->lang}/{$this->pattern}/generators",
+         "application/views/{$this->lang}/{$this->pattern}/libs"
       );
       CommandLineInterface::getInstance()->printSection('Generator', 'Creating directory structure');
       foreach ($paths as $path){
