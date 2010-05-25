@@ -22,7 +22,7 @@ class BenderDumper
 	        return;
 	    while (false !== ($obj = readdir ($dh)))
 	    {
-	        if($obj == '.' || $obj == '..' || $obj == '.svn') continue;
+	        if(preg_match('/^\./',$obj)) continue;
 		    $file = $path . '/' . $obj;
 		    if(is_dir($file))
 		    {

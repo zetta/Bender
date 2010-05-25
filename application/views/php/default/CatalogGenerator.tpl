@@ -83,6 +83,7 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
 {% endfor %}
 {% endif %}
     }
+{% if table.hasPrimaryField() %}
 
     /**
      * Metodo para agregar un {{ Bean }} a la base de datos
@@ -272,6 +273,7 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
         $criteria = (null === $criteria) ? new Criteria() : $criteria;
         return $this->getCustomFieldByCriteria({{ Bean }}::{{ table.getPrimaryField().getConstantName() }}, $criteria);
     }
+{% endif %}
 
     /**
      * Metodo para obtener un campo en particular de un {{ Bean }} dado un criterio
@@ -592,6 +594,23 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
         return $this->getByIds($ids);
     }
 {% endfor %}
+
+{% if table.hasPrimaryField() == FALSE %}
+
+    /**
+     * Bender cant implement this methods, make sure you have a primaryField 
+     * in your {{ table.getTableName() }} table
+     */
+    public function create(${{ bean }}){ throw new Exception('Method not implemented'); }
+    public function delete(${{ bean }}){ throw new Exception('Method not implemented'); }
+    public function update(${{ bean }}){ throw new Exception('Method not implemented'); }
+    public function getByIds($id){ throw new Exception('Method not implemented'); }
+    public function getById($id){ throw new Exception('Method not implemented'); }
+    public function deleteById($id){ throw new Exception('Method not implemented'); }
+    public function retrieveAllIds(){ throw new Exception('Method not implemented'); }
+    public function getIdsByCriteria(Criteria $criteria){ throw new Exception('Method not implemented'); }
+
+{% endif %}
 
 } 
  
