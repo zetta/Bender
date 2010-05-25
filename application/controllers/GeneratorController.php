@@ -30,7 +30,7 @@ class GeneratorController extends BenderController
             'ignore-database' => true
         ));
     }
-    
+
     /**
      * Elimina un script de Bender
      * @param string $lang
@@ -42,7 +42,7 @@ class GeneratorController extends BenderController
         $dumper->deleteDirectoryContent("application/lib/generators/{$this->lang}/{$this->pattern}");
         $dumper->deleteDirectoryContent("application/views/{$this->lang}/{$this->pattern}");
     }
-    
+
     /**
      * Clona un script
      * @param string $lang
@@ -50,11 +50,9 @@ class GeneratorController extends BenderController
      */
     public function cloneAction()
     {
-       
+       throw new Exception('method not implemented');
     }
-    
-    
-    
+
     /**
      * Create the directory structure
      */
@@ -70,15 +68,7 @@ class GeneratorController extends BenderController
           mkdir($path,0755,true);
       }
     }
-    
-
 
 }
-
-
-
-
-
-
 
 

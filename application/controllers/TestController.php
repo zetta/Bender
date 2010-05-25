@@ -30,8 +30,7 @@ class TestController extends BenderController
         echo "\n";
       }
       while ($entry != 'quit;');
-      $figlet = new Zend_Text_Figlet();
-      echo $figlet->render('bye!');
+      echo 'bye!';
     }
     
 }

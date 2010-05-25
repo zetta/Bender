@@ -17,7 +17,7 @@ class ModelController extends BenderController
     /**
      * Corre los scripts especificados para `lang` y `pattern`
      * @param string $lang
-     * @param string $pattern [OPTIONAL]
+     * @param string $pattern [OPTIONAL] (default)
      */
     public function generateAction()
     {
@@ -156,7 +156,7 @@ class ModelController extends BenderController
     {
       $object = $class->newInstance();
       $object->setTable($table);
-      $object->setPath("application/views/{$this->lang}/{$this->mode}/")->setLang($this->lang)->setMode($this->mode);
+      $object->setPath("application/views/{$this->lang}/{$this->pattern}/")->setLang($this->lang)->setMode($this->pattern);
       foreach($class->getMethods() as $method)
       {
           if(preg_match('/(^run$)|(^additional)/',$method->getName()))

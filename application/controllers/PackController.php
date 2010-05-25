@@ -23,5 +23,15 @@ class PackController extends BenderController
      $pack->setPattern($this->pattern);
      $pack->pack();
   }
+  
+  
+  /**
+   * Instala un script
+   * @param string $file
+   */
+  public function installAction()
+  {
+    throw new Exception('Method not implemented');
+  }
 
 }
