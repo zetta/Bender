@@ -217,6 +217,9 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
         if(!(${{ bean }} instanceof {{ Bean }}))
             throw new {{ Exception }}("passed parameter isn't a {{ Bean }} instance");
         $this->deleteById(${{ bean }}->{{ table.getPrimaryField().getGetterName() }}());
+{% if table.extends() %}
+        parent::delete(${{ bean }});
+{% endif %
     }
 
     /**
