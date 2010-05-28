@@ -13,7 +13,7 @@ final class Bender
     /**
      * Bender Version
      */
-    const VERSION = '1.0.1';
+    const VERSION = '1.0.2';
 
     /**
      * The Bender Signature

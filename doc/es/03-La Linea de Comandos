@@ -72,7 +72,7 @@ Parámetros que recibe:
 Empaqueta un script para poder distribuirlo a otros desarrolladores
 
 
-### model:generate
+### generator:run
 
 Parámetros que recibe:
 

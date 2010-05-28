@@ -14,7 +14,7 @@ PHP
 ### default
 
     [bash]
-    $ ./bender model:generate php
+    $ ./bender generator:run php
 
 Se generan archivos en PHP, para su uso en `ZendFramework` que contiene la siguiente estructura.
 
@@ -50,7 +50,7 @@ DOT
 ### default 
 
     [bash]
-    $ ./bender model:generate dot
+    $ ./bender generator:run dot
 
 Utilizando lenguaje **dot** genera los siguientes diagramas.
 

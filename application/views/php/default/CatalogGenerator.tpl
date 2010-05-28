@@ -219,7 +219,7 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
         $this->deleteById(${{ bean }}->{{ table.getPrimaryField().getGetterName() }}());
 {% if table.extends() %}
         parent::delete(${{ bean }});
-{% endif %
+{% endif %}
     }
 
     /**

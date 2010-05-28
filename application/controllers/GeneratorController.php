@@ -53,6 +53,26 @@ class GeneratorController extends BenderController
        throw new Exception('method not implemented');
     }
 
+    
+    /**
+     * Corre los scripts especificados para `lang` y `pattern`
+     * @param string $lang
+     * @param string $pattern [OPTIONAL] (default)
+     */
+    public function runAction()
+    {
+    	$runner = new GeneratorRunner($this->lang,$this->pattern);
+        if(BenderRequest::getInstance()->getFlag('isolated'))
+          $this->forward('cache:clear',null,array('keep-autoloader'=>true));
+        $path = "application/lib/generators/{$this->lang}/{$this->pattern}/generators/";
+        $runner->directoryIteration($path);
+        $path = "application/lib/generators/{$this->lang}/{$this->pattern}/libs/";
+        $runner->directoryIteration($path,true);
+        $fs = new FileSaver();
+        CommandLineInterface::getInstance()->printSection('End', $fs->getCount() . ' files generated');
+    }
+    
+    
     /**
      * Create the directory structure
      */
@@ -68,6 +88,10 @@ class GeneratorController extends BenderController
           mkdir($path,0755,true);
       }
     }
+    
+    
+    
+    
 
 }
 
