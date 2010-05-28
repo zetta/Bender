@@ -24,8 +24,6 @@ class CatalogGenerator  extends BaseGenerator implements CodeGenerable
 
   /**
    * run 
-   * TODO behaviors
-   * TODO validators
    */
   public function run()
   {
@@ -37,14 +35,4 @@ class CatalogGenerator  extends BaseGenerator implements CodeGenerable
   }
 
 }
-
-
-
-
-
-
-
-
-
-
 

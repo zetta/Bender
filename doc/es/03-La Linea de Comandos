@@ -7,6 +7,9 @@ Bender se ejecuta en la linea de comandos, la sintaxis es.
     [bash]
     $ ./bender comando[:accion] [arg1] [arg2] [arg3] [argn] [--flag1] [--flag2] [--flagn]
 
+    [cmd]
+    > bender.bat comando[:accion] [arg1] [arg2] [arg3] [argn] [--flag1] [--flag2] [--flagn]
+
 
 Comandos Disponibles
 --------------------

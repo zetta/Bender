@@ -22,7 +22,7 @@ Instalación          {#instalacion}
 
 ### Descargar la version mas reciente
 
-  1. Descargar el archivo comprimido desde la [pagina de descargas](http://github.com/zetta/Bender/downloads) 
+  1. Descargar el archivo comprimido desde la [ultima version disponible](http://github.com/zetta/Bender/archives/master) 
   2. Descomprimir el archivo
 
 ### Instalar la version de desarrollo 
@@ -51,3 +51,6 @@ Ejemplo de Uso        {#ejemplo}
 
     [bash]
     $ ./bender model:generate php
+    
+    [cmd]
+    > bender.bat model:generate php
