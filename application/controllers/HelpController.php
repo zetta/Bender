@@ -44,8 +44,6 @@ class HelpController extends BenderController
       }
       $out->printText("\nBender v". Bender::VERSION ." \n",'NOTE');
    }
- 
- 
- 
-     
+
+   
 }

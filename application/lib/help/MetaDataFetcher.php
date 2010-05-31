@@ -64,7 +64,7 @@ class MetaDataFetcher
         
         //if($txt['needColonSign'])
         //  $out->printText(':','WARNING');
-        $a = str_pad('   '.($txt['needColonSign'] ? ':' : ''). trim($txt['actions']), 30);
+        $a = str_pad('   '.($txt['needColonSign'] ? ':' : ''). trim($txt['actions']), 35);
         $out->printText($a,'INFO');
         $out->printText($txt['comment'],'NONE');
         $out->printText("\n");

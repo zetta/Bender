@@ -47,10 +47,14 @@ class ScriptController extends BenderController
      * Clona un script
      * @param string $lang
      * @param string $pattern
+     * @param string $newPattern
      */
     public function cloneAction()
     {
-       throw new Exception('method not implemented');
+       $util = new FileUtil();
+       $util->copydir("application/lib/generators/{$this->lang}/{$this->pattern}","application/lib/generators/{$this->lang}/{$this->newPattern}");
+       $util->copydir("application/views/{$this->lang}/{$this->pattern}","application/views/{$this->lang}/{$this->newPattern}");
+       CommandLineInterface::getInstance()->printSection('Script', 'cloned');
     }
 
     
@@ -83,7 +87,7 @@ class ScriptController extends BenderController
          "application/lib/generators/{$this->lang}/{$this->pattern}/generators",
          "application/views/{$this->lang}/{$this->pattern}/libs"
       );
-      CommandLineInterface::getInstance()->printSection('Generator', 'Creating directory structure');
+      CommandLineInterface::getInstance()->printSection('Script', 'Creating directory structure');
       foreach ($paths as $path){
           mkdir($path,0755,true);
       }
