@@ -9,9 +9,9 @@
  */
 
 /**
- * Modulo para crear nuevos generadores 
+ * Controlador de scripts
  */
-class GeneratorController extends BenderController
+class ScriptController extends BenderController
 {    
 
     /**

@@ -49,8 +49,10 @@ class MetaDataFetcher
     }
     $out = CommandLineInterface::getInstance();
     $methods = $class->getMethods();
+    $out->printText($this->controller."\n",'SECTION');
     foreach($methods as $method)
     {
+      
       if($method->isPublic() && preg_match('/Action$/',$method->name) )
       {
         $action = substr($method->name,0,-6);
@@ -58,13 +60,16 @@ class MetaDataFetcher
         $comment = $method->getDocComment();
         $comment = preg_replace("#\\*|\\/#",'',$comment);
         $txt = $this->parseEntry($this->controller,$action,$comment);
-        $out->printMessage($txt['controller'],'INFO');
-        if($txt['needColonSign'])
-          $out->printText(':','WARNING');
-        $out->printText($txt['actions'],'INFO');
+        
+        
+        //if($txt['needColonSign'])
+        //  $out->printText(':','WARNING');
+        $a = str_pad('   '.($txt['needColonSign'] ? ':' : ''). trim($txt['actions']), 30);
+        $out->printText($a,'INFO');
+        $out->printText($txt['comment'],'NONE');
         $out->printText("\n");
-        $out->printMessage($txt['comment'],'NOTE');
-        $out->printText("\n\n");
+        
+        //$out->printText("\n\n");
       }
     }
   }

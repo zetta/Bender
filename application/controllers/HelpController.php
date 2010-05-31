@@ -15,7 +15,6 @@ class HelpController extends BenderController
 {
    /**
     * Muestra la ayuda
-    * utilice help controller para ver la ayuda de un controlador en especifico
     * @param string $controller [OPTIONAL]
     */
    public function defaultAction()
@@ -23,7 +22,7 @@ class HelpController extends BenderController
       $this->request->setFlag('no-truncate-text',true);
       $out = CommandLineInterface::getInstance();
       $out->printMessage("Bender Usage\n",'NOTE');
-      $out->printMessage("./bender controller[:action]\n\n",'INFO');
+      $out->printMessage("./bender controller[:action] [arguments]\n\n",'INFO');
       if($this->controller)
       {
         $file = Formatter::slugToUpperCamelCase($this->controller).'Controller.php';
@@ -43,7 +42,7 @@ class HelpController extends BenderController
             $help->showHelp();
         }
       }
-      $out->printMessage("Bender v". Bender::VERSION ." \n",'INFO');
+      $out->printText("\nBender v". Bender::VERSION ." \n",'NOTE');
    }
  
  
