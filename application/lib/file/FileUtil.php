@@ -28,13 +28,16 @@ class FileUtil
         $handle = opendir($source);
         while ( ($file = readdir($handle)) )
         {
-            if ($file == "." && $file == "..")
+            if ($file == "." || $file == "..")
                 continue;
             $path = "$source/$file";
-            if (is_dir($file))
+            if (is_dir($path))
                 $this->copydir($path,"$destination/$file");
             else
+            {
                 copy($path, "$destination/$file");
+                CommandLineInterface::getInstance()->printSection('Util', 'C '."$destination/$file");
+            }
         }
         closedir($handle);
     }
