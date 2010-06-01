@@ -57,6 +57,17 @@ class {{ Class }} extends Model
 {% endfor %}
         $this->db->update('{{ table.getTableName() }}', $this, array('{{ table.getPrimaryField().getName() }}' => $this->input->post('{{ table.getPrimaryField().getName() }}') ));
     }
+    
+    /**
+     * Obtener por id
+     * @param int ${{ table.getPrimaryField().getVarName() }}
+     */
+    function get_by_id(${{ table.getPrimaryField().getVarName() }})
+    {
+        $query = $this->db->get_where('{{ table.getTableName() }}', array('{{ table.getPrimaryField().getName() }}' => ${{ table.getPrimaryField().getVarName() }}), 1);
+        return $query->result();
+    }
+    
 {% endif %}
 
     /**
@@ -64,8 +75,8 @@ class {{ Class }} extends Model
      * @return array 
      */
     function getAll() {
-        $q = $this->db->get('{{ table.getTableName() }}');
-        if($q->num_rows() > 0) {
+        $query = $this->db->get('{{ table.getTableName() }}');
+        if($query->num_rows() > 0) {
             foreach ($q->result() as $row) {
                 $data[] = $row;
             }
@@ -73,7 +84,24 @@ class {{ Class }} extends Model
         }
     }
     
-    
+{% for field in foreigns %}
+  
+
+    function get_by_{{ field.getName() }}(${{ field.getVarName() }})
+    {
+        $query = $this->db->get_where('{{ table.getTableName() }}', array('{{ field.getName() }}' => ${{ field.getVarName() }}));
+        return $query->result();
+    }
+{% endfor %}
+{% for field in uniqueFields %}
+  
+
+    function get_by_{{ field.getName() }}(${{ field.getVarName() }})
+    {
+        $query = $this->db->get_where('{{ table.getTableName() }}', array('{{ field.getName() }}' => ${{ field.getVarName() }}), 1);
+        return $query->result();
+    }
+{% endfor %}
 }
 
 

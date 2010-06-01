@@ -25,6 +25,8 @@ class ObjectGenerator extends BaseGenerator implements CodeGenerable
   {
   	  $this->view->fields = $this->table->getFields();
   	  $this->view->nonPrimaryFields = $this->table->getNonPrimaryFields();
+  	  $this->view->uniqueFields = $this->table->getUniqueFields();
+  	  $this->view->foreigns = $this->table->getForeignKeys();
   }
   
  
