@@ -25,7 +25,7 @@ class ScriptController extends BenderController
         if(is_dir($path))
           throw new Exception("Lang [{$this->lang}] mode [{$this->pattern}] already exists");
         $this->createStructure();
-        $this->forward('model:generate', array('php','bender',100 => $this->lang, 101 => $this->pattern), array(
+        $this->forward('script:run', array('php','bender',100 => $this->lang, 101 => $this->pattern), array(
             'output-dir' => "application/lib/generators/{$this->lang}/{$this->pattern}",
             'ignore-database' => true
         ));
@@ -39,8 +39,8 @@ class ScriptController extends BenderController
     public function removeAction()
     {
         $dumper = new BenderDumper();
-        $dumper->deleteDirectoryContent("application/lib/generators/{$this->lang}/{$this->pattern}");
-        $dumper->deleteDirectoryContent("application/views/{$this->lang}/{$this->pattern}");
+        $dumper->deleteDirectoryContent("application/lib/generators/{$this->lang}/{$this->pattern}",true);
+        $dumper->deleteDirectoryContent("application/views/{$this->lang}/{$this->pattern}",true);
     }
 
     /**
