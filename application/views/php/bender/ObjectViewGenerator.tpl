@@ -10,7 +10,9 @@
  * @author     {{ author }}, $LastChangedBy$
 {% if showBenderSignature %}
  * @copyright  {{ benderSignature }}
- * @author     <zetta> & <chentepixtol>
+{% endraw %}
+{% raw %}
+ * @author     {{ author }}
 {% endif %}
  * @version    {{ version }} SVN: $Id$
  */
