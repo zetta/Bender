@@ -1,23 +1,19 @@
 {% raw %}
 /**
+ * My PseudoClass
+ * {{ description }}
  * {{ brandName }}
  *
- * {{ description }}
- *
- * @category   lib
- * @package    lib_models
+ * @category   models
+ * @package    models
  * @copyright  {{ copyright }}
  * @author     {{ author }}, $LastChangedBy$
+{% if showBenderSignature %}
+ * @copyright  {{ benderSignature }}
+ * @author     <zetta> & <chentepixtol>
+{% endif %}
  * @version    {{ version }} SVN: $Id$
  */
-/**
- * My PseudoClass
- * @author {{ author }}
- */
-
-
-
-
 
 Class {{ Class }}
 
