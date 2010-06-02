@@ -102,6 +102,7 @@ class {{ Class }} extends Model
         return $query->result();
     }
 {% endfor %}
+
 }
 
 

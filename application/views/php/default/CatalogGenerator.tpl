@@ -602,7 +602,7 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
 
     /**
      * Bender cant implement this methods, make sure you have a primaryField 
-     * in your {{ table.getTableName() }} table
+     * in your "{{ table.getTableName() }}" table
      */
     public function create(${{ bean }}){ throw new Exception('Method not implemented'); }
     public function delete(${{ bean }}){ throw new Exception('Method not implemented'); }

@@ -48,7 +48,7 @@ class GeneratorRunner {
       }
       catch (Exception $e)
       {
-        throw new Exception("There's no `{$this->mode}` pattern in `{$this->lang}`");
+        throw new Exception("There's no `{$this->pattern}` pattern in `{$this->lang}`");
       }
       foreach ($dir as $fileInfo)
       {
