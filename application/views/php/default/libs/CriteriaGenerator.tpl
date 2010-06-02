@@ -157,11 +157,11 @@ class Criteria
      *
      * @param string $criteria La columna a comparar
      * @param mixed $value
-     * @param string $comparison
+     * @param string [optional] $comparison
      * @param string [optional] $mutator
      * @return Criteria $this
      */
-    public function add($column, $value, $comparison, $mutator = '')
+    public function add($column, $value, $comparison = '=', $mutator = '')
     {
         if(!$comparison)
             throw new Exception('Se necesita especificar un signo de comparación para el criterio');

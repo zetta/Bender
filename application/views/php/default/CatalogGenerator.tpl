@@ -125,9 +125,10 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
     /**
      * Metodo para Obtener los datos de un objeto por su llave primaria
      * @param {{ table.getPrimaryField().getDataType() }} ${{ table.getPrimaryField().getVarName() }}
+     * @param boolean $throw
      * @return {{ Bean }}|null
      */
-    public function getById(${{ table.getPrimaryField().getVarName() }})
+    public function getById(${{ table.getPrimaryField().getVarName() }}, $throw = false)
     {
         try
         {
@@ -139,6 +140,8 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
         {
             throw new {{ Exception }}("Can't obtain the {{ Bean }} \n" . $e->getMessage());
         }
+        if($throw && null == $new{{ Bean }})
+            throw new {{ Exception }}("The {{ Bean }} at ${{ table.getPrimaryField().getVarName() }} not exists ");
         return $new{{ Bean }};
     }
     
