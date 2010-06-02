@@ -2,9 +2,8 @@
 /**
  * {{ Class }}, Code Igniter Model
  *
- * @category   lib
- * @package    lib_models
- * @subpackage lib_models_beans
+ * @category   models
+ * @package    models
  * @copyright  {{ copyright }} 
  * @author     {{ author }}
 {% if showBenderSignature %}
@@ -86,7 +85,11 @@ class {{ Class }} extends Model
     
 {% for field in foreigns %}
   
-
+    /**
+     * get by {{ field.getName() }}
+     * @param {{ field.getDataType() }} ${{ field.getVarName() }}
+     * @return mixed
+     */
     function get_by_{{ field.getName() }}(${{ field.getVarName() }})
     {
         $query = $this->db->get_where('{{ table.getTableName() }}', array('{{ field.getName() }}' => ${{ field.getVarName() }}));
@@ -95,7 +98,11 @@ class {{ Class }} extends Model
 {% endfor %}
 {% for field in uniqueFields %}
   
-
+    /**
+     * get by {{ field.getName() }}
+     * @param {{ field.getDataType() }} ${{ field.getVarName() }}
+     * @return mixed
+     */
     function get_by_{{ field.getName() }}(${{ field.getVarName() }})
     {
         $query = $this->db->get_where('{{ table.getTableName() }}', array('{{ field.getName() }}' => ${{ field.getVarName() }}), 1);

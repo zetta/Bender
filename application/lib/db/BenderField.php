@@ -163,6 +163,13 @@ class BenderField
   private $foreignLowerObject = '';
   
   /**
+   * more options
+   * @var array
+   */
+  private $options = array();
+  
+  
+  /**
    * Constructor Class
    *
    * @param string $field
@@ -576,5 +583,33 @@ class BenderField
     return $this->isFk;
   }
   
+  /**
+   * set options
+   * @param array $options
+   */
+  public function setOptions(array $options)
+  {
+    $this->options = $options;  
+  }
+  
+  /**
+   * get option
+   * @param int|string $index
+   * @return mixed
+   */
+  public function getOption($index)
+  {
+    return isset($this->options[$index]) ? $this->options[$index] : null;
+  }
+  
+  /*
+   * has options
+   * @param int|string $index
+   * @return boolean
+   */
+  public function hasOptions($index)
+  {
+    return !is_null( $this->getOption($index) );
+  }
   
 }

@@ -183,6 +183,7 @@ class BenderTable
             if( isset($info['fields'][$field->getName()]) )
             {
                 $custom = $info['fields'][$field->getName()];
+                $field->setOptions($custom);
                 if(isset($custom['type']))
                   $field->setType($custom['type']);
                 if(isset($custom['required']))
@@ -408,9 +409,13 @@ class BenderTable
     /**
      * @return array
      */
-    public function getInfo()
+    public function getInfo($index = null)
     {
-      return $this->info;
+      if($index)
+      {
+        return isset($this->info[$index]) ? $this->info[$index] : null;
+      }else
+        return $this->info;
     }
 
     /**
