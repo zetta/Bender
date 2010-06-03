@@ -1,4 +1,4 @@
-
+<?php 
 /**
  * ZendFramework Model 
  * {{ description }}
@@ -18,12 +18,16 @@
 
 class {{ Class }}
 {
-
-    protected $_comment;
-    protected $_created;
-    protected $_email;
-    protected $_id;
+{% for field in fields %}
+    /**
+     * @var {{ field.getDataType() }} $_{{ field.getName() }}
+     */
+    protected $_{{ field.getName() }};
+{% endfor %}
  
+    /**
+     * Class Constructor
+     */
     public function __construct(array $options = null)
     {
         if (is_array($options)) {
@@ -31,6 +35,11 @@ class {{ Class }}
         }
     }
  
+    /**
+     * Magic setter
+     * @param string $name
+     * @param mixed $value
+     */
     public function __set($name, $value)
     {
         $method = 'set' . $name;
@@ -40,6 +49,11 @@ class {{ Class }}
         $this->$method($value);
     }
  
+    /**
+     * Magic getter
+     * @param mixed $name
+     * @return mixed
+     */
     public function __get($name)
     {
         $method = 'get' . $name;
@@ -49,6 +63,11 @@ class {{ Class }}
         return $this->$method();
     }
  
+    /**
+     * Set Options
+     * @param array $options
+     * @return {{ Class }}
+     */
     public function setOptions(array $options)
     {
         $methods = get_class_methods($this);
@@ -60,12 +79,20 @@ class {{ Class }}
         }
         return $this;
     }
- 
+    
+{% for field in fields %}
+    /**
+     * $_{{ field.getName() }} setter
+     * @param 
+     */
     public function setComment($text)
     {
         $this->_comment = (string) $text;
         return $this;
     }
+{% endfor %}
+    
+
  
     public function getComment()
     {
