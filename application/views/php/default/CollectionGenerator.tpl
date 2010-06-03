@@ -101,21 +101,66 @@ class {{ Collection }} extends ArrayIterator
     }
     
     /**
+     * Remove one object with ${{ table.getPrimaryField().getVarName() }}
+     * @param  {{ table.getPrimaryField().getDataType() }} ${{ table.getPrimaryField().getVarName() }}
+     */
+    public function remove(${{ table.getPrimaryField().getVarName() }})
+    {
+        if( $this->contains(${{ table.getPrimaryField().getVarName() }}) )
+            $this->offsetUnset(${{ table.getPrimaryField().getVarName() }});
+    }
+    
+    /**
      * Merge two Collections
      * @param {{ Collection }} ${{ collection }}
      * @return void
      */
     public function merge({{ Collection }} ${{ collection }})
     {
+        ${{ collection }}->rewind();
         while(${{ collection }}->valid())
         {
             ${{ bean }} = ${{ collection }}->read();
             if( !$this->contains( ${{ bean }}->{{ table.getPrimaryField().getGetterName() }}() ) )
-            {
                 $this->append(${{ bean }});
-            }             
         }
         ${{ collection }}->rewind();
+    }
+    
+    /**
+     * Diff two Collections
+     * @param {{ Collection }} ${{ collection }}
+     * @return void
+     */
+    public function diff({{ Collection }} ${{ collection }})
+    {
+        ${{ collection }}->rewind();
+        while(${{ collection }}->valid())
+        {
+            ${{ bean }} = ${{ collection }}->read();
+            if( $this->contains( ${{ bean }}->{{ table.getPrimaryField().getGetterName() }}() ) )
+                $this->remove(${{ bean }}->{{ table.getPrimaryField().getGetterName() }}());     
+        }
+        ${{ collection }}->rewind();
+    }
+    
+    /**
+     * Intersect two Collections
+     * @param {{ Collection }} ${{ collection }}
+     * @return {{ Collection }}
+     */
+    public function intersect({{ Collection }} ${{ collection }})
+    {
+        $new{{ collection }} = {{ Collection }}();
+        ${{ collection }}->rewind();
+        while(${{ collection }}->valid())
+        {
+            ${{ bean }} = ${{ collection }}->read();
+            if( $this->contains( ${{ bean }}->{{ table.getPrimaryField().getGetterName() }}() ) )
+                $new{{ collection }}->append(${{ bean }});
+        }
+        ${{ collection }}->rewind();
+        return $new{{ collection }};
     }
     
     /**
