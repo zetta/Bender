@@ -11,7 +11,7 @@
 
 chdir(dirname(__FILE__));
 error_reporting(-1); // making strict =D
-set_error_handler(create_function('$a, $b, $c, $d', 'throw new ErrorException($b, 0, $a, $c, $d);'), E_ALL & ~E_NOTICE);
+set_error_handler(create_function('$a, $b, $c, $d', 'throw new ErrorException($b, 0, $a, $c, $d);'), E_ALL | E_STRICT);
 require_once 'application/lib/autoloader/BenderAutoloader.php';
 $autoloader = BenderAutoloader::getInstance('cache/autoloadCache.file',true)->register();
 

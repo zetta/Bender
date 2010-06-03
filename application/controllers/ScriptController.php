@@ -25,7 +25,7 @@ class ScriptController extends BenderController
         if(is_dir($path))
           throw new Exception("Lang [{$this->lang}] pattern [{$this->pattern}] already exists");
         $util = new FileUtil();
-	$util->createStructure();
+        $util->createScriptStructure($this->lang, $this->pattern);
         $this->forward('script:run', array('php','bender',100 => $this->lang, 101 => $this->pattern), array(
             'output-dir' => "application/lib/generators/{$this->lang}/{$this->pattern}",
             'ignore-database' => true
@@ -66,7 +66,7 @@ class ScriptController extends BenderController
      */
     public function runAction()
     {
-    	$runner = new GeneratorRunner($this->lang,$this->pattern);
+        $runner = new GeneratorRunner($this->lang,$this->pattern);
         if(BenderRequest::getInstance()->getFlag('isolated'))
           $this->forward('cache:clear',null,array('keep-autoloader'=>true));
         $path = "application/lib/generators/{$this->lang}/{$this->pattern}/generators/";
@@ -82,19 +82,19 @@ class ScriptController extends BenderController
      */
     public function listAction()
     {
-	$out = CommandLineInterface::getInstance();
-	foreach ( new DirectoryIterator('application/lib/generators') as $langInfo)
-	{
-	    if($langInfo->isDir() && !$langInfo->isDot())
-	    {
-		$out->printText( $langInfo->getFileName() . "\n");
-		foreach(new DirectoryIterator($langInfo->getPathName()) as $patternInfo)
-		{
-		    if($patternInfo->isDir() && !$patternInfo->isDot())
-		      $out->printMessage($patternInfo->getFileName() . "\n");
-		}
-	    }
-	}
+        $out = CommandLineInterface::getInstance();
+        foreach ( new DirectoryIterator('application/lib/generators') as $langInfo)
+        {
+            if($langInfo->isDir() && !$langInfo->isDot())
+            {
+                $out->printText( $langInfo->getFileName() . "\n");
+                  foreach(new DirectoryIterator($langInfo->getPathName()) as $patternInfo)
+                  {
+                    if($patternInfo->isDir() && !$patternInfo->isDot())
+                        $out->printMessage($patternInfo->getFileName() . "\n");
+                  }
+            }
+        }
     }
 
 }
