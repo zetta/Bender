@@ -37,7 +37,10 @@ abstract class BaseGenerator extends PhpGenerator
     public function start()
     {
         $this->view->Class = 'Application_Model_'.$this->table->getObject();
+        $this->view->Mapper = 'Application_Model_'.$this->table->getObject().'Mapper';
+        $this->view->DbTable = 'Application_Model_DbTable_'.$this->table->getObject();
         $this->view->Object = $this->table->getObject();
+        $this->view->object = $this->table->getLowerObject();
         $this->view->table = $this->table;
     }
   

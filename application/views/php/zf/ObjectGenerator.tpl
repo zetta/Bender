@@ -23,6 +23,7 @@ class {{ Class }}
      * @var {{ field.getDataType() }} $_{{ field.getName() }}
      */
     protected $_{{ field.getName() }};
+    
 {% endfor %}
  
     /**
