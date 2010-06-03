@@ -260,9 +260,9 @@ class CommandLineInterface
     /**
      * Hace una pregunta al usuario y espera la respuesta
      */
-    public function prompt($message)
+    public function prompt($txt)
     {
-        $this->printMessage($message.': ');
+        $this->printText($txt);
         return trim(fgets(STDIN));
     }
     

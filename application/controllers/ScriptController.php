@@ -23,8 +23,9 @@ class ScriptController extends BenderController
     {
         $path = "application/lib/generators/{$this->lang}/{$this->pattern}";
         if(is_dir($path))
-          throw new Exception("Lang [{$this->lang}] mode [{$this->pattern}] already exists");
-        $this->createStructure();
+          throw new Exception("Lang [{$this->lang}] pattern [{$this->pattern}] already exists");
+        $util = new FileUtil();
+	$util->createStructure();
         $this->forward('script:run', array('php','bender',100 => $this->lang, 101 => $this->pattern), array(
             'output-dir' => "application/lib/generators/{$this->lang}/{$this->pattern}",
             'ignore-database' => true
@@ -71,31 +72,30 @@ class ScriptController extends BenderController
         $path = "application/lib/generators/{$this->lang}/{$this->pattern}/generators/";
         $runner->directoryIteration($path);
         $path = "application/lib/generators/{$this->lang}/{$this->pattern}/libs/";
-        $runner->directoryIteration($path,true);
+        $runner->directoryIteration($path,true,false);
         $fs = new FileSaver();
         CommandLineInterface::getInstance()->printSection('End', $fs->getCount() . ' files generated');
     }
     
-    
     /**
-     * Create the directory structure
+     * Lista todos los scripts disponibles
      */
-    private function createStructure()
+    public function listAction()
     {
-      $paths = array(
-         "application/lib/generators/{$this->lang}/{$this->pattern}/libs",
-         "application/lib/generators/{$this->lang}/{$this->pattern}/generators",
-         "application/views/{$this->lang}/{$this->pattern}/libs"
-      );
-      CommandLineInterface::getInstance()->printSection('Script', 'Creating directory structure');
-      foreach ($paths as $path){
-          mkdir($path,0755,true);
-      }
+	$out = CommandLineInterface::getInstance();
+	foreach ( new DirectoryIterator('application/lib/generators') as $langInfo)
+	{
+	    if($langInfo->isDir() && !$langInfo->isDot())
+	    {
+		$out->printText( $langInfo->getFileName() . "\n");
+		foreach(new DirectoryIterator($langInfo->getPathName()) as $patternInfo)
+		{
+		    if($patternInfo->isDir() && !$patternInfo->isDot())
+		      $out->printMessage($patternInfo->getFileName() . "\n");
+		}
+	    }
+	}
     }
-    
-    
-    
-    
 
 }
 

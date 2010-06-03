@@ -25,7 +25,7 @@ class TestController extends BenderController
     public function interactiveAction()
     {
       do{
-        $entry = CommandLineInterface::getInstance()->prompt('');
+        $entry = CommandLineInterface::getInstance()->prompt('>');
         eval($entry);
         echo "\n";
       }

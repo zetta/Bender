@@ -40,7 +40,7 @@ class {{ Class }} extends Model
     function insert_entry()
     {
 {% for field in nonPrimaryFields %}
-        $this->{{ field.getName() }} = $this->input->post('{{ field.getName() }}'):
+        $this->{{ field.getName() }} = $this->input->post('{{ field.getName() }}');
 {% endfor %}
         $this->db->insert('{{ table.getTableName() }}', $this);
     }

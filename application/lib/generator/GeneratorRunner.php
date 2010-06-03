@@ -9,38 +9,38 @@
  */
 
 class GeneratorRunner {
-	
-	/**
-	 * 
-	 * @var string
-	 */
-	private $lang;
-	
-	/**
-	 * 
-	 * @var string
-	 */
-	private $pattern;
-	
-	/**
-	 * Constructor de la clase
-	 * @param string $lang
-	 * @param string $pattern
-	 */
-	public function GeneratorRunner($lang, $pattern)
-	{
-	   $this->lang = $lang;
-	   $this->pattern = $pattern;
-	}
-	
-	
-	
+
+    /**
+     * 
+     * @var string
+     */
+    private $lang;
+
+    /**
+     * 
+     * @var string
+     */
+    private $pattern;
+
+    /**
+     * Constructor de la clase
+     * @param string $lang
+     * @param string $pattern
+     */
+    public function GeneratorRunner($lang, $pattern)
+    {
+       $this->lang = $lang;
+       $this->pattern = $pattern;
+    }
+
+
     /**
      * Iterate over the directory and search generator classes
      * @param string $path the directory to iterate over
      * @param boolean $single if we must use this directory as library (run once)
+     * @param boolean [optional] $throw
      */
-    public function directoryIteration($path, $single = false)
+    public function directoryIteration($path, $single = false, $throw = FALSE)
     {
       try
       {
@@ -48,7 +48,10 @@ class GeneratorRunner {
       }
       catch (Exception $e)
       {
-        throw new Exception("There's no `{$this->pattern}` pattern in `{$this->lang}`");
+        if($throw)
+            throw new Exception("There's no `{$this->pattern}` pattern in `{$this->lang}`");
+        else
+            return;
       }
       foreach ($dir as $fileInfo)
       {
@@ -174,7 +177,6 @@ class GeneratorRunner {
           }
       }
     }
-	
 }
 
 

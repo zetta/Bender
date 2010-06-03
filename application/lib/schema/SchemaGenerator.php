@@ -26,28 +26,28 @@ class SchemaGenerator
     $schema = array();
     foreach($st as $table)
     {
-            $tableName = $table[0];
-            $objectName = Formatter::underscoreToUpperCamelCase($tableName, '_', true);
-            
-            $dbTable = new BenderTable(array('object' => $tableName, 'table' => $tableName));
-            $dbTable->initialize($objectName);
-            
-            $dbFields = array();
-            
-            $fields = $dbTable->getFields();
-            
-            while ($fields->valid())
-            {
-              $field = $fields->current();
-              $dbFields[ $field->getName() ] = array(
-                'type' => $field->getBaseDataType()
-              );
-              $fields->next();
-            }
-            if(!BenderRequest::getInstance()->getFlag('no-fields'))
-               $schema[$objectName] = array('table' => $tableName, 'extends' => false,'fields' => $dbFields);
-            else
-               $schema[$objectName] = array('table' => $tableName, 'extends' => false);
+        $tableName = $table[0];
+        $objectName = Formatter::underscoreToUpperCamelCase($tableName, '_', true);
+        
+        $dbTable = new BenderTable(array('object' => $tableName, 'table' => $tableName));
+        $dbTable->initialize($objectName);
+        
+        $dbFields = array();
+        
+        $fields = $dbTable->getFields();
+        
+        while ($fields->valid())
+        {
+          $field = $fields->current();
+          $dbFields[ $field->getName() ] = array(
+            'type' => $field->getBaseDataType()
+          );
+          $fields->next();
+        }
+        if(!BenderRequest::getInstance()->getFlag('no-fields'))
+           $schema[$objectName] = array('table' => $tableName, 'extends' => false,'fields' => $dbFields);
+        else
+           $schema[$objectName] = array('table' => $tableName, 'extends' => false);
     }
     $schema = array('schema' => $schema);
     $yaml = sfYaml::dump($schema,4);

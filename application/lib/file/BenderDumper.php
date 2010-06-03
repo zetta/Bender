@@ -34,7 +34,7 @@ class BenderDumper
 	    closedir($dh);
 	    if($deleteItself)
 	    {
-	        CommandLineInterface::getInstance()->printSection('Cache', "D {$path}", 'NOTE');
+	        CommandLineInterface::getInstance()->printSection('Dump', "D {$path}", 'NOTE');
     	    @rmdir($path);
     	}
     }
@@ -46,7 +46,7 @@ class BenderDumper
     public function deleteFile($filePath)
     {
         @unlink ($filePath);
-		    CommandLineInterface::getInstance()->printSection('Cache', "D {$filePath}", 'NOTE');
+		    CommandLineInterface::getInstance()->printSection('Dump', "D {$filePath}", 'NOTE');
     }
 
 

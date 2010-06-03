@@ -41,5 +41,25 @@ class FileUtil
         }
         closedir($handle);
     }
+    
+    
+    
+    /**
+     * Create the directory structure
+     * @param int $lang
+     * @param int $pattern
+     */
+    public function createScriptStructure($lang, $pattern)
+    {
+      $paths = array(
+         "application/lib/generators/{$lang}/{$pattern}/libs",
+         "application/lib/generators/{$lang}/{$pattern}/generators",
+         "application/views/{$lang}/{$pattern}/libs"
+      );
+      CommandLineInterface::getInstance()->printSection('Util', 'Creating directory structure');
+      foreach ($paths as $path){
+          mkdir($path,0755,true);
+      }
+    }
 
 }
