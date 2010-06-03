@@ -7,7 +7,7 @@ bender:
   add_bender_signature:      true
   encoding:                  UTF-8
   header:
-    author:                  <zetta> <chentepixtol>
-    brand_name:              Bender
-    copyright:               Copyright (c) 2008-2010 Bender Modeler (http://www.ctrl-zetta.com/#code)
-    description:             Our Simple Models
+    author:                  PUT_YOUR_NAME_HERE
+    brand_name:              PUT_YOUR_BRAND_NAME_HERE
+    copyright:               PUT_YOUR_COPYRIGHT_INFORMATION_HERE
+    description:             PUT_A_SIMPLE_DESCRIPTION_HERE
