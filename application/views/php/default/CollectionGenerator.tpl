@@ -186,6 +186,15 @@ class {{ Collection }} extends ArrayIterator
     {
         return $this->parser;
     }
+    
+    /**
+     * Is Empty
+     * @return boolean
+     */
+    public function isEmpty()
+    {
+        return $this->count() == 0;
+    }
   
   
 }
