@@ -24,6 +24,7 @@ interface CodeGenerable
    */
   public function getFileName();
   public function start();
+  public function wakeUp();
 
 
 }

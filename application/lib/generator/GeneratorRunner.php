@@ -168,6 +168,7 @@ class GeneratorRunner {
       {
           if(preg_match('/(^run$)|(^additional)/',$method->getName()))
           {
+             $object->wakeUp();
              $object->initialize($method->getName()); // la vista escoge el nombre del archivo
              $object->start();
              $fileName = $object->invoke($method);

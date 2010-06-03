@@ -139,6 +139,14 @@ abstract class CodeGenerator
     $this->ignoreMe = true;
   }
   
+  /**
+   * WakeUp Method
+   */
+  public function wakeUp()
+  {
+      
+  }
+  
 
 
 }
