@@ -39,6 +39,7 @@ class {{ Class }}
      * Magic setter
      * @param string $name
      * @param mixed $value
+     * @throws Exception
      */
     public function __set($name, $value)
     {
@@ -53,6 +54,7 @@ class {{ Class }}
      * Magic getter
      * @param mixed $name
      * @return mixed
+     * @throws Exception
      */
     public function __get($name)
     {
@@ -83,55 +85,26 @@ class {{ Class }}
 {% for field in fields %}
     /**
      * $_{{ field.getName() }} setter
-     * @param 
+     * @param {{ field.getDataType() }} $_{{ field.getName() }}
+     * @return {{ Class }}
      */
-    public function setComment($text)
+    public function setComment($_{{ field.getName() }})
     {
-        $this->_comment = (string) $text;
+        $this->_{{ field.getName() }} = {% if field.getCastDataType() %}({{ field.getCastDataType() }}){% endif %} $_{{ field.getName() }};
         return $this;
     }
-{% endfor %}
     
-
- 
-    public function getComment()
+    /**
+     * $_{{ field.getName() }} getter
+     * @return {{ field.getDataType() }}
+     */
+    public function getComment()    
     {
-        return $this->_comment;
+        return $this->_{{ field.getName() }};
     }
- 
-    public function setEmail($email)
-    {
-        $this->_email = (string) $email;
-        return $this;
-    }
- 
-    public function getEmail()
-    {
-        return $this->_email;
-    }
- 
-    public function setCreated($ts)
-    {
-        $this->_created = $ts;
-        return $this;
-    }
- 
-    public function getCreated()
-    {
-        return $this->_created;
-    }
- 
-    public function setId($id)
-    {
-        $this->_id = (int) $id;
-        return $this;
-    }
- 
-    public function getId()
-    {
-        return $this->_id;
-    }
- 
+    
+{% endfor %}
+     
 }
 
 

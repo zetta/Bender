@@ -12,17 +12,39 @@
 abstract class BaseGenerator extends PhpGenerator
 {
 
-  public function start()
-  {
-     $this->view->Class = 'Application_Model_'.$this->table->getObject();
-     $this->view->Object = $this->table->getObject();
-     $this->view->table = $this->table;
-  }
+    /**
+     * WakeUp method
+     */
+    public function wakeUp()
+    {
+        $this->castDataTypes = array(
+            'date' => 'string',
+            'date_time' => 'string',
+            'timestamp' => 'string',
+            'time' => 'string',
+            'varchar' => 'string',
+            'int' => 'int',
+            'integer' => 'int',
+            'numeric' => 'int',
+            'text' => 'string',
+            'float' => 'float',
+            'smallint' => 'int',
+            'decimal' => 'int',
+            'tinyint' => 'int'
+        );
+    }
+    
+    public function start()
+    {
+        $this->view->Class = 'Application_Model_'.$this->table->getObject();
+        $this->view->Object = $this->table->getObject();
+        $this->view->table = $this->table;
+    }
   
-  public function getFileName()
-  {
-      return sprintf($this->fileName, $this->table->getObject());
-  }
+    public function getFileName()
+    {
+        return sprintf($this->fileName, $this->table->getObject());
+    }
 
 }
 
