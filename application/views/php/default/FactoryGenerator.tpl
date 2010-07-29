@@ -34,12 +34,15 @@ class {{ Factory }}
     */
    public static function create({% for field in fields %}{% if primaryFields.contains(field) == false %}${{ field.getVarName() }}{% if loop.last == false %}, {%endif%}{%endif%}{% endfor %})
    {
+      throw new Exception('Factory Deprecated');
       $new{{ Bean }} = new {{ Bean }}();
+      $new{{ Bean }}->
 {% for field in fields %}
 {% if primaryFields.contains(field) == false %}
-      $new{{ Bean }}->{{ field.getSetterName() }}(${{ field.getVarName() }});
+          {{ field.getSetterName() }}(${{ field.getVarName() }});
 {% endif %}
 {% endfor %}
+      ;
       return $new{{ Bean }};
    }
    
