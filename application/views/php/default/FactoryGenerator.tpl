@@ -39,7 +39,7 @@ class {{ Factory }}
       $new{{ Bean }}->
 {% for field in fields %}
 {% if primaryFields.contains(field) == false %}
-          {{ field.getSetterName() }}(${{ field.getVarName() }});
+          {{ field.getSetterName() }}(${{ field.getVarName() }})
 {% endif %}
 {% endfor %}
       ;
