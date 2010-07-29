@@ -285,14 +285,16 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
      * Metodo para obtener un campo en particular de un {{ Bean }} dado un criterio
      * @param string $field
      * @param Criteria $criteria
+     * @param $distinct
      * @return array Array con el campo de los objetos {{ Bean }} que encajen en la busqueda
      */
-    public function getCustomFieldByCriteria($field, Criteria $criteria = null)
+    public function getCustomFieldByCriteria($field, Criteria $criteria = null, $distinct = false)
     { 
         $criteria = (null === $criteria) ? new Criteria() : $criteria;
+        $distinct = $distinct ? 'DISTINCT' : '';
         try
         {
-            $sql = "SELECT {$field}
+            $sql = "SELECT {$distinct} {$field}
                     FROM ".{{ Bean }}::TABLENAME."
 {% for i in 1..5 %}
 {% if table.extends() %}
@@ -304,7 +306,7 @@ class {{ Catalog }} extends {% if table.extends() %}{{ table.getExtendedTable().
             $result = $this->db->fetchCol($sql);
         } catch(Zend_Db_Exception $e)
         {
-            throw new {{ Exception }}("No se pudieron obtener los ids de objetos {{ Bean }}\n" . $e->getMessage());
+            throw new {{ Exception }}("No se pudieron obtener los fields de objetos {{ Bean }}\n" . $e->getMessage());
         }
         return $result;
     }
