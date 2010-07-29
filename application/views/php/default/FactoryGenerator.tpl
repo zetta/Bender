@@ -36,10 +36,10 @@ class {{ Factory }}
    {
       throw new Exception('Factory Deprecated');
       $new{{ Bean }} = new {{ Bean }}();
-      $new{{ Bean }}->
+      $new{{ Bean }}
 {% for field in fields %}
 {% if primaryFields.contains(field) == false %}
-          {{ field.getSetterName() }}(${{ field.getVarName() }})
+          ->{{ field.getSetterName() }}(${{ field.getVarName() }})
 {% endif %}
 {% endfor %}
       ;
