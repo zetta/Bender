@@ -48,6 +48,18 @@ abstract class Catalog implements CatalogInterface
     protected $db;
     
     /**
+     * Engines
+     * @var array
+     */
+    protected static $savepointTransactions = array("pgsql", "mysql");
+
+    /**
+     * The current transaction level.
+     */ 
+    protected static $transLevel = 0;
+    
+    
+    /**
      * Can't Clone Singleton Class 
      */
     private function __clone(){}
@@ -104,6 +116,58 @@ abstract class Catalog implements CatalogInterface
         }
     }
 {% endif %}
+
+	/**
+     * Soporta transacciones nested
+     * @return array
+     */
+    protected function isNestable() 
+    {
+        return in_array($this->db->getConnection()->getAttribute(PDO::ATTR_DRIVER_NAME),
+                        self::$savepointTransactions);
+    }
+
+    /**
+     * beginTransaction
+     */
+    public function beginTransaction() 
+    {
+        if(!$this->isNestable() || self::$transLevel == 0) {
+            $this->db->beginTransaction();
+        } else {
+            $this->db->exec("SAVEPOINT LEVEL".self::$transLevel);
+        }
+        self::$transLevel++;
+    }
+
+    /**
+     * commit
+     */
+    public function commit() 
+    {
+        self::$transLevel--;
+
+        if(!$this->isNestable() || self::$transLevel == 0) {
+            $this->db->commit();
+        } else {
+            $this->db->exec("RELEASE SAVEPOINT LEVEL".self::$transLevel);
+        }
+    }
+
+    /**
+     * rollBack
+     */
+    public function rollBack() 
+    {
+        self::$transLevel--;
+
+        if(!$this->isNestable() || self::$transLevel == 0) 
+        {
+            $this->db->rollBack();
+        } else {
+            $this->db->exec("ROLLBACK TO SAVEPOINT LEVEL".self::$transLevel);
+        }
+    }
   
     /**
      * array_filter
