@@ -54,6 +54,8 @@ class Criteria
     const DATE = 'DATE(%s)';
     const MONTH = 'MONTH(%s)';
     const YEAR = 'YEAR(%s)';
+ 	const AS_FIELD = '%s';
+	const AS_SUBQUERY = '(%s)';
 
     /**
      * El limite de filas que regresará el sql .  <code>0</code> significa que regresa todos
@@ -220,7 +222,8 @@ class Criteria
                 $criteria = array(
                     'column'=>$column, 
                     'value'=>$value, 
-                    'comparision'=>$comparison);
+                    'comparision'=>$comparison,
+				);
             }
         }
         return $this;
@@ -236,7 +239,8 @@ class Criteria
         $this->map[] = array(
             'firstCriteria'=>$firstCriteria, 
             'secondCriteria'=>$secondCriteria, 
-            'comparision'=>'OR');
+            'comparision'=>'OR',
+        );
     }
 
     /**
@@ -402,7 +406,11 @@ class Criteria
                           break;
                       }
                       
-                      if($criterion['comparision'] != self::IS_NULL && $criterion['comparision'] != self::IS_NOT_NULL)
+	                      if ($criterion['comparision'] != self::IS_NULL 
+						       && $criterion['comparision'] != self::IS_NOT_NULL 
+						       && $criterion['mutator'] != self::AS_FIELD
+						       && $criterion['mutator'] != self::AS_SUBQUERY
+						  )
                            $criterion['value'] = DBAO::Database()->quote($criterion['value']);
                         
                       if(isset($criterion['mutator']) && $criterion['mutator'] != '')
@@ -448,6 +456,14 @@ class Criteria
         return $sql;
     
     }
+
+  /**
+   * @return boolean
+   */
+  public function isEmpty()
+  {
+  	return $this->createSql() == "1";
+  }
 
 }
 
