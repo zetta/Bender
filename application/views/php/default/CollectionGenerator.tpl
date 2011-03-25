@@ -25,7 +25,7 @@ class {{ Collection }} extends ArrayIterator
     /**
      * @var Parser
      */
-    private $parser;
+    protected static $parser;
 
     /**
      * Constructor
@@ -34,7 +34,9 @@ class {{ Collection }} extends ArrayIterator
      */
     public function __construct($array = array())
     {
-        $this->parser = new Parser('{{ Bean }}');
+    	if( null != self::$parser ){
+        	self::$parser = new Parser('{{ Bean }}');
+        }
         parent::__construct($array);
     }
 
@@ -193,11 +195,11 @@ class {{ Collection }} extends ArrayIterator
         while ($this->valid())
         {
             ${{ bean }} = $this->read();
-            $this->parser->changeBean(${{ bean }});
+            $this->getParser()->changeBean(${{ bean }});
 {% if table.hasPrimaryField() %}
             $array[${{ bean }}->{{ table.getPrimaryField().getGetterName() }}()] = $this->parser->toArray();
 {% else %}
-            $array[] = $this->parser->toArray();
+            $array[] = $this->getParser()->toArray();
 {% endif %}
         }
         $this->rewind();
@@ -216,8 +218,8 @@ class {{ Collection }} extends ArrayIterator
         while ($this->valid())
         {
             ${{ bean }} = $this->read();
-            $this->parser->changeBean(${{ bean }});
-            $array += $this->parser->toKeyValueArray($ckey, $cvalue);
+            $this->getParser()->changeBean(${{ bean }});
+            $array += $this->getParser()->toKeyValueArray($ckey, $cvalue);
         }
         $this->rewind();
         return $array;
@@ -229,7 +231,7 @@ class {{ Collection }} extends ArrayIterator
      */
     public function getParser()
     {
-        return $this->parser;
+        return self::$parser;
     }
 
     /**
