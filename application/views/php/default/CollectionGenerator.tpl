@@ -197,7 +197,7 @@ class {{ Collection }} extends ArrayIterator
             ${{ bean }} = $this->read();
             $this->getParser()->changeBean(${{ bean }});
 {% if table.hasPrimaryField() %}
-            $array[${{ bean }}->{{ table.getPrimaryField().getGetterName() }}()] = $this->parser->toArray();
+            $array[${{ bean }}->{{ table.getPrimaryField().getGetterName() }}()] = $this->getParser()->toArray();
 {% else %}
             $array[] = $this->getParser()->toArray();
 {% endif %}
