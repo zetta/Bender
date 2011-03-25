@@ -26,7 +26,7 @@ class {{ Collection }} extends ArrayIterator
      * @var Parser
      */
     private $parser;
-    
+
     /**
      * Constructor
      * @param array $array
@@ -63,9 +63,9 @@ class {{ Collection }} extends ArrayIterator
     }
 
     /**
-     * Return current array entry and 
+     * Return current array entry and
      * move to next entry
-     * @return {{ Bean }} 
+     * @return {{ Bean }}
      */
     public function read()
     {
@@ -76,8 +76,8 @@ class {{ Collection }} extends ArrayIterator
 
     /**
      * Get the first array entry
-     * if exists or null if not 
-     * @return {{ Bean }}|null 
+     * if exists or null if not
+     * @return {{ Bean }}|null
      */
     public function getOne()
     {
@@ -88,7 +88,7 @@ class {{ Collection }} extends ArrayIterator
         } else
             return null;
     }
-    
+
 {% if table.hasPrimaryField() %}
     /**
      * Contains one object with ${{ table.getPrimaryField().getVarName() }}
@@ -99,7 +99,7 @@ class {{ Collection }} extends ArrayIterator
     {
         return parent::offsetExists(${{ table.getPrimaryField().getVarName() }});
     }
-    
+
     /**
      * Remove one object with ${{ table.getPrimaryField().getVarName() }}
      * @param  {{ table.getPrimaryField().getDataType() }} ${{ table.getPrimaryField().getVarName() }}
@@ -109,7 +109,7 @@ class {{ Collection }} extends ArrayIterator
         if( $this->contains(${{ table.getPrimaryField().getVarName() }}) )
             $this->offsetUnset(${{ table.getPrimaryField().getVarName() }});
     }
-    
+
     /**
      * Merge two Collections
      * @param {{ Collection }} ${{ collection }}
@@ -126,7 +126,7 @@ class {{ Collection }} extends ArrayIterator
         }
         ${{ collection }}->rewind();
     }
-    
+
     /**
      * Diff two Collections
      * @param {{ Collection }} ${{ collection }}
@@ -139,11 +139,11 @@ class {{ Collection }} extends ArrayIterator
         {
             ${{ bean }} = ${{ collection }}->read();
             if( $this->contains( ${{ bean }}->{{ table.getPrimaryField().getGetterName() }}() ) )
-                $this->remove(${{ bean }}->{{ table.getPrimaryField().getGetterName() }}());     
+                $this->remove(${{ bean }}->{{ table.getPrimaryField().getGetterName() }}());
         }
         ${{ collection }}->rewind();
     }
-    
+
     /**
      * Intersect two Collections
      * @param {{ Collection }} ${{ collection }}
@@ -151,7 +151,7 @@ class {{ Collection }} extends ArrayIterator
      */
     public function intersect({{ Collection }} ${{ collection }})
     {
-        $new{{ collection }} = {{ Collection }}();
+        $new{{ collection }} = new {{ Collection }}();
         ${{ collection }}->rewind();
         while(${{ collection }}->valid())
         {
@@ -162,18 +162,18 @@ class {{ Collection }} extends ArrayIterator
         ${{ collection }}->rewind();
         return $new{{ collection }};
     }
-    
+
     /**
-     * Retrieve the array with primary keys 
+     * Retrieve the array with primary keys
      * @return array
      */
     public function getPrimaryKeys()
     {
         return array_keys($this->getArrayCopy());
     }
-    
+
     /**
-     * Retrieve the {{ Bean }} with primary key  
+     * Retrieve the {{ Bean }} with primary key
      * @param  {{ table.getPrimaryField().getDataType() }} ${{ table.getPrimaryField().getVarName() }}
      * @return {{ Bean }}
      */
@@ -182,7 +182,7 @@ class {{ Collection }} extends ArrayIterator
         return $this->contains(${{ table.getPrimaryField().getVarName() }}) ? $this[${{ table.getPrimaryField().getVarName() }}] : null;
     }
 {% endif %}
-  
+
     /**
      * Transforma una collection a un array
      * @return array
@@ -203,7 +203,7 @@ class {{ Collection }} extends ArrayIterator
         $this->rewind();
         return $array;
     }
-    
+
     /**
      * Crea un array asociativo de $key => $value a partir de las constantes de un bean
      * @param string $ckey
@@ -222,7 +222,7 @@ class {{ Collection }} extends ArrayIterator
         $this->rewind();
         return $array;
     }
-    
+
     /**
      * Retrieve the parser object
      * @return Parser
@@ -231,7 +231,7 @@ class {{ Collection }} extends ArrayIterator
     {
         return $this->parser;
     }
-    
+
     /**
      * Is Empty
      * @return boolean
@@ -240,8 +240,8 @@ class {{ Collection }} extends ArrayIterator
     {
         return $this->count() == 0;
     }
-  
-  
+
+
 }
 
 {% endblock %}
