@@ -50,7 +50,7 @@ Ejemplo de Uso        {#ejemplo}
 ----------
 
     [bash]
-    $ ./bender generator:run php
+    $ ./bender script:run php
     
     [cmd]
-    > bender.bat generator:run php
+    > bender.bat script:run php

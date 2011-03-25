@@ -18,7 +18,8 @@ A continuación se presenta una tabla con los valores que contiene dicho archivo
 
 | Parámetro              | Example                              | Description
 | ---------------------- | ------------------------------------ | -------------------------------------------------------------
-| `dsn`                  | sqlite:application/config/bender.db  | EL DSN que ocupará Bender para conectarse a la base de datos
+| `dsn`                  | sqlite:application/config/bender.db  |
+|                        | mysql:host=localhost;dbname=mydb     | EL DSN que ocupará Bender para conectarse a la base de datos
 | `username`             | root                                 | Nombre de usuario de nuestra conexión (si la necesita)
 | `password`             | my_secret                            | El password asociado a nuestro nombre de usuario (si lo necesita)
 | `schema_file`          | default                              | Nombre del archivo schema que usaremos 
